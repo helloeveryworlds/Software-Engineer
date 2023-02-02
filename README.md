@@ -8,6 +8,7 @@
     - [Want to Have](#want-to-have)
     - [Nice to Have stretch goals](#nice-to-have-stretch-goals)
   - [Related Efforts](#related-efforts)
+  - [Usage](#usage)
   - [Structure](#structure)
   - [Maintainers](#maintainers)
   - [Contributing](#contributing)
@@ -15,6 +16,8 @@
 
 ## Background
 Proposal google doc link: [here](https://docs.google.com/document/d/19A-Ovdj1PSGlUoQklYVjRKVRHxpZLoF1OxOf17hxW4E/edit)
+
+Customer buy food in person. price compare baseed on user location.
 
 Stack: Java, Python, React, Android, AWS, MySQL, RESTFUL API, Spring boots, MVC, junit, testng, selenium, git
 ### Must Have
@@ -33,6 +36,11 @@ Stack: Java, Python, React, Android, AWS, MySQL, RESTFUL API, Spring boots, MVC,
 
 ### Nice to Have stretch goals
 ## Related Efforts
+## Usage
+Node.js' package ecosystem, npm, is the largest ecosystem of open source libraries in the world.
+https://nodejs.org (Download LTS Version)
+
+npm is the package manager for JavaScript and the world’s largest software registry. 
 ## Structure
 
 ## Maintainers
