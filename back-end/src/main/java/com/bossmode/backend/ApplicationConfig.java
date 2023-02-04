@@ -1,2 +1,4 @@
-package com.bossmode.backend;public class ApplicationConfig {
+package com.bossmode.backend;
+
+public class ApplicationConfig {
 }
