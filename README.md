@@ -19,7 +19,7 @@ Proposal google doc link: [here](https://docs.google.com/document/d/19A-Ovdj1PSG
 
 Customer buy food in person. price compare baseed on user location.
 
-Stack: Java, Python, React, Android, AWS, MySQL, RESTFUL API, Spring boots, MVC, junit, testng, selenium, git
+Stack: Java, Python, React, AWS, MySQL, RESTFUL API, Spring boots, MVC, junit, testng, selenium, git
 ### Must Have
 <em>Front End</em>
 - User Login and register system
