@@ -43,6 +43,12 @@ https://nodejs.org (Download LTS Version)
 npm is the package manager for JavaScript and the world’s largest software registry. 
 
 Tomcat I have download on the back-end file. You guys can use intellij to deploy it.
+
+AWS access:
+Go to the root folder and run following shell code.
+
+`chmod 600 BossMode.pem`
+`ssh -i BossMode.pem ubuntu@44.204.96.116`
 ## Structure
 
 ## Maintainers
@@ -51,7 +57,7 @@ Tomcat I have download on the back-end file. You guys can use intellij to deploy
 ### Contributors
 - Ratan J Naik 
 Email: ratanjn@bu.edu
-- Fuhao Ruan
+- Fuhao Ruan(helloeveryworlds)
 Email: fuhao105@bu.edu
 - Chibundom Ejimuda
 Email: cejimuda@bu.edu
