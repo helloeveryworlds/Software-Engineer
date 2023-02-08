@@ -60,6 +60,6 @@ Email: wangzj@bu.edu
 - Zheng Zhang
 Email: zhzheng@bu.edu
 -  Bauyrzhan Kussayev
-Email: kussayev@bu.edu
+Email: kussayev88@gmail.com
 - Qiwei Li
 Email: Qiweili@bu.edu
