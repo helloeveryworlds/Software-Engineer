@@ -17,6 +17,7 @@
 ## Background
 Proposal google doc link: [here](https://docs.google.com/document/d/19A-Ovdj1PSGlUoQklYVjRKVRHxpZLoF1OxOf17hxW4E/edit)
 
+
 FOR busy families WHO want to save money on their daily grocery shopping, the GroceSave is an application that helps find the best deals on groceries. UNLIKE traditional shopping lists, our product utilizes local store sales to create a personalized shopping list that helps users save the most money. GroceSave is the perfect solution for families looking to stretch their budget and live smarter with their grocery shopping.
 
 Stack: Java, Python, React, AWS, MySQL, RESTFUL API, Spring boots, MVC, junit, testng, selenium, git
