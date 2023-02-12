@@ -1,1 +1,1 @@
-About Grocery Save App: this folder is a react native folder containing iOS and Android React native code..
+About GroceSave App: this folder is a react native folder containing iOS and Android React native code..
