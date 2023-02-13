@@ -1,7 +1,7 @@
 body {
   margin: 0;
   padding: 0;
-  background: url(Image/background.png);
+  background: url(assets/background.png);
   background-size: cover;
   font-family: sans-serif;
 }
@@ -52,6 +52,7 @@ input[type="password"] {
   background: #00cc66;
   color: #fff;
   font-size: 18px;
+  margin-left: 7px;
 }
 
 .loginbox input[type="submit"]:hover {
