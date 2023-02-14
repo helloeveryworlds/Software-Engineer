@@ -11,13 +11,15 @@ import {
   Alert,
   Dimensions,
   LogBox,
+  ImageBackground,
 } from "react-native";
 // import AsyncStorage from '@react-native-async-storage/async-storage';
 // import { Dropdown } from "react-native-material-dropdown";
+import UserIcon from "../../assets/svgs/user";
 import { SimpleLineIcons, Foundation, Entypo, AntDesign, MaterialCommunityIcons, MaterialIcons, FontAwesome, FontAwesome5, Feather } from "@expo/vector-icons";
-// import bUSuggestBoxService, {
+// import groceSaveService, {
 //   setClientOnboardToken,
-// } from "../service/BUSuggestBoxService";
+// } from "../service/GroceSaveService";
 // import  Loader  from '../config/Loader';
 
 const { width, height } = Dimensions.get("window");
@@ -30,21 +32,21 @@ const initialState = {
   username: "",
   password: "", 
   pa: "",
-  confirmPassword: "",
+  name: "",
   cpa: "",
   showCpa: "",
   buId: "",
   bui: "",
   userType: "Select Option",
   uty: "",
-  code: "",
+  address: "",
   cod: "",
   backendCode: 0,
   errors: {}, 
   role: "",
   first_name: "",
   last_name: "",
-  question: "Select Question",
+  zipcode: "",
   qu: "",
   answer: "",
   ans: "",
@@ -106,15 +108,15 @@ class SignUp extends Component {
     } 
   };
 
-  handleConfirmPassword = (confirmPassword) => {  
-    if(confirmPassword != ""){
-      if(confirmPassword != this.state.password){
-        this.setState({ confirmPassword: confirmPassword, showCpa: "empty", cpa: "empty" });
+  handleName = (name) => {  
+    if(name != ""){
+      if(name != this.state.password){
+        this.setState({ name: name, showCpa: "empty", cpa: "empty" });
       }else{
-        this.setState({ confirmPassword: confirmPassword, cpa: "" });
+        this.setState({ name: name, cpa: "" });
       }
     }else {
-      this.setState({ confirmPassword: confirmPassword, cpa: "empty", showCpa: "" });
+      this.setState({ name: name, cpa: "empty", showCpa: "" });
     } 
     
   };
@@ -143,19 +145,19 @@ class SignUp extends Component {
     } 
   };
 
-  handleCode = (code) => {  
-    if(code != ""){
-      this.setState({ code: code, cod: "" });
+  handleAddress = (address) => {  
+    if(address != ""){
+      this.setState({ address: address, cod: "" });
     }else {
-      this.setState({ code: code, cod: "empty" });
+      this.setState({ address: address, cod: "empty" });
     } 
   };
 
-  handleQuestion = (question) => {  
-    if(question != "Select Question"){
-      this.setState({ question: question, qu: "" });
+  handleZipcode = (zipcode) => {  
+    if(zipcode != "Select zipcode"){
+      this.setState({ zipcode: zipcode, qu: "" });
     }else {
-      this.setState({ question: question, qu: "empty" });
+      this.setState({ zipcode: zipcode, qu: "empty" });
     } 
   };
 
@@ -216,7 +218,7 @@ class SignUp extends Component {
     if(this.state.email){
     const fbList = [];
 
-    // bUSuggestBoxService
+    // groceSaveService
     //   .get(`/user/getCode?email=${this.state.email}`)
     //   .then((data) => {
     //     if(data.data.data != null){
@@ -241,23 +243,23 @@ class SignUp extends Component {
     }
   }
 
-  questionsList() {
+  zipcodesList() {
     this.setState({ isLoading: true });
 
     const questList = [];
     questList.push({
-      value: "Select Question",
-      label: "Select Question",
+      value: "Select zipcode",
+      label: "Select zipcode",
     });
-    // bUSuggestBoxService
-    //     .get("/user/allQuestion")
+    // groceSaveService
+    //     .get("/user/allzipcode")
     //     .then(data => {
     //       console.log("list: questList", data.data);
     //       this.setState({ isLoading: false });
     //       data.data.data.forEach(element => {
     //         questList.push({
-    //           value: `${element.questionName}`,
-    //           label: `${element.questionName}`,
+    //           value: `${element.zipcodeName}`,
+    //           label: `${element.zipcodeName}`,
     //         }); 
     //     })
         
@@ -271,7 +273,7 @@ class SignUp extends Component {
     }
 
   componentDidMount() {
-    this.questionsList()
+    this.zipcodesList()
     let timeLeftVar = this.secondsToTime(this.state.seconds);
     this.setState({ time: timeLeftVar });
   }
@@ -279,7 +281,7 @@ class SignUp extends Component {
   onPressLogin() {
     this.setState({ isLoading: true });
 
-    const { embu, email, password, userType, username, buId, confirmPassword, code, backendCode, question, answer } = this.state;
+    const { embu, email, password, userType, username, buId, name, code, backendCode, zipcode, answer } = this.state;
     
     if(userType == "Select Option"){
       this.setState({ isLoading: false, uty: "empty" });
@@ -299,16 +301,16 @@ class SignUp extends Component {
     }else if(password == ""){
       this.setState({ isLoading: false, pa: "empty" });
       // Alert.alert(null,'Password field is empty')
-    }else if(confirmPassword == ""){
+    }else if(name == ""){
       this.setState({ isLoading: false, cpa: "empty" });
       // Alert.alert(null,'Password field is empty')
-    }else if(password != confirmPassword){
+    }else if(password != name){
       this.setState({ isLoading: false, cpa: "empty", showCpa: "empty" });
       // Alert.alert(null,'Password field is empty')
     }else if(userType == "prof" && code == ""){
       this.setState({ isLoading: false, cod: "empty" });
       // Alert.alert(null,'Password field is empty')
-    }else if(question == "Select Question"){
+    }else if(zipcode == "Select zipcode"){
       this.setState({ isLoading: false, qu: "empty" });
       // Alert.alert(null,'Password field is empty')
     }else if(answer == ""){
@@ -318,7 +320,7 @@ class SignUp extends Component {
       const role = userType
       const buID = buId
       const userName = username
-      const payload = { email, password, role, buID, userName, question, answer };
+      const payload = { email, password, role, buID, userName, zipcode, answer };
       if(userType == "prof" && code != ""){
         if(code == backendCode){
           this.signUp(payload)
@@ -379,7 +381,7 @@ class SignUp extends Component {
   };
 
   this.setState({ isLoading: true });
-  //  bUSuggestBoxService
+  //  groceSaveService
   //   .post("/user/register", payload)
   //   .then(onSuccess)
   //   .catch(onFailure);
@@ -424,1023 +426,243 @@ class SignUp extends Component {
     const { userType, showCountDown } = this.state;
 
     return (
-        <ScrollView
-          style={styles.scrollView}
-          keyboardShouldPersistTaps="always">
-          
-          <StatusBar backgroundColor="#E5E5E5" barStyle="dark-content"/>
-          {/* <Loader loading={this.state.isLoading} /> */}
-          
-            <View style={styles.cardStyleLong}>
-            <View style={{ flexDirection: "row", alignSelf: "center", borderRadius: 10, borderWidth: 0.5, borderColor: "maroon", paddingHorizontal: 10 }}>
-            {/* <Image source={require('../../assets/dogcirclesmall.png')} resizeMode={'cover'} top={-1} alignSelf={"center"} height={20} width={20}/>  */}
-            <Text style={styles.welcomeTextStyle}>Sign Up in BU Community</Text>
-            </View>
-            <View style={styles.emailTextStyleView}>
-              <Text style={{
-                fontSize: 12,
-                color: this.state.uty == "empty" ? 'red' : "maroon",
-                fontFamily: "Nunito_400Regular",
-                textAlign: "left",
-                paddingBottom: 5,
-                paddingLeft: 12,
-                opacity: 1,
-                fontWeight: "400",
-                marginTop: 8,
-              }}>Are you a Student or Professor?</Text>
-
-            <Dropdown
-                  value={"Select Option"}
-                  data={this.state.optionList}
-                  baseColor={"#FFF"}
-                  textColor={"maroon"}
-                  fontSize={15}
-                  selectedItemColor={"maroon"}
-                  style={{fontFamily: "Nunito_400Regular",}}
-                  itemPadding={8}
-                  itemTextStyle={{ marginLeft: 5, fontFamily: "Nunito_400Regular", }}
-                  dropdownMargins={{ min:8, max:6 }}
-                  overlayStyle={{bottom: 10, alignSelf: "center", }}
-                  dropdownOffset={{top: 12, left: 0}}
-                  containerStyle={{
-                    borderColor: this.state.uty == "empty" ? 'red' : "maroon",
-                    backgroundColor: "#FFF",
-                    borderWidth: 1,
-                    borderRadius: 10,
-                    marginHorizontal: 10,
-                    paddingLeft: 15,
-                    height: 56,
-                    alignSelf: "center",
-                    width: width * 0.80,
-                    fontFamily: "Nunito_400Regular",
-                  }}
-                  onChangeText={(value) => this.handleUserType(value)}
-                />
-                <AntDesign
-                  name="down"
-                  color="maroon"
-                  style={{ alignSelf: "flex-end", right: 30, bottom: 32, opacity: 1 }}
-                  size={13}/>
-            {this.state.uty == "empty" && this.state.userType == "Select Option" && <Text style={styles.invalidDropdownTextStyle}>Please select an option</Text>}
-            </View>
-
-            {this.state.userType == "prof" ?
-            <View>
-            <View style={styles.answerTextStyleView}>
-              <Text style={{
-                fontSize: 12,
-                fontFamily: "Nunito_400Regular",
-                textAlign: "left",
-                paddingBottom: 3,
-                paddingLeft: 5,
-                opacity: 1,
-                fontWeight: "400",
-                color: this.state.em == "empty" ? 'red' : "maroon"
-                }}>BU E-mail</Text>
-              <View style={{
-                width: width * 0.81,
-                height: 54,
-                padding: 1,
-                borderRadius: 10
-              }}>  
-
-              <TextInput
-                backgroundColor = "#FFF"
-                borderWidth = {1}
-                borderColor={this.state.em == "empty" ? 'red' : "maroon"}
-                width = {width * 0.81}
-                height= {56}
-                borderRadius = {10}
-                textAlign = "left"
-                paddingTop = {8}
-                paddingBottom ={8}
-                paddingStart ={15}
-                paddingEnd= {22}
-                opacity= {1}
-                fontSize={16}
-                underlineColorAndroid="transparent"
-                autoCapitalize="none"
-                keyboardType="email-address"
-                placeholder={"johndoe@bu.edu"}
-                
-                style={{fontFamily: "Nunito_400Regular",}}
-                returnKeyType="next"
-                onSubmitEditing={() => { this.userTextInput.focus(); }}
-                blurOnSubmit={false}
-                value={this.state.email}
-                onChangeText={this.handleEmail}
-              />
-              
-              </View>
-              {this.state.em == "empty" && this.state.email == "" && <Text style={styles.invalidPasswordTextStyle}>BU E-mail is Empty</Text>}
-              {this.state.embu == "empty" && this.state.email != "" && <Text style={styles.invalidPasswordTextStyle}>This BU E-mail does not exist</Text>}
-
-            </View>
-
-            <View style={styles.userNameTextStyleView}>
-              <Text style={{
-                fontSize: 12,
-                color: this.state.us == "empty" ? 'red' : "maroon",
-                fontFamily: "Nunito_400Regular",
-                textAlign: "left",
-                paddingBottom: 5,
-                paddingLeft: 5,
-                opacity: 1,
-                fontWeight: "400",
-                marginTop: 8,
-              }}>Username</Text>
-
-              <View style={{
-                width: width * 0.81,
-                height: 54,
-                padding: 1,
-                borderRadius: 10
-              }}>
-              <View style={{flexDirection: "row", }}>
-              <TextInput
-                backgroundColor= "#FFF"
-                borderWidth = {1}
-                fontSize={16}
-                borderColor={this.state.us == "empty" ? 'red' : "maroon"}
-                width= {width * 0.81}
-                height= {56}
-                borderRadius= {10}
-                paddingTop = {8}
-                paddingBottom = {8}
-                paddingStart ={15}
-                paddingEnd= {22}
-                opacity= {1}
-                placeholder={"john"}
-                
-                underlineColorAndroid="transparent"
-                autoCapitalize="none"
-                style={{fontFamily: "Nunito_400Regular",}}
-                ref={(input) => { this.userTextInput = input; }}
-                returnKeyType="next"
-                onSubmitEditing={() => { this.buIdTextInput.focus(); }}
-                blurOnSubmit={false}
-                value={this.state.username}
-                onChangeText={this.handleUsername}
-              />
-              </View>
-              </View>
-      
-            {this.state.us == "empty" && this.state.username == "" && <Text style={styles.invalidPasswordTextStyle}>Username is empty</Text>}
-              
-            </View>
-            <View style={styles.passwordTextStyleView}>
-              <Text style={{
-                fontSize: 12,
-                color: this.state.bui == "empty" ? 'red' : "maroon",
-                fontFamily: "Nunito_400Regular",
-                textAlign: "left",
-                paddingBottom: 5,
-                paddingLeft: 5,
-                opacity: 1,
-                fontWeight: "400",
-                marginTop: 8,
-              }}>BU ID</Text>
-
-              <View style={{
-                width: width * 0.81,
-                height: 54,
-                padding: 1,
-                borderRadius: 10
-              }}>
-              <View style={{flexDirection: "row", }}>
-              <TextInput
-                backgroundColor= "#FFF"
-                borderWidth = {1}
-                fontSize={16}
-                borderColor={this.state.bui == "empty" ? 'red' : "maroon"}
-                width= {width * 0.81}
-                height= {56}
-                borderRadius= {10}
-                paddingTop = {8}
-                paddingBottom = {8}
-                paddingStart ={15}
-                paddingEnd= {22}
-                opacity= {1}
-                placeholder={"U********"}
-                
-                underlineColorAndroid="transparent"
-                autoCapitalize="none"
-                style={{fontFamily: "Nunito_400Regular",}}
-                ref={(input) => { this.buIdTextInput = input; }}
-                returnKeyType="next"
-                onSubmitEditing={() => { this.codeTextInput.focus(); }}
-                blurOnSubmit={false}
-                value={this.state.buId}
-                onChangeText={this.handleBUId}
-              />
-              </View>
-              </View>
-      
-            {this.state.bui == "empty" && this.state.buId == "" && <Text style={styles.invalidPasswordTextStyle}>BU Id is empty</Text>}
-              
-            </View>
-
-            <View style={styles.passwordTextStyleView}>
-              <Text style={{
-                fontSize: 12,
-                color: this.state.pa == "empty" ? 'red' : "maroon",
-                fontFamily: "Nunito_400Regular",
-                textAlign: "left",
-                paddingBottom: 5,
-                paddingLeft: 5,
-                opacity: 1,
-                fontWeight: "400",
-                marginTop: 8,
-              }}>Password</Text>
-
-              <View style={{
-                width: width * 0.81,
-                height: 54,
-                padding: 1,
-                borderRadius: 10
-              }}>
-              <View style={{flexDirection: "row", }}>
-              <TextInput
-                backgroundColor= "#FFF"
-                borderWidth = {1}
-                fontSize={16}
-                borderColor={this.state.pa == "empty" ? 'red' : "maroon"}
-                width= {width * 0.81}
-                height= {56}
-                borderRadius= {10}
-                paddingTop = {8}
-                paddingBottom = {8}
-                paddingStart ={15}
-                paddingEnd= {22}
-                opacity= {1}
-                placeholder={"********"}
-                
-                underlineColorAndroid="transparent"
-                autoCapitalize="none"
-                style={{fontFamily: "Nunito_400Regular",}}
-                ref={(input) => { this.passwordTextInput = input; }}
-                returnKeyType="next"
-                onSubmitEditing={() => { this.confirmPasswordTextInput.focus(); }}
-                blurOnSubmit={false}
-                value={this.state.password}
-                secureTextEntry={this.state.secureTextEntry?true:false}
-                onChangeText={this.handlePassword}
-              />
-              {this.state.password ? 
-              <TouchableOpacity 
-              onPress={this.updateSecureTextEntry.bind(this)}>
-                {/* {this.state.secureTextEntry ?
-                <View
-                style={{alignSelf: "flex-end", right: 33, marginTop: 20, }}>
-                <EyeOpenIcon/>
-                </View>
-                 :
-                 <View
-                 style={{alignSelf: "flex-end", right: 33, marginTop: 20, }}>
-                 <EyeCloseIcon/>
-                 </View>
-                } */}
-                
-              </TouchableOpacity> : null} 
-              </View>
-              
-              
-                     {/* {!this.state.secureTextEntry ?
-                      <TouchableOpacity 
-                      onPress={this.updateSecureTextEntry.bind(this)}>
-                        
-                        <Feather
-                          name="eye-off"
-                          color="#000000"
-                          size={15}
-                          style={{alignSelf: "flex-end", marginEnd: 10, bottom: 50, }}
-                          />
-                        </TouchableOpacity>
-                        :
-                        <TouchableOpacity 
-                      onPress={this.updateTrueSecureTextEntry.bind(this)}>
-                        <Feather
-                          name="eye"
-                          color="#000000"
-                          size={15}
-                          style={{alignSelf: "flex-end", marginEnd: 10, bottom: 50, }}
-                        />
-                       </TouchableOpacity>} */}
-
-              </View>
-            {this.state.pa == "empty" && this.state.password == "" && <Text style={styles.invalidPasswordTextStyle}>Password is empty</Text>}
-              
-            </View>
-
-            <View style={styles.passwordTextStyleView}>
-              <Text style={{
-                fontSize: 12,
-                color: this.state.cpa == "empty" ? 'red' : "maroon",
-                fontFamily: "Nunito_400Regular",
-                textAlign: "left",
-                paddingBottom: 5,
-                paddingLeft: 5,
-                opacity: 1,
-                fontWeight: "400",
-                marginTop: 8,
-              }}>Confirm Password</Text>
-
-              <View style={{
-                width: width * 0.81,
-                height: 54,
-                padding: 1,
-                borderRadius: 10,
-              }}>
-              <View style={{flexDirection: "row" }}>
-              <TextInput
-                backgroundColor= "#FFF"
-                borderWidth = {1}
-                fontSize={16}
-                borderColor={this.state.cpa == "empty" ? 'red' : "maroon"}
-                width= {width * 0.81}
-                height= {56}
-                borderRadius= {10}
-                paddingTop = {8}
-                paddingBottom = {8}
-                paddingStart ={15}
-                paddingEnd= {22}
-                opacity= {1}
-                placeholder={"********"}
-                
-                underlineColorAndroid="transparent"
-                autoCapitalize="none"
-                style={{fontFamily: "Nunito_400Regular",}}
-                ref={(input) => { this.confirmPasswordTextInput = input; }}
-                value={this.state.confirmPassword}
-                secureTextEntry={this.state.secureTextEntry?true:false}
-                onChangeText={this.handleConfirmPassword}
-              />
-              {this.state.confirmPassword ? 
-              <TouchableOpacity 
-              onPress={this.updateSecureTextEntry.bind(this)}>
-                {/* {this.state.secureTextEntry ?
-                <View
-                style={{alignSelf: "flex-end", right: 33, marginTop: 20, }}>
-                <EyeOpenIcon/>
-                </View>
-                 :
-                 <View
-                 style={{alignSelf: "flex-end", right: 33, marginTop: 20, }}>
-                 <EyeCloseIcon/>
-                 </View>
-                } */}
-                
-              </TouchableOpacity> : null} 
-              </View>
-              
-              
-              {/* <View      
-                  style={styles.iconViewStyle}>
-                  <LockIcon/>
-              </View> */}
-                      {/* {!this.state.secureTextEntry ?
-                      <TouchableOpacity 
-                      onPress={this.updateSecureTextEntry.bind(this)}>
-                        
-                        <Feather
-                          name="eye-off"
-                          color="#000000"
-                          size={15}
-                          style={{alignSelf: "flex-end", marginEnd: 10, bottom: 50, }}
-                          />
-                        </TouchableOpacity>
-                        :
-                        <TouchableOpacity 
-                      onPress={this.updateTrueSecureTextEntry.bind(this)}>
-                        <Feather
-                          name="eye"
-                          color="#000000"
-                          size={15}
-                          style={{alignSelf: "flex-end", marginEnd: 10, bottom: 50, }}
-                        />
-                       </TouchableOpacity>} */}
-
-              </View>
-            {this.state.cpa == "empty" && this.state.showCpa == "" && this.state.confirmPassword == "" && <Text style={styles.invalidPasswordTextStyle}>Confirm Password is empty</Text>}
-            {this.state.cpa == "empty" && this.state.showCpa == "empty" && this.state.confirmPassword != "" && <Text style={styles.invalidPasswordTextStyle}>Passwords don't match</Text>}
-            </View>
-
-            <View style={styles.passwordTextStyleView}>
-              <Text style={{
-                fontSize: 12,
-                color: this.state.cod == "empty" ? 'red' : "maroon",
-                fontFamily: "Nunito_400Regular",
-                textAlign: "left",
-                paddingBottom: 5,
-                paddingLeft: 5,
-                opacity: 1,
-                fontWeight: "400",
-                marginTop: 8,
-              }}>Code</Text>
-
-              <View style={{
-                width: width * 0.81,
-                height: 54,
-                padding: 1,
-                borderRadius: 10
-              }}>
-              <View style={{flexDirection: "row", marginBottom: 10 }}>
-              <TextInput
-                backgroundColor= "#FFF"
-                borderWidth = {1}
-                fontSize={16}
-                borderColor={this.state.cod == "empty" ? 'red' : "maroon"}
-                width= {width * 0.81}
-                height= {56}
-                borderRadius= {10}
-                paddingTop = {8}
-                paddingBottom = {8}
-                paddingStart ={15}
-                paddingEnd= {22}
-                opacity= {1}
-                maxLength={4}
-                placeholder={"Enter Code"}
-                underlineColorAndroid="transparent"
-                autoCapitalize="none"
-                style={{fontFamily: "Nunito_400Regular",}}
-                ref={(input) => { this.codeTextInput = input; }}
-                value={this.state.code}
-                onChangeText={this.handleCode}
-              />
-              </View>
-              </View>
-      
-            {this.state.cod == "empty" && this.state.code == "" && <Text style={styles.invalidPasswordTextStyle}>Code is empty</Text>}
-              
-            </View>
-            <TouchableOpacity onPress={this.startTimer} disabled={this.state.time.s == 30 | this.state.time.s == 0 ? false : true}>
-                <View flexDirection={"row"} alignSelf={"center"}>
-                {showCountDown == true ? 
-                <View flexDirection={"row"} alignSelf={"center"}>
-                <SimpleLineIcons name="reload" style={styles.reloadIconStyle}/>
-                <Text style={{color: "grey", fontWeight: "500", fontSize: 15, marginLeft: 10, textAlign: "left", top: 2 }}>{this.state.time.s} sec</Text>
-                </View> : null}
-                {showCountDown ? 
-                <Text style={{color: "maroon", fontWeight: "400", fontSize: 12, marginLeft: 5, textAlign: "center", marginTop: 24, marginBottom: 15 }}>Didn’t receive Code?{"  "}
-                <Text style={{color: "maroon", fontWeight: "600", fontSize: 14, marginLeft: 30, textAlign: "left", textDecorationLine: "underline", lineHeight: 15 }}>Resend Code</Text>
-                </Text> : 
-                <View style={{ alignSelf: "flex-end", width: width * 0.8 }}>
-                <Text style={{color: "maroon", fontWeight: "600", fontSize: 14, marginTop: 10, textDecorationLine: "underline", alignSelf: "flex-end", alignContent: "flex-end" }}
-                // onPress={()=> Alert.alert(null, "You will receive the code via E-mail..", [{text: 'Ok', onPress: this.startTimer.bind(this)}] )}
-                >Send Code</Text>
-                </View>}
-                </View>
-                </TouchableOpacity>
-
-                <View style={styles.codeTextStyleView}>
-                <Text style={{
-                  fontSize: 12,
-                  color: this.state.qu == "empty" ? 'red' : "maroon",
-                  fontFamily: "Nunito_400Regular",
-                  textAlign: "left",
-                  paddingBottom: 5,
-                  paddingLeft: 12,
-                  opacity: 1,
-                  fontWeight: "400",
-                  marginTop: 8,
-                }}>Secret Question</Text>
-
-              <Dropdown
-                    value={"Select Question"}
-                    data={this.state.questList}
-                    baseColor={"#FFF"}
-                    textColor={"maroon"}
-                    fontSize={15}
-                    selectedItemColor={"maroon"}
-                    style={{fontFamily: "Nunito_400Regular",}}
-                    itemPadding={8}
-                    itemTextStyle={{ marginLeft: 5, fontFamily: "Nunito_400Regular", }}
-                    dropdownMargins={{ min:8, max:6 }}
-                    overlayStyle={{bottom: 10, alignSelf: "center", }}
-                    dropdownOffset={{top: 12, left: 0}}
-                    containerStyle={{
-                      borderColor: this.state.qu == "empty" ? 'red' : "maroon",
-                      backgroundColor: "#FFF",
-                      borderWidth: 1,
-                      borderRadius: 10,
-                      marginHorizontal: 10,
-                      paddingLeft: 15,
-                      height: 56,
-                      alignSelf: "center",
-                      width: width * 0.80,
-                      fontFamily: "Nunito_400Regular",
-                    }}
-                    onChangeText={(value) => this.handleQuestion(value)}
-                  />
-                  <AntDesign
-                    name="down"
-                    color="maroon"
-                    style={{ alignSelf: "flex-end", right: 30, bottom: 32, opacity: 1 }}
-                    size={13}/>
-              {this.state.qu == "empty" && this.state.question == "Select Question" && <Text style={styles.invalidDropdownTextStyle}>Please select a secret Question</Text>}
-              </View>
-
-              <View style={styles.answerTextStyleView}>
-              <Text style={{
-                fontSize: 12,
-                color: this.state.ans == "empty" ? 'red' : "maroon",
-                fontFamily: "Nunito_400Regular",
-                textAlign: "left",
-                paddingBottom: 5,
-                paddingLeft: 5,
-                opacity: 1,
-                fontWeight: "400",
-                marginTop: 8,
-              }}>Secret Answer</Text>
-
-              <View style={{
-                width: width * 0.81,
-                height: 54,
-                padding: 1,
-                borderRadius: 10
-              }}>
-              <View style={{flexDirection: "row", }}>
-              <TextInput
-                backgroundColor= "#FFF"
-                borderWidth = {1}
-                fontSize={16}
-                borderColor={this.state.ans == "empty" ? 'red' : "maroon"}
-                width= {width * 0.81}
-                height= {56}
-                borderRadius= {10}
-                paddingTop = {8}
-                paddingBottom = {8}
-                paddingStart ={15}
-                paddingEnd= {22}
-                opacity= {1}
-                placeholder={"Answer"}
-                underlineColorAndroid="transparent"
-                autoCapitalize="none"
-                style={{fontFamily: "Nunito_400Regular",}}
-                value={this.state.answer}
-                onChangeText={this.handleAnswer}
-              />
-              </View>
-              </View>
-      
-            {this.state.ans == "empty" && this.state.answer == "" && <Text style={styles.invalidPasswordTextStyle}>Secret Answer is empty</Text>}
-              
-            </View>
-              </View> : null}
-
-            {userType == "student" && <View>
-            <View style={styles.answerTextStyleView}>
-              <Text style={{
-                fontSize: 12,
-                fontFamily: "Nunito_400Regular",
-                textAlign: "left",
-                paddingBottom: 3,
-                paddingLeft: 5,
-                opacity: 1,
-                fontWeight: "400",
-                color: this.state.em == "empty" ? 'red' : "maroon"
-                }}>BU E-mail</Text>
-              <View style={{
-                width: width * 0.81,
-                height: 54,
-                padding: 1,
-                borderRadius: 10
-              }}>  
-
-              <TextInput
-                backgroundColor = "#FFF"
-                borderWidth = {1}
-                borderColor={this.state.em == "empty" ? 'red' : "maroon"}
-                width = {width * 0.81}
-                height= {56}
-                borderRadius = {10}
-                textAlign = "left"
-                paddingTop = {8}
-                paddingBottom ={8}
-                paddingStart ={15}
-                paddingEnd= {22}
-                opacity= {1}
-                fontSize={16}
-                underlineColorAndroid="transparent"
-                autoCapitalize="none"
-                keyboardType="email-address"
-                returnKeyType="next"
-                placeholder={"johndoe@bu.edu"}
-                
-                style={{fontFamily: "Nunito_400Regular",}}
-                onSubmitEditing={() => { this.usernameSTextInput.focus(); }}
-                blurOnSubmit={false}
-                value={this.state.email}
-                onChangeText={this.handleEmail}
-              />
-              
-              </View>
-              {this.state.em == "empty" && this.state.email == "" && <Text style={styles.invalidPasswordTextStyle}>BU E-mail is empty</Text>}
-              {this.state.embu == "empty" && this.state.email != "" && <Text style={styles.invalidPasswordTextStyle}>This BU E-mail does not exist</Text>}
-            </View>
-
-            <View style={styles.userNameTextStyleView}>
-              <Text style={{
-                fontSize: 12,
-                color: this.state.us == "empty" ? 'red' : "maroon",
-                fontFamily: "Nunito_400Regular",
-                textAlign: "left",
-                paddingBottom: 5,
-                paddingLeft: 5,
-                opacity: 1,
-                fontWeight: "400",
-                marginTop: 8,
-              }}>Username</Text>
-
-              <View style={{
-                width: width * 0.81,
-                height: 54,
-                padding: 1,
-                borderRadius: 10
-              }}>
-              <View style={{flexDirection: "row", }}>
-              <TextInput
-                backgroundColor= "#FFF"
-                borderWidth = {1}
-                fontSize={16}
-                borderColor={this.state.us == "empty" ? 'red' : "maroon"}
-                width= {width * 0.81}
-                height= {56}
-                borderRadius= {10}
-                paddingTop = {8}
-                paddingBottom = {8}
-                paddingStart ={15}
-                paddingEnd= {22}
-                opacity= {1}
-                placeholder={"john"}
-                underlineColorAndroid="transparent"
-                autoCapitalize="none"
-                style={{fontFamily: "Nunito_400Regular",}}
-                returnKeyType="next"
-                onSubmitEditing={() => { this.buIdSTextInput.focus(); }}
-                blurOnSubmit={false}
-                ref={(input) => { this.usernameSTextInput = input; }}
-                value={this.state.username}
-                onChangeText={this.handleUsername}
-              />
-              </View>
-              </View>
-      
-            {this.state.us == "empty" && this.state.username == "" && <Text style={styles.invalidPasswordTextStyle}>Username is empty</Text>}
-              
-            </View>
-
-            <View style={styles.passwordTextStyleView}>
-              <Text style={{
-                fontSize: 12,
-                color: this.state.bui == "empty" ? 'red' : "maroon",
-                fontFamily: "Nunito_400Regular",
-                textAlign: "left",
-                paddingBottom: 5,
-                paddingLeft: 5,
-                opacity: 1,
-                fontWeight: "400",
-                marginTop: 8,
-              }}>BU ID</Text>
-
-              <View style={{
-                width: width * 0.81,
-                height: 54,
-                padding: 1,
-                borderRadius: 10
-              }}>
-              <View style={{flexDirection: "row", }}>
-              <TextInput
-                backgroundColor= "#FFF"
-                borderWidth = {1}
-                fontSize={16}
-                borderColor={this.state.bui == "empty" ? 'red' : "maroon"}
-                width= {width * 0.81}
-                height= {56}
-                borderRadius= {10}
-                paddingTop = {8}
-                paddingBottom = {8}
-                paddingStart ={15}
-                paddingEnd= {22}
-                opacity= {1}
-                placeholder={"U********"}
-                underlineColorAndroid="transparent"
-                autoCapitalize="none"
-                style={{fontFamily: "Nunito_400Regular",}}
-                returnKeyType="next"
-                onSubmitEditing={() => { this.passwordTextInput.focus(); }}
-                blurOnSubmit={false}
-                ref={(input) => { this.buIdSTextInput = input; }}
-                value={this.state.buId}
-                onChangeText={this.handleBUId}
-              />
-              </View>
-              </View>
-      
-            {this.state.bui == "empty" && this.state.buId == "" && <Text style={styles.invalidPasswordTextStyle}>BU Id is empty</Text>}
-              
-            </View>
-            <View style={styles.passwordTextStyleView}>
-              <Text style={{
-                fontSize: 12,
-                color: this.state.pa == "empty" ? 'red' : "maroon",
-                fontFamily: "Nunito_400Regular",
-                textAlign: "left",
-                paddingBottom: 5,
-                paddingLeft: 5,
-                opacity: 1,
-                fontWeight: "400",
-                marginTop: 8,
-              }}>Password</Text>
-
-              <View style={{
-                width: width * 0.81,
-                height: 54,
-                padding: 1,
-                borderRadius: 10
-              }}>
-              <View style={{flexDirection: "row", }}>
-              <TextInput
-                backgroundColor= "#FFF"
-                borderWidth = {1}
-                fontSize={16}
-                borderColor={this.state.pa == "empty" ? 'red' : "maroon"}
-                width= {width * 0.81}
-                height= {56}
-                borderRadius= {10}
-                paddingTop = {8}
-                paddingBottom = {8}
-                paddingStart ={15}
-                paddingEnd= {22}
-                opacity= {1}
-                placeholder={"********"}
-                underlineColorAndroid="transparent"
-                autoCapitalize="none"
-                style={{fontFamily: "Nunito_400Regular",}}
-                ref={(input) => { this.passwordTextInput = input; }}
-                returnKeyType="next"
-                onSubmitEditing={() => { this.confirmPasswordTextInput.focus(); }}
-                blurOnSubmit={false}
-                value={this.state.password}
-                secureTextEntry={this.state.secureTextEntry?true:false}
-                onChangeText={this.handlePassword}
-              />
-              {this.state.password ? 
-              <TouchableOpacity 
-              onPress={this.updateSecureTextEntry.bind(this)}>
-                {/* {this.state.secureTextEntry ?
-                <View
-                style={{alignSelf: "flex-end", right: 33, marginTop: 20, }}>
-                <EyeOpenIcon/>
-                </View>
-                 :
-                 <View
-                 style={{alignSelf: "flex-end", right: 33, marginTop: 20, }}>
-                 <EyeCloseIcon/>
-                 </View>
-                } */}
-                
-              </TouchableOpacity> : null} 
-              </View>
-              
-              
-                     {/* {!this.state.secureTextEntry ?
-                      <TouchableOpacity 
-                      onPress={this.updateSecureTextEntry.bind(this)}>
-                        
-                        <Feather
-                          name="eye-off"
-                          color="#000000"
-                          size={15}
-                          style={{alignSelf: "flex-end", marginEnd: 10, bottom: 50, }}
-                          />
-                        </TouchableOpacity>
-                        :
-                        <TouchableOpacity 
-                      onPress={this.updateTrueSecureTextEntry.bind(this)}>
-                        <Feather
-                          name="eye"
-                          color="#000000"
-                          size={15}
-                          style={{alignSelf: "flex-end", marginEnd: 10, bottom: 50, }}
-                        />
-                       </TouchableOpacity>} */}
-
-              </View>
-            {this.state.pa == "empty" && this.state.password == "" && <Text style={styles.invalidPasswordTextStyle}>Password is empty</Text>}
-              
-            </View>
-
-            <View style={styles.passwordTextStyleView}>
-              <Text style={{
-                fontSize: 12,
-                color: this.state.cpa == "empty" ? 'red' : "maroon",
-                fontFamily: "Nunito_400Regular",
-                textAlign: "left",
-                paddingBottom: 5,
-                paddingLeft: 5,
-                opacity: 1,
-                fontWeight: "400",
-                marginTop: 8,
-              }}>Confirm Password</Text>
-
-              <View style={{
-                width: width * 0.81,
-                height: 54,
-                padding: 1,
-                borderRadius: 10,
-              }}>
-              <View style={{flexDirection: "row" }}>
-              <TextInput
-                backgroundColor= "#FFF"
-                borderWidth = {1}
-                fontSize={16}
-                borderColor={this.state.cpa == "empty" ? 'red' : "maroon"}
-                width= {width * 0.81}
-                height= {56}
-                borderRadius= {10}
-                paddingTop = {8}
-                paddingBottom = {8}
-                paddingStart ={15}
-                paddingEnd= {22}
-                opacity= {1}
-                placeholder={"********"}
-                underlineColorAndroid="transparent"
-                autoCapitalize="none"
-                style={{fontFamily: "Nunito_400Regular",}}
-                ref={(input) => { this.confirmPasswordTextInput = input; }}
-                value={this.state.confirmPassword}
-                secureTextEntry={this.state.secureTextEntry?true:false}
-                onChangeText={this.handleConfirmPassword}
-              />
-              {this.state.password ? 
-              <TouchableOpacity 
-              onPress={this.updateSecureTextEntry.bind(this)}>
-                {/* {this.state.secureTextEntry ?
-                <View
-                style={{alignSelf: "flex-end", right: 33, marginTop: 20, }}>
-                <EyeOpenIcon/>
-                </View>
-                 :
-                 <View
-                 style={{alignSelf: "flex-end", right: 33, marginTop: 20, }}>
-                 <EyeCloseIcon/>
-                 </View>
-                } */}
-                
-              </TouchableOpacity> : null} 
-              </View>
-              
-              
-              {/* <View      
-                  style={styles.iconViewStyle}>
-                  <LockIcon/>
-              </View> */}
-                      {/* {!this.state.secureTextEntry ?
-                      <TouchableOpacity 
-                      onPress={this.updateSecureTextEntry.bind(this)}>
-                        
-                        <Feather
-                          name="eye-off"
-                          color="#000000"
-                          size={15}
-                          style={{alignSelf: "flex-end", marginEnd: 10, bottom: 50, }}
-                          />
-                        </TouchableOpacity>
-                        :
-                        <TouchableOpacity 
-                      onPress={this.updateTrueSecureTextEntry.bind(this)}>
-                        <Feather
-                          name="eye"
-                          color="#000000"
-                          size={15}
-                          style={{alignSelf: "flex-end", marginEnd: 10, bottom: 50, }}
-                        />
-                       </TouchableOpacity>} */}
-
-              </View>
-            {this.state.cpa == "empty" && this.state.confirmPassword == "" && <Text style={styles.invalidPasswordTextStyle}>Confirm Password is empty</Text>}
-            {this.state.cpa == "empty" && this.state.showCpa == "empty" && this.state.confirmPassword != "" && <Text style={styles.invalidPasswordTextStyle}>Passwords don't match</Text>}
-            </View>
-
-            <View style={styles.codeTextSStyleView}>
-                <Text style={{
-                  fontSize: 12,
-                  color: this.state.qu == "empty" ? 'red' : "maroon",
-                  fontFamily: "Nunito_400Regular",
-                  textAlign: "left",
-                  paddingBottom: 5,
-                  paddingLeft: 12,
-                  opacity: 1,
-                  fontWeight: "400",
-                  marginTop: 8,
-                }}>Secret Question</Text>
-
-              <Dropdown
-                    value={"Select Question"}
-                    data={this.state.questList}
-                    baseColor={"#FFF"}
-                    textColor={"maroon"}
-                    fontSize={15}
-                    selectedItemColor={"maroon"}
-                    style={{fontFamily: "Nunito_400Regular",}}
-                    itemPadding={8}
-                    itemTextStyle={{ marginLeft: 5, fontFamily: "Nunito_400Regular", }}
-                    dropdownMargins={{ min:8, max:6 }}
-                    overlayStyle={{bottom: 10, alignSelf: "center", }}
-                    dropdownOffset={{top: 12, left: 0}}
-                    containerStyle={{
-                      borderColor: this.state.qu == "empty" ? 'red' : "maroon",
-                      backgroundColor: "#FFF",
-                      borderWidth: 1,
-                      borderRadius: 10,
-                      marginHorizontal: 10,
-                      paddingLeft: 15,
-                      height: 56,
-                      alignSelf: "center",
-                      width: width * 0.80,
-                      fontFamily: "Nunito_400Regular",
-                    }}
-                    onChangeText={(value) => this.handleQuestion(value)}
-                  />
-                  <AntDesign
-                    name="down"
-                    color="maroon"
-                    style={{ alignSelf: "flex-end", right: 30, bottom: 32, opacity: 1 }}
-                    size={13}/>
-              {this.state.qu == "empty" && this.state.question == "Select Question" && <Text style={styles.invalidDropdownTextStyle}>Please select a secret Question</Text>}
-              </View>
-
-              <View style={styles.answerTextSStyleView}>
-              <Text style={{
-                fontSize: 12,
-                color: this.state.ans == "empty" ? 'red' : "maroon",
-                fontFamily: "Nunito_400Regular",
-                textAlign: "left",
-                paddingBottom: 5,
-                paddingLeft: 5,
-                opacity: 1,
-                fontWeight: "400",
-                marginTop: 8,
-              }}>Secret Answer</Text>
-
-              <View style={{
-                width: width * 0.81,
-                height: 54,
-                padding: 1,
-                borderRadius: 10
-              }}>
-              <View style={{flexDirection: "row", }}>
-              <TextInput
-                backgroundColor= "#FFF"
-                borderWidth = {1}
-                fontSize={16}
-                borderColor={this.state.ans == "empty" ? 'red' : "maroon"}
-                width= {width * 0.81}
-                height= {56}
-                borderRadius= {10}
-                paddingTop = {8}
-                paddingBottom = {8}
-                paddingStart ={15}
-                paddingEnd= {22}
-                opacity= {1}
-                placeholder={"Answer"}
-                
-                underlineColorAndroid="transparent"
-                autoCapitalize="none"
-                style={{fontFamily: "Nunito_400Regular",}}
-                // returnKeyType="next"
-                // onSubmitEditing={() => { this.buIdSTextInput.focus(); }}
-                // blurOnSubmit={false}
-                // ref={(input) => { this.usernameSTextInput = input; }}
-                value={this.state.answer}
-                onChangeText={this.handleAnswer}
-              />
-              </View>
-              </View>
-      
-            {this.state.ans == "empty" && this.state.answer == "" && <Text style={styles.invalidPasswordTextStyle}>Secret Answer is empty</Text>}
-              
-            </View>
-            </View>}
-            <TouchableOpacity
-                onPress={this.onPressLogin.bind(this)}
-                style={{ alignSelf: "center", width: width * 0.81, height: 40, backgroundColor: "maroon", borderRadius: 10, opacity: 1, marginTop: 22, marginBottom: 22  }}>
-                <Text style={styles.loginButtonText}>SUBMIT</Text>
-            </TouchableOpacity>
-
+      <ImageBackground
+        source={require("./../../assets/splashh.png")}
+        style={styles.image}
+      >
+      <ScrollView
+        style={styles.scrollView}
+        keyboardShouldPersistTaps="always">
+        
+        <StatusBar backgroundColor="#F4EFEF" barStyle="dark-content"/>
+          <View style={styles.headerContainer}>
+            <Image source={require('../../assets/logo_.png')} resizeMode={'cover'} marginBottom={5}  marginStart={30}/>
+            <View flexDirection="row">
             
-            <View flexDirection="row" alignSelf="center" marginTop={10} marginBottom={10}>
+            <Text style={styles.headerTextStyle_}>Registration</Text>
+            <View style={{ marginVertical: 16 }}>
+            <UserIcon/>
+            </View>
+            </View>
+          </View>
+
+          <View>
+          <Text style={styles.displayTextStyle}>CREATE ACCOUNT</Text>
+          <View style={styles.emailTextStyleView}>
+            <View style={{
+              width: width * 0.81,
+              height: 54,
+              padding: 1,
+              borderRadius: 10
+            }}>  
+
+            <TextInput
+              backgroundColor={"#F4EFEF"}
+              borderWidth = {1}
+              borderColor={this.state.us == "empty" ? 'red' : "transparent"}
+              width = {width * 0.81}
+              height= {56}
+              // borderRadius = {10}
+              textAlign = "left"
+              paddingTop = {8}
+              paddingBottom ={8}
+              paddingStart ={15}
+              paddingEnd= {22}
+              opacity= {1}
+              fontSize={16}
+              underlineColorAndroid="transparent"
+              autoCapitalize="none"
+              
+              returnKeyType="next"
+              placeholder={"Name"}
+              placeholderTextColor={"#979797"}
+              // style={{fontFamily: "Nunito_400Regular",}}
+              onSubmitEditing={() => { this.secondTextInput.focus(); }}
+              blurOnSubmit={false}
+              value={this.state.name}
+              onChangeText={this.handleName}
+            />
+            </View>
+            {/* {this.state.us == "empty" && this.state.email == "" && <Text style={styles.invalidPasswordTextStyle}>E-mail is empty</Text>}
+            {this.state.embu == "empty" && this.state.email != "" && <Text style={styles.invalidPasswordTextStyle}>E-mail does not exist</Text>} */}
+          </View>
+          
+          <View style={styles.emailTextStyleView}>
+            <View style={{
+              width: width * 0.81,
+              height: 54,
+              padding: 1,
+              borderRadius: 10
+            }}>  
+
+            <TextInput
+              backgroundColor={"#F4EFEF"}
+              borderWidth = {1}
+              borderColor={this.state.us == "empty" ? 'red' : "transparent"}
+              width = {width * 0.81}
+              height= {56}
+              // borderRadius = {10}
+              textAlign = "left"
+              paddingTop = {8}
+              paddingBottom ={8}
+              paddingStart ={15}
+              paddingEnd= {22}
+              opacity= {1}
+              fontSize={16}
+              underlineColorAndroid="transparent"
+              autoCapitalize="none"
+              keyboardType="email-address"
+              returnKeyType="next"
+              placeholder={"Email"}
+              placeholderTextColor={"#979797"}
+              // style={{fontFamily: "Nunito_400Regular",}}
+              onSubmitEditing={() => { this.secondTextInput.focus(); }}
+              blurOnSubmit={false}
+              value={this.state.email}
+              onChangeText={this.handleEmail}
+            />
+            </View>
+            {this.state.us == "empty" && this.state.email == "" && <Text style={styles.invalidPasswordTextStyle}>E-mail is empty</Text>}
+            {this.state.embu == "empty" && this.state.email != "" && <Text style={styles.invalidPasswordTextStyle}>E-mail does not exist</Text>}
+          </View>
+
+          <View style={styles.passwordTextStyleView}>
+            <View style={{
+              width: width * 0.81,
+              height: 54,
+              padding: 1,
+              borderRadius: 10
+            }}>
+            <View style={{flexDirection: "row", }}>
+            <TextInput
+              backgroundColor={"#F4EFEF"}
+              borderWidth = {1}
+              fontSize={16}
+              borderColor={this.state.pa == "empty" ? 'red' : "transparent"}
+              width= {width * 0.81}
+              height= {56}
+              // borderRadius= {10}
+              paddingTop = {8}
+              paddingBottom = {8}
+              paddingStart ={15}
+              paddingEnd= {22}
+              opacity= {1}
+              placeholder={"Password"}
+              placeholderTextColor={"#979797"}
+              underlineColorAndroid="transparent"
+              autoCapitalize="none"
+              // style={{fontFamily: "Nunito_400Regular",}}
+              ref={(input) => { this.secondTextInput = input; }}
+              value={this.state.password}
+              secureTextEntry={this.state.secureTextEntry?true:false}
+              onChangeText={this.handlePassword}
+            />
+            {this.state.password ? 
+            <TouchableOpacity 
+            onPress={this.updateSecureTextEntry.bind(this)}>
+            </TouchableOpacity> : null} 
+            </View>
+
+            </View>
+            {this.state.password == "12345" && this.state.pa == "empty" && <Text style={styles.invalidPasswordTextStyle}>Invalid Password</Text>}
+          {this.state.pa == "empty" && this.state.password == "" && <Text style={styles.invalidPasswordTextStyle}>Password is empty</Text>}
+          </View>
+
+          <View style={styles.emailTextStyleView}>
+            <View style={{
+              width: width * 0.81,
+              height: 54,
+              padding: 1,
+              borderRadius: 10
+            }}>  
+
+            <TextInput
+              backgroundColor={"#F4EFEF"}
+              borderWidth = {1}
+              borderColor={this.state.us == "empty" ? 'red' : "transparent"}
+              width = {width * 0.81}
+              height= {56}
+              // borderRadius = {10}
+              textAlign = "left"
+              paddingTop = {8}
+              paddingBottom ={8}
+              paddingStart ={15}
+              paddingEnd= {22}
+              opacity= {1}
+              fontSize={16}
+              underlineColorAndroid="transparent"
+              autoCapitalize="none"
+              returnKeyType="next"
+              placeholder={"Address"}
+              placeholderTextColor={"#979797"}
+              // style={{fontFamily: "Nunito_400Regular",}}
+              onSubmitEditing={() => { this.secondTextInput.focus(); }}
+              blurOnSubmit={false}
+              value={this.state.address}
+              onChangeText={this.handleAddress}
+            />
+            </View>
+            {/* {this.state.us == "empty" && ///this.state.email == "" && <Text style={styles.invalidPasswordTextStyle}>E-mail is empty</Text>}
+            {this.state.embu == "empty" && this.state.email != "" && <Text style={styles.invalidPasswordTextStyle}>E-mail does not exist</Text>} */}
+          </View>
+
+          <View style={styles.emailTextStyleView}>
+            <View style={{
+              width: width * 0.81,
+              height: 54,
+              padding: 1,
+              borderRadius: 10
+            }}>  
+
+            <TextInput
+              backgroundColor={"#F4EFEF"}
+              borderWidth = {1}
+              borderColor={this.state.us == "empty" ? 'red' : "transparent"}
+              width = {width * 0.81}
+              height= {56}
+              // borderRadius = {10}
+              textAlign = "left"
+              paddingTop = {8}
+              paddingBottom ={8}
+              paddingStart ={15}
+              paddingEnd= {22}
+              opacity= {1}
+              fontSize={16}
+              underlineColorAndroid="transparent"
+              autoCapitalize="none"
+              returnKeyType="next"
+              placeholder={"Zip code"}
+              placeholderTextColor={"#979797"}
+              // style={{fontFamily: "Nunito_400Regular",}}
+              onSubmitEditing={() => { this.secondTextInput.focus(); }}
+              blurOnSubmit={false}
+              value={this.state.zipcode}
+              onChangeText={this.handleZipcode}
+            />
+            </View>
+            {/* {this.state.us == "empty" && this.state.email == "" && <Text style={styles.invalidPasswordTextStyle}>E-mail is empty</Text>}
+            {this.state.embu == "empty" && this.state.email != "" && <Text style={styles.invalidPasswordTextStyle}>E-mail does not exist</Text>} */}
+          </View>
+
+          <TouchableOpacity
+              onPress={this.onPressLogin.bind(this)}
+              style={{ alignSelf: "center", width: width * 0.81, height: 40, backgroundColor: "#52A860", marginBottom: 5, opacity: 1, marginTop: 60,  }}>
+              <Text style={styles.loginButtonText}>Submit</Text>
+          </TouchableOpacity>
+          <View flexDirection="row" alignSelf="center" marginTop={10} marginBottom={10}>
             <Text style={styles.dontHaveAccountTextStyle}>Have an account?{" "}</Text>
             <TouchableOpacity
                 onPress={() =>
-                  this.props.navigation.navigate("Welcome")
+                  // Alert.alert(null, "Signup")
+                  this.props.navigation.navigate("SignIn")
                 }>
             <Text style={styles.dontHaveAccountMintTextStyle}>Sign in</Text>
             </TouchableOpacity>
-            </View>
-            </View>
-        </ScrollView>
+          </View>
+
+          </View>
+      </ScrollView>
+   </ImageBackground>
     );
   }
 }
@@ -1458,7 +680,48 @@ const styles = StyleSheet.create({
   },
   image: {
     flex: 1,
+    // width: width,
+    height: height
+  },
+  headerContainer: {
     width: width,
+    height: 70,
+    padding: 10,
+    marginBottom: 10,
+    backgroundColor: "#F4EFEF",
+    flexDirection: "row",
+    justifyContent: "space-between"
+  },
+  headerTextStyle: {
+    fontSize: 20,
+    color: "black",
+    alignSelf: "center",
+    paddingVertical: 10,
+    paddingLeft: width * 0.2,
+    // fontFamily: "Nunito_700Bold",
+    opacity: 1,
+  },
+  headerTextStyle_: {
+    fontSize: 20,
+    color: "black",
+    alignSelf: "center",
+    paddingEnd: 10,
+    // width: 100,
+    paddingVertical: 10,
+    // fontFamily: "Nunito_700Bold",
+    opacity: 1,
+  },
+  displayTextStyle: {
+    fontSize: 22,
+    color: "black",
+    alignSelf: "center",
+    paddingEnd: 10,
+    fontWeight: "600",
+    paddingVertical: 10,
+    marginTop: 30,
+    marginBottom: 30,
+    // fontFamily: "Nunito_700Bold",
+    opacity: 1,
   },
   emailInput: {
     borderColor: "#EEF4FE",
@@ -1575,6 +838,7 @@ const styles = StyleSheet.create({
   emailTextStyleView: {
     marginTop: 15,
     alignSelf: "center",
+    marginBottom: 15,
   },
   passwordTextStyleView: {
     marginTop: 15,
@@ -1653,28 +917,28 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "maroon",
     right: 10,
-    fontFamily: "Nunito_400Regular",
+    // fontFamily: "Nunito_400Regular",
     textAlign: "right",
     marginTop: 18, 
     marginBottom: 22
   },
   dontHaveAccountTextStyle: {
-    fontSize: 12,
+    fontSize: 14,
     color: "#000000",
     marginBottom: 1,
     opacity: 1,
     marginStart: 5,
     fontWeight: "400",
-    fontFamily: "Nunito_400Regular",
+    // fontFamily: "Nunito_400Regular",
     alignSelf: "center",
   },
   dontHaveAccountMintTextStyle: {
     fontSize: 16,
-    color: "maroon",
+    color: "#52A860",
     marginBottom: 1,
     fontWeight: "600",
     opacity: 1,
-    fontFamily: "Nunito_400Regular",
+    // fontFamily: "Nunito_400Regular",
     alignSelf: "center",
     textDecorationLine: "underline"
   },
@@ -1713,19 +977,16 @@ const styles = StyleSheet.create({
     color: "white",
     textAlign: "center",
     alignItems: "center",
-    fontFamily: "Nunito_400Regular",
     padding: 5,
-    fontWeight: "400",
+    fontWeight: "500",
     fontSize: 20,
   },
   signUpButtonText: {
     color: "#4848FF",
     textAlign: "center",
-    fontFamily: "Nunito_400Regular",
   },
   scrollView: {
     flex: 1,
-    backgroundColor: "#E5E5E5",
   },
   errorMessageContainerStyle: {
     backgroundColor: "#fee8e6",
