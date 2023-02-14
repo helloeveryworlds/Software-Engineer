@@ -16,9 +16,9 @@ import {
 import UserIcon from "../../assets/svgs/user";
 
 // import AsyncStorage from '@react-native-async-storage/async-storage';
-// import bUSuggestBoxService, {
+// import groceSaveService, {
 //   setClientOnboardToken,
-// } from ".././service/BUSuggestBoxService";
+// } from ".././service/GroceSaveService";
 // import  Loader  from '../config/Loader';
 
 const { width, height } = Dimensions.get("window");
@@ -117,7 +117,7 @@ class SignIn extends Component {
     };
 
     this.setState({ isLoading: true });
-    // bUSuggestBoxService
+    // groceSaveService
     //   .post("/user/login",payload)
     //   .then(onSuccess)
     //   .catch(onFailure);
@@ -352,8 +352,8 @@ class SignIn extends Component {
             <Text style={styles.dontHaveAccountTextStyle}>Other issues{" "}</Text>
             <TouchableOpacity
                 onPress={() =>
-                  Alert.alert(null, "Signup")
-                  // this.props.navigation.navigate("SignUp")
+                  // Alert.alert(null, "Signup")
+                  this.props.navigation.navigate("SignUp")
                 }>
             <Text style={styles.dontHaveAccountMintTextStyle}>with Sign up</Text>
             </TouchableOpacity>
