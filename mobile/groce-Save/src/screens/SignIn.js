@@ -12,6 +12,7 @@ import {
   Alert,
   Dimensions,
   LogBox,
+  Platform
 } from "react-native";
 import UserIcon from "../../assets/svgs/user";
 
@@ -136,7 +137,6 @@ class SignIn extends Component {
     await this.removeItemValue("userDetails");
     try {
       await AsyncStorage.setItem("userDetails", JSON.stringify(value));
-      // await AsyncStorage.setItem("checkedBoxBoolean", JSON.stringify(payload));
 
     } catch (error) {
     }
@@ -145,45 +145,8 @@ class SignIn extends Component {
 
   };
 
-  _retrieveData() {
-    // this.setState({initialState})
-        
-    // AsyncStorage.getItem("userDetails").then((res) => {
-    //   const response = JSON.parse(res);
-    //   if (res !== null) {
-    //     this.setState({
-    //       role: response.role,
-    //       first_name: response.first_name,
-    //       last_name: response.last_name,
-    //     });
-
-    //     console.log("There is no role dey...", response);
-    //     console.log("I role to make role o", this.state.role);
-    //   } else {
-    //     console.log("There is no role dey...", response);
-    //   }
-    // });
-  
-    // AsyncStorage.getItem("checkedBoxBoolean").then((res) => {
-    //   const response = JSON.parse(res);
-    //   if (res !== null) {
-    //     if(response != null && response.checked == true){
-    //       console.log("Reached.......----",this.state);
-    //         this.setState({
-    //         email: response.email,
-    //         password: response.password,
-    //         checked: response.checked,
-    //         });       
-    //     }
-    //   } else {
-    //     console.log("Check box response... Error...", response);
-    //   }
-    // });
-  }
-
   componentWillMount = ()=> {
     console.log("I don mount o");
-    // this._retrieveData();
   }
 
     updateSecureTextEntry(){
@@ -192,7 +155,7 @@ class SignIn extends Component {
 
   render() {
     LogBox.ignoreAllLogs(true);
-
+    if(Platform.OS === "android"){
     return (
       <ImageBackground
         source={require("./../../assets/splashh.png")}
@@ -303,33 +266,6 @@ class SignIn extends Component {
                 
               </TouchableOpacity> : null} 
               </View>
-              
-              {/* <View      
-                  style={styles.iconViewStyle}>
-                  <LockIcon/>
-              </View> */}
-                      {/* {!this.state.secureTextEntry ?
-                      <TouchableOpacity 
-                      onPress={this.updateSecureTextEntry.bind(this)}>
-                        
-                        <Feather
-                          name="eye-off"
-                          color="#000000"
-                          size={15}
-                          style={{alignSelf: "flex-end", marginEnd: 10, bottom: 50, }}
-                          />
-                        </TouchableOpacity>
-                        :
-                        <TouchableOpacity 
-                      onPress={this.updateTrueSecureTextEntry.bind(this)}>
-                        <Feather
-                          name="eye"
-                          color="#000000"
-                          size={15}
-                          style={{alignSelf: "flex-end", marginEnd: 10, bottom: 50, }}
-                        />
-                       </TouchableOpacity>} */}
-
               </View>
               {this.state.password == "12345" && this.state.pa == "empty" && <Text style={styles.invalidPasswordTextStyle}>Invalid Password</Text>}
             {this.state.pa == "empty" && this.state.password == "" && <Text style={styles.invalidPasswordTextStyle}>Password is empty</Text>}
@@ -352,7 +288,6 @@ class SignIn extends Component {
             <Text style={styles.dontHaveAccountTextStyle}>Other issues{" "}</Text>
             <TouchableOpacity
                 onPress={() =>
-                  // Alert.alert(null, "Signup")
                   this.props.navigation.navigate("SignUp")
                 }>
             <Text style={styles.dontHaveAccountMintTextStyle}>with Sign up</Text>
@@ -362,7 +297,152 @@ class SignIn extends Component {
             </View>
         </ScrollView>
      </ImageBackground>
-    );
+  );
+  }
+    else if(Platform.OS === "ios"){
+      return(
+    <ImageBackground
+        source={require("./../../assets/splashh.png")}
+        style={styles.image}
+      >
+        <ScrollView
+          style={styles.scrollView}
+          keyboardShouldPersistTaps="always">
+          
+          <StatusBar backgroundColor="#F4EFEF" barStyle="dark-content"/>
+            <View style={styles.headerContainerIos}>
+              <Image source={require('../../assets/logo_.png')} resizeMode={'cover'} marginBottom={5}  marginStart={30}/>
+              <View flexDirection="row">
+              
+              <Text style={styles.headerTextStyleIos}>Login</Text>
+              <View style={{ marginVertical: 16 }}>
+              <UserIcon/>
+              </View>
+              </View>
+            </View>
+
+            <View>
+            <Text style={styles.displayTextStyleIos}>Signin</Text>
+            <View style={styles.emailTextStyleViewIos}>
+              <View style={{
+                width: width * 0.81,
+                height: 54,
+                padding: 1,
+                borderRadius: 10
+              }}>  
+
+              <TextInput
+                backgroundColor={"#F4EFEF"}
+                borderWidth = {1}
+                borderColor={this.state.us == "empty" ? 'red' : "transparent"}
+                width = {width * 0.81}
+                height= {56}
+                // borderRadius = {10}
+                textAlign = "left"
+                paddingTop = {8}
+                paddingBottom ={8}
+                paddingStart ={15}
+                paddingEnd= {22}
+                opacity= {1}
+                fontSize={16}
+                underlineColorAndroid="transparent"
+                autoCapitalize="none"
+                keyboardType="email-address"
+                returnKeyType="next"
+                placeholder={"Email"}
+                placeholderTextColor={"#979797"}
+                // style={{fontFamily: "Nunito_400Regular",}}
+                onSubmitEditing={() => { this.secondTextInput.focus(); }}
+                blurOnSubmit={false}
+                value={this.state.email}
+                onChangeText={this.handleEmail}
+              />
+              </View>
+              {this.state.us == "empty" && this.state.email == "" && <Text style={styles.invalidPasswordTextStyle}>E-mail is empty</Text>}
+              {this.state.embu == "empty" && this.state.email != "" && <Text style={styles.invalidPasswordTextStyle}>E-mail does not exist</Text>}
+            </View>
+            
+            <View style={styles.passwordTextStyleViewIos}>
+              <View style={{
+                width: width * 0.81,
+                height: 54,
+                padding: 1,
+                borderRadius: 10
+              }}>
+              <View style={{flexDirection: "row", }}>
+              <TextInput
+                backgroundColor={"#F4EFEF"}
+                borderWidth = {1}
+                fontSize={16}
+                borderColor={this.state.pa == "empty" ? 'red' : "transparent"}
+                width= {width * 0.81}
+                height= {56}
+                // borderRadius= {10}
+                paddingTop = {8}
+                paddingBottom = {8}
+                paddingStart ={15}
+                paddingEnd= {22}
+                opacity= {1}
+                placeholder={"Password"}
+                placeholderTextColor={"#979797"}
+                underlineColorAndroid="transparent"
+                autoCapitalize="none"
+                // style={{fontFamily: "Nunito_400Regular",}}
+                ref={(input) => { this.secondTextInput = input; }}
+                value={this.state.password}
+                secureTextEntry={this.state.secureTextEntry?true:false}
+                onChangeText={this.handlePassword}
+              />
+              {this.state.password ? 
+              <TouchableOpacity 
+              onPress={this.updateSecureTextEntry.bind(this)}>
+                {/* {this.state.secureTextEntry ?
+                <View
+                style={{alignSelf: "flex-end", right: 33, marginTop: 20, }}>
+                <EyeOpenIcon/>
+                </View>
+                 :
+                 <View
+                 style={{alignSelf: "flex-end", right: 33, marginTop: 20, }}>
+                 <EyeCloseIcon/>
+                 </View>
+                } */}
+                
+              </TouchableOpacity> : null} 
+              </View>
+              </View>
+              {this.state.password == "12345" && this.state.pa == "empty" && <Text style={styles.invalidPasswordTextStyle}>Invalid Password</Text>}
+            {this.state.pa == "empty" && this.state.password == "" && <Text style={styles.invalidPasswordTextStyle}>Password is empty</Text>}
+            </View>
+
+            <TouchableOpacity
+                onPress={this.onPressLogin.bind(this)}
+                style={{ alignSelf: "center", width: width * 0.81, height: 40, backgroundColor: "#52A860", marginBottom: 5, opacity: 1, marginTop: 60,  }}>
+                <Text style={styles.loginButtonTextIos}>Submit</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+                onPress={() =>
+                  this.props.navigation.navigate("ForgotPassword")
+                }>             
+              <Text style={styles.forgetTextStyleIos}>Forgot your Password? </Text>
+              </TouchableOpacity>
+
+            
+            <View flexDirection="row" alignSelf="center" marginTop={10} marginBottom={10}>
+            <Text style={styles.dontHaveAccountTextStyleIos}>Other issues{" "}</Text>
+            <TouchableOpacity
+                onPress={() =>
+                  this.props.navigation.navigate("SignUp")
+                }>
+            <Text style={styles.dontHaveAccountMintTextStyleIos}>with Sign up</Text>
+            </TouchableOpacity>
+            </View>
+
+            </View>
+        </ScrollView>
+     </ImageBackground>
+  );
+    }
   }
 }
 
@@ -379,7 +459,10 @@ const styles = StyleSheet.create({
   },
   image: {
     flex: 1,
-    // width: width,
+    height: height
+  },
+  imageIos: {
+    flex: 1,
     height: height
   },
   headerContainer: {
@@ -391,16 +474,26 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between"
   },
-  headerTextStyle: {
+  headerContainerIos: {
+    width: width,
+    height: 70,
+    padding: 10,
+    marginBottom: 10,
+    backgroundColor: "#F4EFEF",
+    flexDirection: "row",
+    justifyContent: "space-between"
+  },
+  headerTextStyle_: {
     fontSize: 20,
     color: "black",
     alignSelf: "center",
+    paddingEnd: 10,
+    // width: 100,
     paddingVertical: 10,
-    paddingLeft: width * 0.2,
     // fontFamily: "Nunito_700Bold",
     opacity: 1,
   },
-  headerTextStyle_: {
+  headerTextStyleIos: {
     fontSize: 20,
     color: "black",
     alignSelf: "center",
@@ -422,90 +515,17 @@ const styles = StyleSheet.create({
     // fontFamily: "Nunito_700Bold",
     opacity: 1,
   },
-  emailInput: {
-    borderColor: "#EEF4FE",
-    backgroundColor: "#EEF4FE",
-    borderWidth: 1,
-    width: width * 0.85,
-    height: 55,
-    borderRadius: 20,
-    textAlign: "left",
-    paddingTop: 15,
-    paddingBottom: 17,
-    paddingStart: 30,
-    paddingEnd: 40,
-  },
-  iconViewStyle: {
-      fontSize: 20,
-      bottom: 56,
-      marginLeft: 0,
-      alignSelf: "flex-start",
-      backgroundColor: "#507C543D",
-      borderColor: "#507C543D",
-      height: 56,
-      width: 52,
-      borderTopLeftRadius: 12,
-      borderBottomLeftRadius: 12,
-      paddingHorizontal: 15,
-      paddingVertical: 16,
-  },
-  textBgdIconViewStyle: {
-    marginLeft: 18,
-    alignSelf: "flex-start",
-    backgroundColor: "#507C543D",
-    height: 56
-  },
-  passwordInput: {
-    borderColor: "#EEF4FE",
-    backgroundColor: "#EEF4FE",
-    borderWidth: 1,
-    width: width * 0.85,
-    height: 55,
-    borderRadius: 20,
-    textAlign: "left",
-    paddingTop: 20,
-    paddingBottom: 17,
-    paddingStart: 30,
-    paddingEnd: 22,
-    opacity: 1,
-  },
-  cardStyleLong: {
-    marginTop: height * 0.12,
-    marginBottom: 10,
+  displayTextStyleIos: {
+    fontSize: 22,
+    color: "black",
     alignSelf: "center",
-    width: width * 0.92,
-    // height: height * 0.718,
-    padding: 15,
-    color: "#ffffff",
-    borderRadius: 6,
-    backgroundColor: "#FFFFFF",
-    shadowColor: "#000000",
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.2,
-    elevation: 5
-  },
-  textStyle: {
-    fontSize: 25,
-    color: "#ffffff",
-    fontWeight: "bold",
-    textAlign: "center",
-    textTransform: "uppercase",
-    letterSpacing: -0.35,
-  },
-  textStyle_: {
-    fontSize: 25,
-    color: "#ffffff",
-    fontWeight: "bold",
-    textAlign: "center",
-    textTransform: "uppercase",
-    letterSpacing: -0.35,
-  },
-  textStyleView: {
-    justifyContent: "center",
-    top: 20,
-    borderColor: "white",
-    borderWidth: 2,
-    padding: 7,
+    paddingEnd: 10,
+    fontWeight: "600",
+    paddingVertical: 10,
+    marginTop: 35,
+    marginBottom: 40,
+    // fontFamily: "Nunito_700Bold",
+    opacity: 1,
   },
   emailTextStyle: {
     fontSize: 12,
@@ -531,7 +551,15 @@ const styles = StyleSheet.create({
     marginTop: 15,
     alignSelf: "center",
   },
+  emailTextStyleViewIos: {
+    marginTop: 15,
+    alignSelf: "center",
+  },
   passwordTextStyleView: {
+    marginTop: 30,
+    alignSelf: "center",
+  },
+  passwordTextStyleViewIos: {
     marginTop: 30,
     alignSelf: "center",
   },
@@ -581,6 +609,16 @@ const styles = StyleSheet.create({
     marginBottom: 2,
     fontWeight: "600"
   },
+  forgetTextStyleIos: {
+    fontSize: 16,
+    color: "#52A860",
+    marginEnd: 25,
+    // fontFamily: "Nunito_400Regular",
+    textAlign: "right",
+    marginTop: 5, 
+    marginBottom: 2,
+    fontWeight: "600"
+  },
   dontHaveAccountTextStyle: {
     fontSize: 16,
     color: "#FFF",
@@ -592,6 +630,26 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   dontHaveAccountMintTextStyle: {
+    fontSize: 16,
+    color: "#52A860",
+    marginBottom: 1,
+    fontWeight: "700",
+    opacity: 1,
+    // fontFamily: "Nunito_400Regular",
+    alignSelf: "center",
+    // textDecorationLine: "underline"
+  },
+  dontHaveAccountTextStyleIos: {
+    fontSize: 16,
+    color: "#FFF",
+    marginBottom: 1,
+    opacity: 1,
+    marginStart: 5,
+    fontWeight: "700",
+    // fontFamily: "Nunito_400Regular",
+    alignSelf: "center",
+  },
+  dontHaveAccountMintTextStyleIos: {
     fontSize: 16,
     color: "#52A860",
     marginBottom: 1,
@@ -633,6 +691,15 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   loginButtonText: {
+    color: "white",
+    textAlign: "center",
+    alignItems: "center",
+    // fontFamily: "Nunito_400Regular",
+    padding: 5,
+    fontWeight: "400",
+    fontSize: 20,
+  },
+  loginButtonTextIos: {
     color: "white",
     textAlign: "center",
     alignItems: "center",

@@ -11,7 +11,8 @@ import {
   Image,
   TextInput,
   ImageBackground,
-  Alert
+  Alert,
+  Platform
 } from "react-native";
 // import Toast from 'react-native-tiny-toast';
 import SearchIcon from "../../assets/svgs/search";
@@ -28,8 +29,8 @@ class Welcome extends Component {
 
   render() {
     LogBox.ignoreAllLogs(true);
-
-    return (
+    if(Platform.OS === "android"){
+      return (
       <ImageBackground
         source={require('../../assets/splashh.png')}
         style={{ height: height, backgroundColor: "#FFF" }}>
@@ -65,6 +66,42 @@ class Welcome extends Component {
         </ScrollView>
         </ImageBackground>
     );
+    } else if(Platform.OS === "ios"){
+      <ImageBackground
+      source={require('../../assets/splashh.png')}
+      style={{ height: height, backgroundColor: "#FFF" }}>
+      <ScrollView
+        keyboardShouldPersistTaps="always">
+        
+        <StatusBar backgroundColor="#F4EFEF" barStyle="dark-content"/>
+          <View style={styles.headerContainer}>
+            <Image source={require('../../assets/logo_.png')} resizeMode={'cover'} marginBottom={5}/>
+            <View flexDirection="row">
+            <TouchableOpacity onPress={()=> Alert.alert(null,"Shop")}>
+            <Text style={styles.headerTextStyle}>Shop{"  "}</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress={()=> this.props.navigation.navigate("SignIn")}>
+            <Text style={styles.headerTextStyle_}>Signup/Signin</Text>
+            </TouchableOpacity>
+            </View>
+            <View style={{ marginVertical: 16, }}>
+            <UserIcon/>
+            </View>
+          </View>
+          
+          <View style={{ marginVertical: height * 0.2 }}>
+            <TextInput style={styles.optionContainer}/>
+            <View style={{ bottom: 35, paddingStart: 20 }}>
+            <SearchIcon/>
+            </View>
+          <View flexDirection="row" alignSelf="center" marginTop={10} marginBottom={10}>
+          <Text style={styles.infoTextStyle}>The right store with the right price</Text>
+          </View>
+          </View>
+      </ScrollView>
+      </ImageBackground>
+    }
   }
 }
 
