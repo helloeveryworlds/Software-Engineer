@@ -2,6 +2,8 @@
 import { Routes, Route, BrowserRouter as Router } from "react-router-dom";
 
 import Navigation from "../routes/navigation/navigation";
+import SignIn from "../routes/signin/signin";
+import SignUp from "../routes/signup/signup";
 
 function App() {
   return (
@@ -15,10 +17,10 @@ function App() {
           {/* <Route path="shopping" element={<Shopping />} /> */}
 
           {/* sign in page */}
-          {/* <Route path="signin" element={<SignIn />} /> */}
+          <Route path="signin" element={<SignIn />} />
 
           {/* sign up page */}
-          {/* <Route path="signup" element={<SignUp />} /> */}
+          <Route path="signup" element={<SignUp />} />
 
           {/* user info page */}
           {/* <Route path="userinfo" element={<UserInfo />} /> */}

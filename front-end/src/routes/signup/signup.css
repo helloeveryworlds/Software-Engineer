@@ -1,12 +1,12 @@
 body {
   margin: 0;
   padding: 0;
-  background: url(../assets/background.png);
+  background: url(../../assets/background.png);
   background-size: cover;
   font-family: sans-serif;
 }
 
-.loginbox {
+.signupbox {
   width: 320px;
   height: 420px;
   background: #fff;
@@ -27,12 +27,12 @@ h1 {
   font-size: 22px;
 }
 
-.loginbox input {
+.signupbox input {
   width: 100%;
   margin-bottom: 20px;
 }
 
-.loginbox input[type="text"],
+.signupbox input[type="text"],
 input[type="password"] {
   border: none;
   border-bottom: 1px solid #fff;
@@ -45,7 +45,7 @@ input[type="password"] {
   padding-left: 5%;
 }
 
-.loginbox input[type="submit"] {
+.signupbox input[type="submit"] {
   border: none;
   outline: none;
   height: 40px;
@@ -55,19 +55,23 @@ input[type="password"] {
   margin-left: 7px;
 }
 
-.loginbox input[type="submit"]:hover {
+.signupbox input[type="submit"]:hover {
   cursor: pointer;
   background: #ffc107;
   color: #000;
 }
 
-.loginbox a {
+.signupbox a {
   text-decoration: none;
   font-size: 12px;
   line-height: 20px;
   color: #00cc66;
 }
 
-.loginbox a:hover {
+.signupbox a:hover {
   color: #ffc107;
+}
+
+.signinlink {
+  text-align: center;
 }
