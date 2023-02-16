@@ -14,10 +14,10 @@ class SignIn extends React.Component {
             <input type="password" name="" placeholder="Password" />
             <input type="submit" name="" value="Login" />
             <p className="signuplink">
-              <a href="../../signup/signup.html">Don't have an account?</a>
+              <a href="/signup">Don't have an account?</a>
             </p>
             <p className="signuplink">
-              <a href="/#">Forgot your password?</a>
+              <a href="../signup/signup.jsx">Forgot your password?</a>
             </p>
           </form>
         </div>{" "}
