@@ -425,8 +425,6 @@ class SignUp extends Component {
   render() {
     LogBox.ignoreAllLogs(true);
     const { userType, showCountDown } = this.state;
-
-    if(Platform.OS === "android"){
       return (
       <ImageBackground
         source={require("./../../assets/splashh.png")}
@@ -666,245 +664,6 @@ class SignUp extends Component {
       </ScrollView>
    </ImageBackground>
     );
-    } else if (Platform.OS === "ios"){
-      <ImageBackground
-        source={require("./../../assets/splashh.png")}
-        style={styles.image}
-      >
-      <ScrollView
-        style={styles.scrollView}
-        keyboardShouldPersistTaps="always">
-        
-        <StatusBar backgroundColor="#F4EFEF" barStyle="dark-content"/>
-          <View style={styles.headerContainer}>
-            <Image source={require('../../assets/logo_.png')} resizeMode={'cover'} marginBottom={5}  marginStart={30}/>
-            <View flexDirection="row">
-            
-            <Text style={styles.headerTextStyle_}>Registration</Text>
-            <View style={{ marginVertical: 16 }}>
-            <UserIcon/>
-            </View>
-            </View>
-          </View>
-
-          <View>
-          <Text style={styles.displayTextStyle}>CREATE ACCOUNT</Text>
-          <View style={styles.emailTextStyleView}>
-            <View style={{
-              width: width * 0.81,
-              height: 54,
-              padding: 1,
-              borderRadius: 10
-            }}>  
-
-            <TextInput
-              backgroundColor={"#F4EFEF"}
-              borderWidth = {1}
-              borderColor={this.state.us == "empty" ? 'red' : "transparent"}
-              width = {width * 0.81}
-              height= {56}
-              // borderRadius = {10}
-              textAlign = "left"
-              paddingTop = {8}
-              paddingBottom ={8}
-              paddingStart ={15}
-              paddingEnd= {22}
-              opacity= {1}
-              fontSize={16}
-              underlineColorAndroid="transparent"
-              autoCapitalize="none"
-              
-              returnKeyType="next"
-              placeholder={"Name"}
-              placeholderTextColor={"#979797"}
-              // style={{fontFamily: "Nunito_400Regular",}}
-              onSubmitEditing={() => { this.secondTextInput.focus(); }}
-              blurOnSubmit={false}
-              value={this.state.name}
-              onChangeText={this.handleName}
-            />
-            </View>
-            {/* {this.state.us == "empty" && this.state.email == "" && <Text style={styles.invalidPasswordTextStyle}>E-mail is empty</Text>}
-            {this.state.embu == "empty" && this.state.email != "" && <Text style={styles.invalidPasswordTextStyle}>E-mail does not exist</Text>} */}
-          </View>
-          
-          <View style={styles.emailTextStyleView}>
-            <View style={{
-              width: width * 0.81,
-              height: 54,
-              padding: 1,
-              borderRadius: 10
-            }}>  
-
-            <TextInput
-              backgroundColor={"#F4EFEF"}
-              borderWidth = {1}
-              borderColor={this.state.us == "empty" ? 'red' : "transparent"}
-              width = {width * 0.81}
-              height= {56}
-              // borderRadius = {10}
-              textAlign = "left"
-              paddingTop = {8}
-              paddingBottom ={8}
-              paddingStart ={15}
-              paddingEnd= {22}
-              opacity= {1}
-              fontSize={16}
-              underlineColorAndroid="transparent"
-              autoCapitalize="none"
-              keyboardType="email-address"
-              returnKeyType="next"
-              placeholder={"Email"}
-              placeholderTextColor={"#979797"}
-              // style={{fontFamily: "Nunito_400Regular",}}
-              onSubmitEditing={() => { this.secondTextInput.focus(); }}
-              blurOnSubmit={false}
-              value={this.state.email}
-              onChangeText={this.handleEmail}
-            />
-            </View>
-            {this.state.us == "empty" && this.state.email == "" && <Text style={styles.invalidPasswordTextStyle}>E-mail is empty</Text>}
-            {this.state.embu == "empty" && this.state.email != "" && <Text style={styles.invalidPasswordTextStyle}>E-mail does not exist</Text>}
-          </View>
-
-          <View style={styles.passwordTextStyleView}>
-            <View style={{
-              width: width * 0.81,
-              height: 54,
-              padding: 1,
-              borderRadius: 10
-            }}>
-            <View style={{flexDirection: "row", }}>
-            <TextInput
-              backgroundColor={"#F4EFEF"}
-              borderWidth = {1}
-              fontSize={16}
-              borderColor={this.state.pa == "empty" ? 'red' : "transparent"}
-              width= {width * 0.81}
-              height= {56}
-              // borderRadius= {10}
-              paddingTop = {8}
-              paddingBottom = {8}
-              paddingStart ={15}
-              paddingEnd= {22}
-              opacity= {1}
-              placeholder={"Password"}
-              placeholderTextColor={"#979797"}
-              underlineColorAndroid="transparent"
-              autoCapitalize="none"
-              // style={{fontFamily: "Nunito_400Regular",}}
-              ref={(input) => { this.secondTextInput = input; }}
-              value={this.state.password}
-              secureTextEntry={this.state.secureTextEntry?true:false}
-              onChangeText={this.handlePassword}
-            />
-            {this.state.password ? 
-            <TouchableOpacity 
-            onPress={this.updateSecureTextEntry.bind(this)}>
-            </TouchableOpacity> : null} 
-            </View>
-
-            </View>
-            {this.state.password == "12345" && this.state.pa == "empty" && <Text style={styles.invalidPasswordTextStyle}>Invalid Password</Text>}
-          {this.state.pa == "empty" && this.state.password == "" && <Text style={styles.invalidPasswordTextStyle}>Password is empty</Text>}
-          </View>
-
-          <View style={styles.emailTextStyleView}>
-            <View style={{
-              width: width * 0.81,
-              height: 54,
-              padding: 1,
-              borderRadius: 10
-            }}>  
-
-            <TextInput
-              backgroundColor={"#F4EFEF"}
-              borderWidth = {1}
-              borderColor={this.state.us == "empty" ? 'red' : "transparent"}
-              width = {width * 0.81}
-              height= {56}
-              // borderRadius = {10}
-              textAlign = "left"
-              paddingTop = {8}
-              paddingBottom ={8}
-              paddingStart ={15}
-              paddingEnd= {22}
-              opacity= {1}
-              fontSize={16}
-              underlineColorAndroid="transparent"
-              autoCapitalize="none"
-              returnKeyType="next"
-              placeholder={"Address"}
-              placeholderTextColor={"#979797"}
-              // style={{fontFamily: "Nunito_400Regular",}}
-              onSubmitEditing={() => { this.secondTextInput.focus(); }}
-              blurOnSubmit={false}
-              value={this.state.address}
-              onChangeText={this.handleAddress}
-            />
-            </View>
-            {/* {this.state.us == "empty" && ///this.state.email == "" && <Text style={styles.invalidPasswordTextStyle}>E-mail is empty</Text>}
-            {this.state.embu == "empty" && this.state.email != "" && <Text style={styles.invalidPasswordTextStyle}>E-mail does not exist</Text>} */}
-          </View>
-
-          <View style={styles.emailTextStyleView}>
-            <View style={{
-              width: width * 0.81,
-              height: 54,
-              padding: 1,
-              borderRadius: 10
-            }}>  
-
-            <TextInput
-              backgroundColor={"#F4EFEF"}
-              borderWidth = {1}
-              borderColor={this.state.us == "empty" ? 'red' : "transparent"}
-              width = {width * 0.81}
-              height= {56}
-              // borderRadius = {10}
-              textAlign = "left"
-              paddingTop = {8}
-              paddingBottom ={8}
-              paddingStart ={15}
-              paddingEnd= {22}
-              opacity= {1}
-              fontSize={16}
-              underlineColorAndroid="transparent"
-              autoCapitalize="none"
-              returnKeyType="next"
-              placeholder={"Zip code"}
-              placeholderTextColor={"#979797"}
-              // style={{fontFamily: "Nunito_400Regular",}}
-              onSubmitEditing={() => { this.secondTextInput.focus(); }}
-              blurOnSubmit={false}
-              value={this.state.zipcode}
-              onChangeText={this.handleZipcode}
-            />
-            </View>
-            {/* {this.state.us == "empty" && this.state.email == "" && <Text style={styles.invalidPasswordTextStyle}>E-mail is empty</Text>}
-            {this.state.embu == "empty" && this.state.email != "" && <Text style={styles.invalidPasswordTextStyle}>E-mail does not exist</Text>} */}
-          </View>
-
-          <TouchableOpacity
-              onPress={this.onPressLogin.bind(this)}
-              style={{ alignSelf: "center", width: width * 0.81, height: 40, backgroundColor: "#52A860", marginBottom: 5, opacity: 1, marginTop: 60,  }}>
-              <Text style={styles.loginButtonText}>Submit</Text>
-          </TouchableOpacity>
-          <View flexDirection="row" alignSelf="center" marginTop={10} marginBottom={10}>
-            <Text style={styles.dontHaveAccountTextStyle}>Have an account?{" "}</Text>
-            <TouchableOpacity
-                onPress={() =>
-                  // Alert.alert(null, "Signup")
-                  this.props.navigation.navigate("SignIn")
-                }>
-            <Text style={styles.dontHaveAccountMintTextStyle}>Sign in</Text>
-            </TouchableOpacity>
-          </View>
-
-          </View>
-      </ScrollView>
-   </ImageBackground>
-    }
   }
 }
 
@@ -922,10 +681,10 @@ const styles = StyleSheet.create({
   image: {
     flex: 1,
     // width: width,
-    height: height
+    height: Platform.OS === "ios" ? height : height
   },
   headerContainer: {
-    width: width,
+    width: Platform.OS === "ios" ? width : width,
     height: 70,
     padding: 10,
     marginBottom: 10,
@@ -938,12 +697,12 @@ const styles = StyleSheet.create({
     color: "black",
     alignSelf: "center",
     paddingVertical: 10,
-    paddingLeft: width * 0.2,
+    paddingLeft: Platform.OS === "ios" ? width * 0.2 : width * 0.2,
     // fontFamily: "Nunito_700Bold",
     opacity: 1,
   },
   headerTextStyle_: {
-    fontSize: 20,
+    fontSize: Platform.OS === "ios" ? 20 : 20,
     color: "black",
     alignSelf: "center",
     paddingEnd: 10,
@@ -953,7 +712,7 @@ const styles = StyleSheet.create({
     opacity: 1,
   },
   displayTextStyle: {
-    fontSize: 22,
+    fontSize: Platform.OS === "ios" ? 22 : 22,
     color: "black",
     alignSelf: "center",
     paddingEnd: 10,
@@ -1077,12 +836,12 @@ const styles = StyleSheet.create({
     opacity: 1,
   },
   emailTextStyleView: {
-    marginTop: 15,
+    marginTop: Platform.OS === "ios" ? 15 : 15,
     alignSelf: "center",
     marginBottom: 15,
   },
   passwordTextStyleView: {
-    marginTop: 15,
+    marginTop: Platform.OS === "ios" ? 15 : 15,
     alignSelf: "center",
   },
   userNameTextStyleView: {

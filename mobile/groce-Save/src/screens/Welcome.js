@@ -29,7 +29,6 @@ class Welcome extends Component {
 
   render() {
     LogBox.ignoreAllLogs(true);
-    if(Platform.OS === "android"){
       return (
       <ImageBackground
         source={require('../../assets/splashh.png')}
@@ -65,44 +64,8 @@ class Welcome extends Component {
             </View>
         </ScrollView>
         </ImageBackground>
-    );
-    } else if(Platform.OS === "ios"){
-      <ImageBackground
-      source={require('../../assets/splashh.png')}
-      style={{ height: height, backgroundColor: "#FFF" }}>
-      <ScrollView
-        keyboardShouldPersistTaps="always">
-        
-        <StatusBar backgroundColor="#F4EFEF" barStyle="dark-content"/>
-          <View style={styles.headerContainer}>
-            <Image source={require('../../assets/logo_.png')} resizeMode={'cover'} marginBottom={5}/>
-            <View flexDirection="row">
-            <TouchableOpacity onPress={()=> Alert.alert(null,"Shop")}>
-            <Text style={styles.headerTextStyle}>Shop{"  "}</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity onPress={()=> this.props.navigation.navigate("SignIn")}>
-            <Text style={styles.headerTextStyle_}>Signup/Signin</Text>
-            </TouchableOpacity>
-            </View>
-            <View style={{ marginVertical: 16, }}>
-            <UserIcon/>
-            </View>
-          </View>
-          
-          <View style={{ marginVertical: height * 0.2 }}>
-            <TextInput style={styles.optionContainer}/>
-            <View style={{ bottom: 35, paddingStart: 20 }}>
-            <SearchIcon/>
-            </View>
-          <View flexDirection="row" alignSelf="center" marginTop={10} marginBottom={10}>
-          <Text style={styles.infoTextStyle}>The right store with the right price</Text>
-          </View>
-          </View>
-      </ScrollView>
-      </ImageBackground>
+      );
     }
-  }
 }
 
 
@@ -118,7 +81,7 @@ const styles = StyleSheet.create({
   },
   image: {
     flex: 1,
-    width: width,
+    width: Platform.OS === "ios" ? width : width,
   },
   optionContainer: {
       borderRadius: 20,
@@ -132,7 +95,7 @@ const styles = StyleSheet.create({
       marginTop: 30
   },
   headerContainer: {
-    width: width,
+    width: Platform.OS === "ios" ? width : width,
     height: 70,
     padding: 10,
     marginBottom: 10,
@@ -145,12 +108,12 @@ const styles = StyleSheet.create({
     color: "black",
     alignSelf: "center",
     paddingVertical: 10,
-    paddingLeft: width * 0.2,
+    paddingLeft: Platform.OS === "ios" ? width * 0.2 : width * 0.2,
     // fontFamily: "Nunito_700Bold",
     opacity: 1,
   },
   headerTextStyle_: {
-    fontSize: 20,
+    fontSize: Platform.OS === "ios" ? 20 : 20,
     color: "black",
     alignSelf: "center",
     paddingLeft: 17,

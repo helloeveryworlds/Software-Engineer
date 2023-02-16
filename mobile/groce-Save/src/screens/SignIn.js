@@ -155,7 +155,6 @@ class SignIn extends Component {
 
   render() {
     LogBox.ignoreAllLogs(true);
-    if(Platform.OS === "android"){
     return (
       <ImageBackground
         source={require("./../../assets/splashh.png")}
@@ -299,151 +298,6 @@ class SignIn extends Component {
      </ImageBackground>
   );
   }
-    else if(Platform.OS === "ios"){
-      return(
-    <ImageBackground
-        source={require("./../../assets/splashh.png")}
-        style={styles.image}
-      >
-        <ScrollView
-          style={styles.scrollView}
-          keyboardShouldPersistTaps="always">
-          
-          <StatusBar backgroundColor="#F4EFEF" barStyle="dark-content"/>
-            <View style={styles.headerContainerIos}>
-              <Image source={require('../../assets/logo_.png')} resizeMode={'cover'} marginBottom={5}  marginStart={30}/>
-              <View flexDirection="row">
-              
-              <Text style={styles.headerTextStyleIos}>Login</Text>
-              <View style={{ marginVertical: 16 }}>
-              <UserIcon/>
-              </View>
-              </View>
-            </View>
-
-            <View>
-            <Text style={styles.displayTextStyleIos}>Signin</Text>
-            <View style={styles.emailTextStyleViewIos}>
-              <View style={{
-                width: width * 0.81,
-                height: 54,
-                padding: 1,
-                borderRadius: 10
-              }}>  
-
-              <TextInput
-                backgroundColor={"#F4EFEF"}
-                borderWidth = {1}
-                borderColor={this.state.us == "empty" ? 'red' : "transparent"}
-                width = {width * 0.81}
-                height= {56}
-                // borderRadius = {10}
-                textAlign = "left"
-                paddingTop = {8}
-                paddingBottom ={8}
-                paddingStart ={15}
-                paddingEnd= {22}
-                opacity= {1}
-                fontSize={16}
-                underlineColorAndroid="transparent"
-                autoCapitalize="none"
-                keyboardType="email-address"
-                returnKeyType="next"
-                placeholder={"Email"}
-                placeholderTextColor={"#979797"}
-                // style={{fontFamily: "Nunito_400Regular",}}
-                onSubmitEditing={() => { this.secondTextInput.focus(); }}
-                blurOnSubmit={false}
-                value={this.state.email}
-                onChangeText={this.handleEmail}
-              />
-              </View>
-              {this.state.us == "empty" && this.state.email == "" && <Text style={styles.invalidPasswordTextStyle}>E-mail is empty</Text>}
-              {this.state.embu == "empty" && this.state.email != "" && <Text style={styles.invalidPasswordTextStyle}>E-mail does not exist</Text>}
-            </View>
-            
-            <View style={styles.passwordTextStyleViewIos}>
-              <View style={{
-                width: width * 0.81,
-                height: 54,
-                padding: 1,
-                borderRadius: 10
-              }}>
-              <View style={{flexDirection: "row", }}>
-              <TextInput
-                backgroundColor={"#F4EFEF"}
-                borderWidth = {1}
-                fontSize={16}
-                borderColor={this.state.pa == "empty" ? 'red' : "transparent"}
-                width= {width * 0.81}
-                height= {56}
-                // borderRadius= {10}
-                paddingTop = {8}
-                paddingBottom = {8}
-                paddingStart ={15}
-                paddingEnd= {22}
-                opacity= {1}
-                placeholder={"Password"}
-                placeholderTextColor={"#979797"}
-                underlineColorAndroid="transparent"
-                autoCapitalize="none"
-                // style={{fontFamily: "Nunito_400Regular",}}
-                ref={(input) => { this.secondTextInput = input; }}
-                value={this.state.password}
-                secureTextEntry={this.state.secureTextEntry?true:false}
-                onChangeText={this.handlePassword}
-              />
-              {this.state.password ? 
-              <TouchableOpacity 
-              onPress={this.updateSecureTextEntry.bind(this)}>
-                {/* {this.state.secureTextEntry ?
-                <View
-                style={{alignSelf: "flex-end", right: 33, marginTop: 20, }}>
-                <EyeOpenIcon/>
-                </View>
-                 :
-                 <View
-                 style={{alignSelf: "flex-end", right: 33, marginTop: 20, }}>
-                 <EyeCloseIcon/>
-                 </View>
-                } */}
-                
-              </TouchableOpacity> : null} 
-              </View>
-              </View>
-              {this.state.password == "12345" && this.state.pa == "empty" && <Text style={styles.invalidPasswordTextStyle}>Invalid Password</Text>}
-            {this.state.pa == "empty" && this.state.password == "" && <Text style={styles.invalidPasswordTextStyle}>Password is empty</Text>}
-            </View>
-
-            <TouchableOpacity
-                onPress={this.onPressLogin.bind(this)}
-                style={{ alignSelf: "center", width: width * 0.81, height: 40, backgroundColor: "#52A860", marginBottom: 5, opacity: 1, marginTop: 60,  }}>
-                <Text style={styles.loginButtonTextIos}>Submit</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-                onPress={() =>
-                  this.props.navigation.navigate("ForgotPassword")
-                }>             
-              <Text style={styles.forgetTextStyleIos}>Forgot your Password? </Text>
-              </TouchableOpacity>
-
-            
-            <View flexDirection="row" alignSelf="center" marginTop={10} marginBottom={10}>
-            <Text style={styles.dontHaveAccountTextStyleIos}>Other issues{" "}</Text>
-            <TouchableOpacity
-                onPress={() =>
-                  this.props.navigation.navigate("SignUp")
-                }>
-            <Text style={styles.dontHaveAccountMintTextStyleIos}>with Sign up</Text>
-            </TouchableOpacity>
-            </View>
-
-            </View>
-        </ScrollView>
-     </ImageBackground>
-  );
-    }
-  }
 }
 
 
@@ -459,23 +313,10 @@ const styles = StyleSheet.create({
   },
   image: {
     flex: 1,
-    height: height
-  },
-  imageIos: {
-    flex: 1,
-    height: height
+    height:  Platform.OS === "ios" ? height : height
   },
   headerContainer: {
-    width: width,
-    height: 70,
-    padding: 10,
-    marginBottom: 10,
-    backgroundColor: "#F4EFEF",
-    flexDirection: "row",
-    justifyContent: "space-between"
-  },
-  headerContainerIos: {
-    width: width,
+    width: Platform.OS === "ios" ? width : width,
     height: 70,
     padding: 10,
     marginBottom: 10,
@@ -484,39 +325,17 @@ const styles = StyleSheet.create({
     justifyContent: "space-between"
   },
   headerTextStyle_: {
-    fontSize: 20,
+    fontSize: Platform.OS === "ios" ? 20 : 20,
     color: "black",
     alignSelf: "center",
     paddingEnd: 10,
     // width: 100,
-    paddingVertical: 10,
-    // fontFamily: "Nunito_700Bold",
-    opacity: 1,
-  },
-  headerTextStyleIos: {
-    fontSize: 20,
-    color: "black",
-    alignSelf: "center",
-    paddingEnd: 10,
-    // width: 100,
-    paddingVertical: 10,
+    paddingVertical: Platform.OS === "ios" ? 10 : 10,
     // fontFamily: "Nunito_700Bold",
     opacity: 1,
   },
   displayTextStyle: {
-    fontSize: 22,
-    color: "black",
-    alignSelf: "center",
-    paddingEnd: 10,
-    fontWeight: "600",
-    paddingVertical: 10,
-    marginTop: 35,
-    marginBottom: 40,
-    // fontFamily: "Nunito_700Bold",
-    opacity: 1,
-  },
-  displayTextStyleIos: {
-    fontSize: 22,
+    fontSize: Platform.OS === "ios" ? 22 : 22,
     color: "black",
     alignSelf: "center",
     paddingEnd: 10,
@@ -548,19 +367,11 @@ const styles = StyleSheet.create({
     opacity: 1,
   },
   emailTextStyleView: {
-    marginTop: 15,
-    alignSelf: "center",
-  },
-  emailTextStyleViewIos: {
-    marginTop: 15,
+    marginTop: Platform.OS === "ios" ? 15 : 15,
     alignSelf: "center",
   },
   passwordTextStyleView: {
-    marginTop: 30,
-    alignSelf: "center",
-  },
-  passwordTextStyleViewIos: {
-    marginTop: 30,
+    marginTop: Platform.OS === "ios" ? 30 : 30,
     alignSelf: "center",
   },
   passwordTextStyle: {
@@ -600,17 +411,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   forgetTextStyle: {
-    fontSize: 16,
-    color: "#52A860",
-    marginEnd: 25,
-    // fontFamily: "Nunito_400Regular",
-    textAlign: "right",
-    marginTop: 5, 
-    marginBottom: 2,
-    fontWeight: "600"
-  },
-  forgetTextStyleIos: {
-    fontSize: 16,
+    fontSize: Platform.OS === "ios" ? 16 : 16,
     color: "#52A860",
     marginEnd: 25,
     // fontFamily: "Nunito_400Regular",
@@ -620,7 +421,7 @@ const styles = StyleSheet.create({
     fontWeight: "600"
   },
   dontHaveAccountTextStyle: {
-    fontSize: 16,
+    fontSize: Platform.OS === "ios" ? 16 : 16,
     color: "#FFF",
     marginBottom: 1,
     opacity: 1,
@@ -630,27 +431,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   dontHaveAccountMintTextStyle: {
-    fontSize: 16,
-    color: "#52A860",
-    marginBottom: 1,
-    fontWeight: "700",
-    opacity: 1,
-    // fontFamily: "Nunito_400Regular",
-    alignSelf: "center",
-    // textDecorationLine: "underline"
-  },
-  dontHaveAccountTextStyleIos: {
-    fontSize: 16,
-    color: "#FFF",
-    marginBottom: 1,
-    opacity: 1,
-    marginStart: 5,
-    fontWeight: "700",
-    // fontFamily: "Nunito_400Regular",
-    alignSelf: "center",
-  },
-  dontHaveAccountMintTextStyleIos: {
-    fontSize: 16,
+    fontSize: Platform.OS === "ios" ?  16 : 16,
     color: "#52A860",
     marginBottom: 1,
     fontWeight: "700",
@@ -697,16 +478,7 @@ const styles = StyleSheet.create({
     // fontFamily: "Nunito_400Regular",
     padding: 5,
     fontWeight: "400",
-    fontSize: 20,
-  },
-  loginButtonTextIos: {
-    color: "white",
-    textAlign: "center",
-    alignItems: "center",
-    // fontFamily: "Nunito_400Regular",
-    padding: 5,
-    fontWeight: "400",
-    fontSize: 20,
+    fontSize: Platform.OS === "ios" ? 20 : 20,
   },
   signUpButtonText: {
     color: "#4848FF",
