@@ -3,6 +3,7 @@ import { Fragment } from "react";
 import { Outlet, Link } from "react-router-dom";
 
 import HomeLogo from "../../assets/logo.png";
+import Footer from "../../components/footer/footer";
 import { PersonBoundingBox } from "react-bootstrap-icons";
 
 import "./navigation.css";
@@ -33,6 +34,7 @@ class Navigation extends React.Component {
           </div>
         </div>
         <Outlet />
+        <Footer />
       </Fragment>
     );
   }
