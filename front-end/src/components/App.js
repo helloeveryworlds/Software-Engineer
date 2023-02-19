@@ -2,6 +2,7 @@
 import { Routes, Route, BrowserRouter as Router } from "react-router-dom";
 
 import Navigation from "../routes/navigation/navigation";
+import Home from "./home/home";
 import SignIn from "../routes/signin/signin";
 import SignUp from "../routes/signup/signup";
 
@@ -11,7 +12,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Navigation />}>
           {/* Landing page */}
-          {/* <Route index element={<Home />} /> */}
+          <Route index element={<Home />} />
 
           {/* shopping page */}
           {/* <Route path="shopping" element={<Shopping />} /> */}
