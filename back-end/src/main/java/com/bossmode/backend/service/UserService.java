@@ -15,8 +15,9 @@ public class UserService {
         this.userDao = userDao;
     }
 
-    public void signUp(User customer) {
-        userDao.signUp(customer);
+    public void signUp(User user) {
+        user.setEnabled(true);
+        userDao.signUp(user);
     }
 
     public User getUser(String email) {

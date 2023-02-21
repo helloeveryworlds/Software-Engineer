@@ -1,6 +1,8 @@
 CREATE TABLE users(
-   email INT AUTO_INCREMENT PRIMARY KEY,
-   username VARCHAR(40),
-   password VARCHAR(255),
-   email VARCHAR(255)
+   email VARCHAR(50) PRIMARY KEY,
+   name VARCHAR(20),
+   password VARCHAR(50),
+   address VARCHAR(60),
+   zipcode INT,
+   enable BOOLEAN
 );

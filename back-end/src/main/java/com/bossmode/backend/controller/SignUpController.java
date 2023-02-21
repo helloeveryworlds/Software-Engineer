@@ -24,6 +24,8 @@ public class SignUpController {
     @ResponseStatus(value = HttpStatus.CREATED)
     public void signUp(@RequestBody User user) {
         userService.signUp(user);
+        userService.signUp(user);
+
     }
 }
 
