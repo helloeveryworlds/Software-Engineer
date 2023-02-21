@@ -10,15 +10,21 @@ CREATE TABLE Persons IF NOT EXISTS(
     City varchar(255)
 );
 */
+@Entity
+@Table(name = "user")
 
-public class User {
+public class User implements Serializable{
+    private static final long serialVersionUID = 2652327633296064143L;
 
+
+    @Id
     private String email;
     private String name;
     private String password;
     private boolean enabled;
     private String address;
     private String zipCode;
+
 
     public String getAddress() {
         return address;
