@@ -1,34 +1,40 @@
 import React from "react";
 // import axios from "axios";
 
+import SearchBar from "../../components/search-bar/search-bar";
 import "./home.css";
 
 class Home extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { query: "" };
+    this.state = { searchQuery: "", searchResults: [] };
   }
 
   handleSearchChange = (e) => {
-    this.setState({ query: e.target.value });
+    this.setState({ searchQuery: e.target.value });
   };
 
   handleSearchSubmit = (e) => {
     e.preventDefault();
-    if (this.state.query.trim() === "") {
+
+    const queryStr = this.state.query.trim();
+    if (queryStr === "") {
       return;
     }
-    //     axios
-    //       .post("/search", { query: this.state.query })
-    //       .then((response) => {
-    //         this.props.history.push("/shopping", { result: response.data });
-    //       })
-    //       .catch((error) => {
-    //         console.error(error);
-    //       });
+
+    // try {
+    //   const response = await fetch(`/search?query=${queryStr}`);
+    //   const results = await response.json();
+    //   this.setState({
+    //     results,
+    //   });
+    //   this.props.history.push("/search-results");
+    // } catch (error) {
+    //   console.error(error);
+    // }
   };
 
-  handleKeyPress = (e) => {
+  handleKeyDown = (e) => {
     if (e.key === "Enter") {
       this.handleSearchSubmit(e);
     }
@@ -39,16 +45,11 @@ class Home extends React.Component {
       <div className="home-container">
         <div className="home-right">
           <form onSubmit={this.handleSearchSubmit}>
-            <div className="search-container">
-              <input
-                className="search-input"
-                type="text"
-                placeholder="Search"
-                value={this.state.query}
-                onChange={this.handleSearchChange}
-                onKeyPress={this.handleKeyPress}
-              />
-            </div>
+            <SearchBar
+              searchQuery={this.state.searchQuery}
+              onChange={this.handleSearchChange}
+              onKeyDown={this.handleKeyDown}
+            />
           </form>
           <p className="home-slogan">The right store with the right price</p>
         </div>
