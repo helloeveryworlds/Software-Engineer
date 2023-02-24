@@ -1,7 +1,7 @@
 import React from "react";
 import { Fragment } from "react";
 
-import "./signup.css";
+import "./sign-up.css";
 
 class SignUp extends React.Component {
   render() {

@@ -2,9 +2,9 @@
 import { Routes, Route, BrowserRouter as Router } from "react-router-dom";
 
 import Navigation from "../routes/navigation/navigation";
-import Home from "./home/home";
-import SignIn from "../routes/signin/signin";
-import SignUp from "../routes/signup/signup";
+import Home from "../routes/home/home";
+import SignIn from "../routes/sign-in/sign-in";
+import SignUp from "../routes/sign-up/sign-up";
 
 function App() {
   return (

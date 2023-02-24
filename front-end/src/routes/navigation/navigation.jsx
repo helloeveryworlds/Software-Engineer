@@ -25,7 +25,7 @@ class Navigation extends React.Component {
             </Link>
 
             <Link className="nav-link" to="/signin">
-              Sign In / Up
+              Sign In/Up
             </Link>
 
             <Link className="nav-link" to="/userinfo">
