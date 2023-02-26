@@ -20,7 +20,7 @@ public class Store {
 	private Long id;
 	
 	@NonNull
-	@Column(name="storeName",unique=true)
+	@Column(name="storeName")
 	private String name;
 	
 	@NonNull

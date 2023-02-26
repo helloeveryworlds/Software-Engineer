@@ -1,0 +1,15 @@
+.footer-email {
+  font-size: 16px;
+  text-transform: capitalize;
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 300;
+  color: black;
+  display: block;
+  transition: all 0.3s ease;
+}
+
+.footer-email:hover {
+  color: #bbbbbb;
+  padding-left: 8px;
+}

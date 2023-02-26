@@ -4,13 +4,13 @@ import java.util.List;
 import java.util.Map;
 
 public class ItemListDTO {
-	private List<String> stores;
+	private Long zipCode;
 	private Map<String,Integer> itemsWithQuantity;
-	public List<String> getStores() {
-		return stores;
+	public Long getZipCode() {
+		return zipCode;
 	}
-	public void setStores(List<String> stores) {
-		this.stores = stores;
+	public void setZipCode(Long zipCode) {
+		this.zipCode = zipCode;
 	}
 	public Map<String, Integer> getItemsWithQuantity() {
 		return itemsWithQuantity;
