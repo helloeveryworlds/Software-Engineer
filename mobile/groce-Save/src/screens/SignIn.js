@@ -17,9 +17,9 @@ import {
 import UserIcon from "../../assets/svgs/user";
 
 // import AsyncStorage from '@react-native-async-storage/async-storage';
-// import groceSaveService, {
-//   setClientOnboardToken,
-// } from ".././service/GroceSaveService";
+import groceSaveService, {
+  setClientOnboardToken,
+} from ".././service/GroceSaveService";
 // import  Loader  from '../config/Loader';
 
 const { width, height } = Dimensions.get("window");
@@ -82,46 +82,48 @@ class SignIn extends Component {
       this.setState({ isLoading: false, pa: "empty" });
     }else{
     const payload = { email, password };
+    this.signnIn(payload)
   }
   } 
 
-  signIn(payload, route, role, roleCheck ){
+  signnIn(payload){
     this.setState({ isLoading: false, isAuthorized: true });
 
     console.log(payload);
 
     const onSuccess = ({ data }) => {
       // insert into db...
-      this._storeData(data);  
+      // this._storeData(data);  
       console.log("Dataaa",data);
-      this.setState({ isLoading: false })
+      // this.setState({ isLoading: false })
       
-      if (data.msg == "Login successfully" ) {
-        if(data.data.role == roleCheck){
-        this.props.navigation.navigate(route, {
-          username: data.data.userName,
-          email: data.data.email,
-          role: role
-        });
-      }else{
-        Alert.alert(null,data.data.role == "prof" ? role+" isn't your role. Your role is professor" : role+" isn't your role. Your role is "+data.data.role)
-      }
-      } else {
-        Alert.alert(null,data.msg)
-      }
+      // if (data.msg == "Login successfully" ) {
+      //   if(data.data.role == roleCheck){
+      //   this.props.navigation.navigate(route, {
+      //     username: data.data.userName,
+      //     email: data.data.email,
+      //     role: role
+      //   });
+      // }else{
+      //   Alert.alert(null,data.data.role == "prof" ? role+" isn't your role. Your role is professor" : role+" isn't your role. Your role is "+data.data.role)
+      // }
+      // } else {
+      //   Alert.alert(null,data.msg)
+      // }
     };
 
     const onFailure = (error) => {
       console.log(error);
         this.setState({ isLoading: false });
-        Alert.alert('Info: ','Network Error')
+      
     };
 
     this.setState({ isLoading: true });
-    // groceSaveService
-    //   .post("/user/login",payload)
-    //   .then(onSuccess)
-    //   .catch(onFailure);
+    groceSaveService
+      // .post(`/login?username=${"fuhao@bu.edu"}&password=${"1234"}`,payload)
+      .get(`/login?username=${payload.email}&password=${payload.password}`)
+      .then(onSuccess)
+      .catch(onFailure);
   }
 
   async removeItemValue(key) {
@@ -164,18 +166,7 @@ class SignIn extends Component {
           style={styles.scrollView}
           keyboardShouldPersistTaps="always">
           
-          <StatusBar backgroundColor="#F4EFEF" barStyle="dark-content"/>
-            <View style={styles.headerContainer}>
-              <Image source={require('../../assets/logo_.png')} resizeMode={'cover'} marginBottom={5}  marginStart={30}/>
-              <View flexDirection="row">
-              
-              <Text style={styles.headerTextStyle_}>Login</Text>
-              <View style={{ marginVertical: 16 }}>
-              <UserIcon/>
-              </View>
-              </View>
-            </View>
-
+          <StatusBar backgroundColor="#DDDDDD" barStyle="dark-content"/>
             <View>
             <Text style={styles.displayTextStyle}>Signin</Text>
             <View style={styles.emailTextStyleView}>
@@ -301,7 +292,7 @@ class SignIn extends Component {
 }
 
 
-export default SignIn;
+export default SignIn ;
 
 const styles = StyleSheet.create({
   spinnerTextStyle: {
