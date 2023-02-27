@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 import { Github } from "react-bootstrap-icons";
 
-import ButtonMailto from "../ButtonMailto/ButtonMailto";
+import ButtonMailto from "../button-mailto/button-mailto";
 
 import "./footer.css";
 
@@ -85,7 +85,7 @@ class Footer extends React.Component {
                   rel="noreferrer"
                   aria-label="Github"
                 >
-                  <Github size="3x" />
+                  <Github size="40px" />
                 </a>
               </div>
             </div>
