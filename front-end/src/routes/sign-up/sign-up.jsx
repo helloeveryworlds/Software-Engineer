@@ -52,7 +52,8 @@ class SignUp extends React.Component {
     })
   }
 
-  handleSubmit() {
+  handleSubmit(e) {
+    e.preventDefault()
     axios.post(
       "http://localhost:8080/signup",
       {
@@ -70,6 +71,7 @@ class SignUp extends React.Component {
     .catch((error) => {
       if( error){
           console.log(error);
+          alert(error.message)
       }
     });
   }
@@ -79,13 +81,13 @@ class SignUp extends React.Component {
       <Fragment>
         <div className="signupbox">
           <h1>Create Account</h1>
-          <form>
+          <form onSubmit={this.handleSubmit}>
             <input type="text" value={this.state.name} onChange={this.handleChangeName} name="" placeholder="Name" />
             <input type="text" value={this.state.email} onChange={this.handleChangeEmail} name="" placeholder="Email" />
             <input type="password" value={this.state.password} onChange={this.handleChangePwd} name="" placeholder="Password" />
             <input type="text" name="" value={this.state.address} onChange={this.handleChangeAddress} placeholder="Address" />
             <input type="text" name="" value={this.state.zipcode} onChange={this.handleChangeZipcode} placeholder="Zip code" />
-            <input type="submit" name="" onClick={this.handleSubmit} value="Submit" />
+            <input type="submit" name="" value="Submit" />
             <p className="signinlink">
               Have an account?
               <a href="/signin">Sign in</a>
