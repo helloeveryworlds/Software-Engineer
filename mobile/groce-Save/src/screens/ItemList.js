@@ -156,7 +156,7 @@ const styles = StyleSheet.create({
     height: 40,
     borderRadius: 50,
     alignSelf: "center",
-    marginTop: 10,
+    marginTop: Platform.OS === "ios" ? -10: 10,
   },
   itemBtnDetails: {
     fontSize: 18,
