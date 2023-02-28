@@ -51,7 +51,9 @@ class Home extends React.Component {
               onKeyDown={this.handleKeyDown}
             />
           </form>
-          <p className="home-slogan">The right store with the right price</p>
+          <p className="home-slogan" data-testid="slogan">
+            The right store with the right price
+          </p>
         </div>
       </div>
     );
