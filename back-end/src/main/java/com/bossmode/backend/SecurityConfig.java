@@ -33,7 +33,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         auth
                 .jdbcAuthentication()
                 .dataSource(dataSource)
-                .usersByUsernameQuery("SELECT email, password, enabled FROM customers WHERE email=?")
+                .usersByUsernameQuery("SELECT email, password, enabled FROM user WHERE email=?")
                 .authoritiesByUsernameQuery("SELECT email, authorities FROM authorities WHERE email=?");
 
     }

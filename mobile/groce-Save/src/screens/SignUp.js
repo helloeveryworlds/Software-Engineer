@@ -434,18 +434,7 @@ class SignUp extends Component {
         style={styles.scrollView}
         keyboardShouldPersistTaps="always">
         
-        <StatusBar backgroundColor="#F4EFEF" barStyle="dark-content"/>
-          <View style={styles.headerContainer}>
-            <Image source={require('../../assets/logo_.png')} resizeMode={'cover'} marginBottom={5}  marginStart={30}/>
-            <View flexDirection="row">
-            
-            <Text style={styles.headerTextStyle_}>Registration</Text>
-            <View style={{ marginVertical: 16 }}>
-            <UserIcon/>
-            </View>
-            </View>
-          </View>
-
+        <StatusBar backgroundColor="#DDDDDD" barStyle="dark-content"/>
           <View>
           <Text style={styles.displayTextStyle}>CREATE ACCOUNT</Text>
           <View style={styles.emailTextStyleView}>

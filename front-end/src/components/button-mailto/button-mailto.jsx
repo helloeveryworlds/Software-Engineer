@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-import "./ButtonMailto.css";
+import "./button-mailto.css";
 
 class ButtonMailto extends React.Component {
   render() {

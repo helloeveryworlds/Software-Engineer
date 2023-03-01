@@ -16,7 +16,8 @@ import {
 } from "react-native";
 // import Toast from 'react-native-tiny-toast';
 import SearchIcon from "../../assets/svgs/search";
-import UserIcon from "../../assets/svgs/user";
+import GitHubIcon from "../../assets/svgs/github"
+import Loader from "../config/Loader";
 
 const { width, height } = Dimensions.get("window");
 
@@ -30,29 +31,14 @@ class Welcome extends Component {
   render() {
     LogBox.ignoreAllLogs(true);
       return (
-      <ImageBackground
-        source={require('../../assets/splashh.png')}
-        style={{ height: height, backgroundColor: "#FFF" }}>
-        <ScrollView
+      <ScrollView
           keyboardShouldPersistTaps="always">
+        <ImageBackground
+          source={require('../../assets/splashh.png')}
+          style={{ height: height, backgroundColor: "#FFF" }}>
+          <Loader loading={this.state.isLoading} />
           
-          <StatusBar backgroundColor="#F4EFEF" barStyle="dark-content"/>
-            <View style={styles.headerContainer}>
-              <Image source={require('../../assets/logo_.png')} resizeMode={'cover'} marginBottom={5}/>
-              <View flexDirection="row">
-              <TouchableOpacity onPress={()=> Alert.alert(null,"Shop")}>
-              <Text style={styles.headerTextStyle}>Shop{"  "}</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity onPress={()=> this.props.navigation.navigate("SignIn")}>
-              <Text style={styles.headerTextStyle_}>Signup/Signin</Text>
-              </TouchableOpacity>
-              </View>
-              <View style={{ marginVertical: 16, }}>
-              <UserIcon/>
-              </View>
-            </View>
-            
+          <StatusBar backgroundColor="#DDDDDD" barStyle="dark-content"/>
             <View style={{ marginVertical: height * 0.2 }}>
               <TextInput style={styles.optionContainer}/>
               <View style={{ bottom: 35, paddingStart: 20 }}>
@@ -62,8 +48,51 @@ class Welcome extends Component {
             <Text style={styles.infoTextStyle}>The right store with the right price</Text>
             </View>
             </View>
+          </ImageBackground>
+        <View  style={{ height: height, backgroundColor: "#F4EFEF", padding: 25 , marginBottom: Platform.OS === "ios" ? 100 : 10 }}>
+        <Text style={styles.bigText}>Shop</Text>
+          <View
+            width={90} 
+            height={4} 
+            marginLeft={5}
+            backgroundColor={"#E91E63"} 
+            alignSelf={"flex-start"} 
+            marginVertical={5}
+            />
+        <TouchableOpacity onPress={()=> this.props.navigation.navigate("Shop")}>
+        <Text style={styles.smallText_}>Shopping Page</Text>
+        </TouchableOpacity>
+        <Text style={styles.bigText}>Students</Text>
+        <View
+            width={90} 
+            height={4} 
+            marginLeft={5}
+            backgroundColor={"#E91E63"} 
+            alignSelf={"flex-start"} 
+            marginVertical={5}
+            />
+        <Text style={styles.smallText}>Ratan J Naik</Text>
+        <Text style={styles.smallText}>Fuhao Ruan</Text>
+        <Text style={styles.smallText}>Chibundom Ejimuda</Text>
+        <Text style={styles.smallText}>Zijie Wang</Text>
+        <Text style={styles.smallText}>Zheng Zhang</Text>
+        <Text style={styles.smallText}>Bauyrzhan Kussayev</Text>
+        <Text style={styles.smallText}>Qiwei Li</Text>
+        <Text style={styles.smallText_}>Shweta Mishra</Text>
+
+        <Text style={styles.bigText}>Boss Mode</Text>
+        <View
+            width={90} 
+            height={4} 
+            backgroundColor={"#E91E63"} 
+            alignSelf={"flex-start"} 
+            marginTop={5}
+            marginLeft={5}
+            marginBottom={20}
+            />
+        <GitHubIcon/>
+        </View>
         </ScrollView>
-        </ImageBackground>
       );
     }
 }
@@ -79,6 +108,25 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
   },
+  bigText:{
+    fontSize: 36,
+    fontWeight: "400",
+    marginTop: 10,
+    lineHeight: 43.57,
+  },
+  smallText:{
+    fontSize: 24,
+    fontWeight: "400",
+    marginTop: 10,
+    lineHeight: 29.05,
+  },
+  smallText_:{
+    fontSize: 24,
+    fontWeight: "400",
+    marginTop: 10,
+    lineHeight: 29.05,
+    marginBottom: 40
+  },
   image: {
     flex: 1,
     width: Platform.OS === "ios" ? width : width,
@@ -91,6 +139,7 @@ const styles = StyleSheet.create({
       marginHorizontal: 16,
       paddingVertical: 10,
       paddingStart: 40,
+      paddingEnd: 10,
       backgroundColor: "#D3DEDD",
       marginTop: 30
   },
@@ -122,7 +171,7 @@ const styles = StyleSheet.create({
     opacity: 1,
   },
   infoTextStyle: {
-    fontSize: 25,
+    fontSize: 26,
     color: "black",
     marginTop: 20,
     paddingLeft: 5,
