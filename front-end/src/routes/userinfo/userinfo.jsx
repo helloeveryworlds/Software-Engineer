@@ -6,22 +6,10 @@
 //     render() {
 //         return (
 //             <div id="user-info">
- 
+
 //             </div>
 //             );
 //         };
 //     }
 
 // export default UserInfo;
-
-
-
-
-
-
-
-
-
-
-
-
