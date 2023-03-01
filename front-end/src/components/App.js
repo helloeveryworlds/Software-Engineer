@@ -6,6 +6,8 @@ import Home from "../routes/home/home";
 import SignIn from "../routes/sign-in/sign-in";
 import SignUp from "../routes/sign-up/sign-up";
 import Shopping from "../routes/shopping/shopping";
+import UserInfo from "../routes/userinfo/userinfo";
+// import Fruits from "../routes/fruits/fruits";
 
 
 function App() {
@@ -26,7 +28,11 @@ function App() {
           <Route path="signup" element={<SignUp />} />
 
           {/* user info page */}
-          {/* <Route path="userinfo" element={<UserInfo />} />  */}
+           <Route path="userinfo" element={<UserInfo />} />   
+
+          {/* fruits page */}
+          {/* <Route path="fruits" element={<Fruits />} /> */}
+
         </Route>
       </Routes>
     </Router>
