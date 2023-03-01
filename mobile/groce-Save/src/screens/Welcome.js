@@ -49,7 +49,7 @@ class Welcome extends Component {
             </View>
             </View>
           </ImageBackground>
-        <View  style={{ height: height, backgroundColor: "#F4EFEF", padding: 25 }}>
+        <View  style={{ height: height, backgroundColor: "#F4EFEF", padding: 25 , marginBottom: Platform.OS === "ios" ? 100 : 10 }}>
         <Text style={styles.bigText}>Shop</Text>
           <View
             width={90} 

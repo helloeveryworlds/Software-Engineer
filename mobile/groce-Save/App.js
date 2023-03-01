@@ -1,12 +1,13 @@
 import React from "react";
 import 'react-native-gesture-handler';
-import { View, TouchableOpacity, Image } from "react-native";
+import { View, TouchableOpacity, Image, Text } from "react-native";
 import { createAppContainer } from "react-navigation";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { Entypo } from "@expo/vector-icons";
+import UserIcon from './assets/svgs/user';
 import SignIn from "./src/screens/SignIn";
 import Welcome from "./src/screens/Welcome";
 import PriceCompare from "./src/screens/PriceCompare";
@@ -113,20 +114,6 @@ function secondScreenStack({ navigation }) {
           title: '', //Set Header Title
         }}
       />
-      <Stack.Screen
-        name="UserInfo"
-        component={UserInfo}
-        options={{
-          title: '', //Set Header Title
-        }}
-      />
-      {/* <Stack.Screen
-        name="Shop"
-        component={Shop}
-        options={{
-          title: '', //Set Header Title
-        }}
-      /> */}
     </Stack.Navigator>
   );
 }
@@ -226,33 +213,6 @@ function shopScreenStack({ navigation }) {
   );
 }
 
-function priceCompareScreenStack({ navigation }) {
-  return (
-    <Stack.Navigator initialRouteName="PriceCompare">
-      <Stack.Screen
-        name="PriceCompare"
-        component={PriceCompare}
-        options={{
-          title: '', //Set Header Title
-          headerLeft: () => (
-            <Image source={require('./assets/logo_.png')} resizeMode={'cover'}  marginStart={20}/>
-          ),
-          headerRight: () => (
-            <NavigationDrawerStructure navigationProps={navigation} />
-          ),
-          headerStyle: {
-            backgroundColor: '#F4EFEF', //Set Header color
-          },
-          headerTintColor: '#fff', //Set Header text color
-          headerTitleStyle: {
-            fontWeight: 'bold', //Set Header text style
-          },
-        }}
-      />
-    </Stack.Navigator>
-  );
-}
-
 function mainScreenStack({ navigation }) {
   return (
     <Stack.Navigator
@@ -304,24 +264,14 @@ function mainScreenStack({ navigation }) {
   );
 }
 
-function MyStack() {
-  return (
-    <Stack.Navigator>
-      <Stack.Screen name="SignIn" component={SignIn} />
-      <Stack.Screen name="Welcome" component={Welcome} />
-      <Stack.Screen name="Shop" component={Shop} />
-      <Stack.Screen name="PriceCompare" component={PriceCompare} />
-    </Stack.Navigator>
-  );
-}
-
 function App() {
   return (
     <NavigationContainer>
       <Drawer.Navigator
       initialRouteName="Welcome"
         drawerContentOptions={{
-          activeTintColor: '#FF0000',
+          activeTintColor:'red',
+          activeBackgroundColor: "#808080",
           itemStyle: { marginVertical: 5, },
           drawerPosition: "right",
         }}
@@ -335,7 +285,7 @@ function App() {
         drawerContent={(props) => <DrawerDesign {...props} />}>
         <Drawer.Screen
           name="Welcome"
-          options={{ drawerLabel: 'Home' }}
+          options={{ drawerLabel: 'Home', color: "#52A860" }}
           component={firstScreenStack}
         />
         <Drawer.Screen
@@ -348,21 +298,13 @@ function App() {
           options={{ drawerLabel: 'Signin/SignUp' }}
           component={secondScreenStack}
         />
-        {/* <Drawer.Screen
-          name="UserInfo"
-          options={{ drawerLabel: '' }}
-          component={userInfoScreenStack}
-        />
         <Drawer.Screen
-          name="Shop"
-          // options={{ drawerLabel: '' }}
-          component={shopScreenStack}
-        />
-        <Drawer.Screen
-          name="PriceCompare"
-          options={{ drawerLabel: '' }}
-          component={priceCompareScreenStack}
-        /> */}
+           name={"UserInfo"}
+           options={{
+            title: '',
+           drawerIcon:({focused})=> <UserIcon color={focused ? "#52A860" : "black"}/>}}
+           component={userInfoScreenStack}
+         />
       </Drawer.Navigator>
     </NavigationContainer>
   );

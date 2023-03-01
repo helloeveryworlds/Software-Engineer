@@ -87,9 +87,10 @@ def scraping(zipcode, product, store, printinfo = False):
     out_path = f'results/{store}/'
     with open(out_path+f'{zipcode}_{product}.json', 'w') as f:
         f.write('[')
-        for item in items:
+        for item in items[:-1]:
             f.write(json.dumps(item))
             f.write(',')
+        f.write(json.dumps(items[-1]))
         f.write(']')
         print(f'{store}  {zipcode}  {product} finished  total:', len(items))
 

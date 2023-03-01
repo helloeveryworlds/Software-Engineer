@@ -149,7 +149,7 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     paddingHorizontal: 10,
     fontSize: 11,
-    width: 50,
+    width: 45,
     position: "absolute",
     right: -20,
     top: -10
@@ -176,7 +176,7 @@ const styles = StyleSheet.create({
     height: 40,
     borderRadius: 50,
     alignSelf: "center",
-    marginTop: 10,
+    marginTop: Platform.OS === "ios" ? -10: 10,
   },
   itemBtnDetails: {
     fontSize: 18,
