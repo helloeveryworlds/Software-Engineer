@@ -2,7 +2,7 @@ import React from "react";
 import { Fragment } from "react";
 import axios from "axios";
 import "./sign-in.css";
-
+import { Button, Form, Input, message } from "antd";
 class SignIn extends React.Component {
   constructor(props) {
     super(props);
@@ -10,14 +10,14 @@ class SignIn extends React.Component {
     this.handleChangePwd = this.handleChangePwd.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.state = {
-      email: "",
+      username: "",
       password: ""
     }
   }
 
   handleChangeEmail(e) {
     this.setState({
-      email: e.target.value
+      username: e.target.value
     })
   }
 
@@ -28,22 +28,18 @@ class SignIn extends React.Component {
   }
 
   handleSubmit(e) {
-    e.preventDefault()
-    axios.post(
-      "http://localhost:8080/login",
-      {
-        email:this.state.email,
-        password:this.state.password
-      }
-      ,{timeout: 5000}
-    )
-    .then((response) => {
-      console.log(response)
+    const loginUrl = `/login?username=${this.state.email}&password=${this.state.password}`;
+
+    fetch(loginUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
     })
-    .catch((error) => {
-      if( error){
-          console.log(error);
-          alert(error.message)
+    .then((response) => {
+      if (response.status < 200 || response.status >= 300) {
+        throw Error("Fail to log in");
       }
     });
   }
