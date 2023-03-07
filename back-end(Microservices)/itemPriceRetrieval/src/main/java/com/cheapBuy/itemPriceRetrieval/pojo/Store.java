@@ -9,6 +9,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
 
 @Entity
@@ -24,8 +25,8 @@ public class Store {
 	private String name;
 	
 	@NonNull
-	@Column(name="priceList")
-	private String priceList;
+	@Column(name="dataList",columnDefinition="LONGTEXT")
+	private String dataList;
 
 	public Long getId() {
 		return id;
@@ -43,12 +44,12 @@ public class Store {
 		this.name = name;
 	}
 
-	public String getPriceList() {
-		return priceList;
+	public String getDataList() {
+		return dataList;
 	}
 
-	public void setPriceList(String priceList) {
-		this.priceList = priceList;
+	public void setPriceList(String dataList) {
+		this.dataList = dataList;
 	}
 	
 	

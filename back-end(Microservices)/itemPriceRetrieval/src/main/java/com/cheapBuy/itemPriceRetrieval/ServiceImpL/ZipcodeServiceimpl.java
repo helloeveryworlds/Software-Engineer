@@ -57,5 +57,24 @@ public class ZipcodeServiceimpl implements ZipCodeService {
 		return retList;
 	}
 
+	@Override
+	public List<Long> storeList(String zipCode) {
+		List<Long> retList=new LinkedList<>();
+		try {
+			Zipcode z =zipRepo.findByCode(zipCode);
+			if(z!=null) {
+				String s=z.getStoreList().substring(1, z.getStoreList().length()-1);
+				String [] arr=s.split(",");
+				for(String a1:arr) {
+					retList.add(Long.valueOf(a1));
+				}
+			}
+		}catch(Exception e) {
+			System.out.println("Contact the Admin");
+		}
+		
+		return retList;
+	}
+
 
 }
