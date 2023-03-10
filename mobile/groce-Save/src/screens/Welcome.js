@@ -17,7 +17,7 @@ import {
 // import Toast from 'react-native-tiny-toast';
 import SearchIcon from "../../assets/svgs/search";
 import GitHubIcon from "../../assets/svgs/github"
-import Loader from "../config/Loader";
+import Loader from "../components/Loader";
 
 const { width, height } = Dimensions.get("window");
 

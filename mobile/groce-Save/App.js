@@ -14,7 +14,7 @@ import PriceCompare from "./src/screens/PriceCompare";
 import UserInfo from "./src/screens/UserInfo";
 import Shop from "./src/screens/Shop";
 import ItemList from "./src/screens/ItemList";
-import DrawerDesign from './src/config/DrawerDesign';
+import DrawerDesign from './src/components/DrawerDesign';
 import SignUp from "./src/screens/SignUp";
 import { 
   Nunito_200ExtraLight,
