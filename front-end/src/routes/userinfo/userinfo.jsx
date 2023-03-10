@@ -1,15 +1,29 @@
-// import React, { Component }  from 'react';
-// import "./userinfo.css";
+import React, { Component }  from 'react';
+import "./userinfo.css";
 
-// class UserInfo extends React.Component {
+class UserInfo extends React.Component {
 
-//     render() {
-//         return (
-//             <div id="user-info">
+    render() {
+        return (
+            <div id="userinfo">
+                
 
-//             </div>
-//             );
-//         };
-//     }
+ 
+            </div>
+            );
+        };
+    }
 
-// export default UserInfo;
+export default UserInfo;
+
+
+
+
+
+
+
+
+
+
+
+

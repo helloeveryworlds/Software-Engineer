@@ -11,9 +11,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cheapBuy.itemPriceRetrieval.Service.StoreItemService;
 import com.cheapBuy.itemPriceRetrieval.Service.ZipCodeService;
 import com.cheapBuy.itemPriceRetrieval.dto.ItemListDTO;
 import com.cheapBuy.itemPriceRetrieval.dto.StoreDataDTO;
@@ -25,6 +27,9 @@ public class PriceRetrievalController {
 	
 	@Autowired
 	ZipCodeService zipserv;
+	
+	@Autowired
+	StoreItemService storeServ;
 	
 	
 	@GetMapping(path="/zipcodes")
@@ -53,10 +58,15 @@ public class PriceRetrievalController {
 	@PostMapping(value="/insertStoreData",consumes="application/json")
 	@ResponseBody
 	public ResponseEntity<?> insertStoreData(@RequestBody List<StoreDataDTO> itemList){
+		storeServ.saveStoreData(itemList);
 		return new ResponseEntity("WorkInProgress",HttpStatus.OK);
 	}
 	
-	
+	@GetMapping(path="/zipStoresList/{zipcode}")
+	@ResponseBody
+	public ResponseEntity<?> zipStoresList(@RequestParam String zipcode){
+		return new ResponseEntity(zipserv.storeList(zipcode),HttpStatus.OK);
+	}
 	
 	
 }
