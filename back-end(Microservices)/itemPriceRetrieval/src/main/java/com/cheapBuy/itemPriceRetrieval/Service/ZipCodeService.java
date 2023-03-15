@@ -9,5 +9,6 @@ public interface ZipCodeService {
 	
 	List<String> getAllZipCode();
 	List<ZipUpdateDTO> updateZipCode(List<ZipCodeDTO> listZipCodes);
+	List<Long> storeList(String zipCode);
 
 }

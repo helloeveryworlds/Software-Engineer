@@ -25,7 +25,7 @@ import groceSaveService, {
 const { width, height } = Dimensions.get("window");
 
 const initialState = {
-  email: "",
+  username: "",
   us: "",
   password: "", 
   pa: "",
@@ -45,19 +45,19 @@ const initialState = {
 class SignIn extends Component {
   state = initialState;
 
-  handleEmail = (email) => {
+  handleUsername = (username) => {
     var e = "@bu.edu"
-    if(email != ""){
-      console.log("Ah ah ah",email.includes(e))
-      if(email.includes(e) && email.endsWith(e)){
-      this.setState({ email: email, embu: "", us: "" });
-      }else if(email == "admin"){
-        this.setState({ email: email, embu: "", us: "" });
+    if(username != ""){
+      // console.log("Ah ah ah",username.includes(e))
+      if(username.includes(e) && username.endsWith(e)){
+      this.setState({ username: username, embu: "", us: "" });
+      }else if(username == "admin"){
+        this.setState({ username: username, embu: "", us: "" });
       }else{
-       this.setState({ email: email, embu: "empty", us: "empty" });
+       this.setState({ username: username, embu: "empty", us: "empty" });
       }
     }else {
-      this.setState({ email: email, us: "empty" });
+      this.setState({ username: username, us: "empty" });
     }
   };
 
@@ -72,16 +72,16 @@ class SignIn extends Component {
   onPressLogin() {
     this.setState({ isLoading: true });
 
-    const { email, password, embu } = this.state;
+    const { username, password, embu } = this.state;
     
-    if(email == ""){
+    if(username == ""){
       this.setState({ isLoading: false, us: "empty" });
-    }else if(email != "" && embu == "empty"){
+    }else if(username != "" && embu == "empty"){
       this.setState({ isLoading: false, embu: "empty" });
     }else if(password == ""){
       this.setState({ isLoading: false, pa: "empty" });
     }else{
-    const payload = { email, password };
+    const payload = { username, password };
     this.signnIn(payload)
   }
   } 
@@ -94,14 +94,15 @@ class SignIn extends Component {
     const onSuccess = ({ data }) => {
       // insert into db...
       // this._storeData(data);  
-      console.log("Dataaa",data);
+      console.log("Dataaa:::::",data);
+      Alert(null,"Login successfully")
       // this.setState({ isLoading: false })
       
       // if (data.msg == "Login successfully" ) {
       //   if(data.data.role == roleCheck){
       //   this.props.navigation.navigate(route, {
       //     username: data.data.userName,
-      //     email: data.data.email,
+      //     username: data.data.username,
       //     role: role
       //   });
       // }else{
@@ -120,8 +121,8 @@ class SignIn extends Component {
 
     this.setState({ isLoading: true });
     groceSaveService
-      // .post(`/login?username=${"fuhao@bu.edu"}&password=${"1234"}`,payload)
-      .get(`/login?username=${payload.email}&password=${payload.password}`)
+      // .post(`/login?username=${"fuhao@bu.edu"}&password=${"1234"}`)
+      .post(`/login?username=${payload.username}&password=${payload.password}`)
       .then(onSuccess)
       .catch(onFailure);
   }
@@ -143,8 +144,6 @@ class SignIn extends Component {
     } catch (error) {
     }
     console.log("This is for storing data...", value);
-    // console.log("This is for storing data...", payload);
-
   };
 
   componentWillMount = ()=> {
@@ -169,7 +168,7 @@ class SignIn extends Component {
           <StatusBar backgroundColor="#DDDDDD" barStyle="dark-content"/>
             <View>
             <Text style={styles.displayTextStyle}>Signin</Text>
-            <View style={styles.emailTextStyleView}>
+            <View style={styles.usernameTextStyleView}>
               <View style={{
                 width: width * 0.81,
                 height: 54,
@@ -200,12 +199,12 @@ class SignIn extends Component {
                 // style={{fontFamily: "Nunito_400Regular",}}
                 onSubmitEditing={() => { this.secondTextInput.focus(); }}
                 blurOnSubmit={false}
-                value={this.state.email}
-                onChangeText={this.handleEmail}
+                value={this.state.username}
+                onChangeText={this.handleUsername}
               />
               </View>
-              {this.state.us == "empty" && this.state.email == "" && <Text style={styles.invalidPasswordTextStyle}>E-mail is empty</Text>}
-              {this.state.embu == "empty" && this.state.email != "" && <Text style={styles.invalidPasswordTextStyle}>E-mail does not exist</Text>}
+              {this.state.us == "empty" && this.state.username == "" && <Text style={styles.invalidPasswordTextStyle}>E-mail is empty</Text>}
+              {this.state.embu == "empty" && this.state.username != "" && <Text style={styles.invalidPasswordTextStyle}>E-mail does not exist</Text>}
             </View>
             
             <View style={styles.passwordTextStyleView}>
@@ -337,7 +336,7 @@ const styles = StyleSheet.create({
     // fontFamily: "Nunito_700Bold",
     opacity: 1,
   },
-  emailTextStyle: {
+  usernameTextStyle: {
     fontSize: 12,
     color: "#002A14",
     // fontFamily: "Nunito_400Regular",
@@ -357,7 +356,7 @@ const styles = StyleSheet.create({
     fontFamily: "Nunito_700Bold",
     opacity: 1,
   },
-  emailTextStyleView: {
+  usernameTextStyleView: {
     marginTop: Platform.OS === "ios" ? 15 : 15,
     alignSelf: "center",
   },

@@ -1,6 +1,6 @@
 // import "../styles/App.css";
 import { Routes, Route, BrowserRouter as Router } from "react-router-dom";
-import React from 'react';
+import React from "react";
 import Navigation from "../routes/navigation/navigation";
 import Home from "../routes/home/home";
 import SignIn from "../routes/sign-in/sign-in";
@@ -9,7 +9,7 @@ import Shopping from "../routes/shopping/shopping";
 import UserInfo from "../routes/userinfo/userinfo";
 // import Fruits from "../routes/fruits/fruits";
 
-
+import SearchResult from "./search-result/search-result";
 function App() {
   return (
     <Router>
@@ -19,7 +19,7 @@ function App() {
           <Route index element={<Home />} />
 
           {/* shopping page */}
-           <Route path="shopping" element={<Shopping />} /> 
+          <Route path="shopping" element={<Shopping />} />
 
           {/* sign in page */}
           <Route path="signin" element={<SignIn />} />
