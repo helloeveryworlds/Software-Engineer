@@ -11,7 +11,7 @@
     <root id="root">
       <element id="directory" name="WEB-INF">
         <element id="directory" name="classes">
-          <element id="module-output" name="backend" />
+          <element id="module-output" name="back-end" />
         </element>
         <element id="directory" name="lib">
           <element id="library" level="project" name="Maven: org.springframework:spring-orm:5.3.9" />
@@ -50,6 +50,10 @@
           <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.11.3" />
           <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.11.3" />
           <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-core:2.11.3" />
+          <element id="library" level="project" name="Maven: org.springframework.security:spring-security-web:5.5.2" />
+          <element id="library" level="project" name="Maven: org.springframework.security:spring-security-core:5.5.2" />
+          <element id="library" level="project" name="Maven: org.springframework.security:spring-security-crypto:5.5.2" />
+          <element id="library" level="project" name="Maven: org.springframework.security:spring-security-config:5.5.2" />
         </element>
       </element>
       <element id="directory" name="META-INF">

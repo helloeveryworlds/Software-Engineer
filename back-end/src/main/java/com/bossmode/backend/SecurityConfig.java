@@ -23,7 +23,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .failureForwardUrl("/login?error=true");
         http
                 .authorizeRequests()
-                .antMatchers("/home").hasAuthority("ROLE_USER")
+                .antMatchers("/*").hasAuthority("ROLE_USER")
                 .anyRequest().permitAll();
     }
 
