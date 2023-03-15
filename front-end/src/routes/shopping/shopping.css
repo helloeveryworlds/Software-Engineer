@@ -1,6 +1,5 @@
-
-#shopping-container{
-  font-family: 'Inter';
+#shopping-container {
+  font-family: "Inter";
   font-style: normal;
   font-weight: 400;
   font-size: 48px;
@@ -11,14 +10,14 @@
   background: #ffffff;
 }
 
-.search-container {
+/* .search-container {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
   margin: 0 0 0 0;
   padding: 0 0 0 0;
-}
+} */
 
 .shopping-categories {
   display: flex;
@@ -30,7 +29,7 @@
 }
 
 .category-heading h4 {
-  font-family: 'Inter';
+  font-family: "Inter";
   font-style: normal;
   font-weight: 700;
   font-size: 48px;

@@ -10,7 +10,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a836269e-5ad6-43da-8c08-705f1fe95b5d" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/d9267f79-dca2-4a52-89bc-4719722988b2.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/d9267f79-dca2-4a52-89bc-4719722988b2.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front-end/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/../front-end/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front-end/src/components/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/../front-end/src/components/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front-end/src/components/search-bar/search-bar.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../front-end/src/components/search-bar/search-bar.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front-end/src/routes/home/home.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../front-end/src/routes/home/home.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front-end/src/routes/shopping/shopping.css" beforeDir="false" afterPath="$PROJECT_DIR$/../front-end/src/routes/shopping/shopping.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front-end/src/routes/shopping/shopping.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../front-end/src/routes/shopping/shopping.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front-end/src/routes/userinfo/userinfo.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../front-end/src/routes/userinfo/userinfo.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,24 +53,9 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/fuhaoruan/Documents/Spring 2023/software engineer/SoftwareEnigneer/backend&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;spring.configuration.checksum&quot;: &quot;b43fdd98b1fd705ae4c3a10cf25aad8a&quot;
-  },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;mysql&quot;
-    ]
-  }
-}</component>
+  <component name="PropertiesComponent">
+    <property name="WebServerToolWindowFactoryState" value="false" />
+  </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$" />
@@ -205,6 +200,9 @@
       <workItem from="1677084167104" duration="5786000" />
       <workItem from="1677173370601" duration="1491000" />
       <workItem from="1677471471719" duration="1133000" />
+      <workItem from="1677532496038" duration="1101000" />
+      <workItem from="1677534724934" duration="999000" />
+      <workItem from="1677557663800" duration="4851000" />
     </task>
     <servers />
   </component>
@@ -221,5 +219,6 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
 </project>
