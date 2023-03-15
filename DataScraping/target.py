@@ -46,9 +46,6 @@ def scraping(zipcode, product, store, printinfo = False):
     
     for i, tag in enumerate(tags[:]):
         try:
-            if printinfo:
-                print(i)
-                print(' pics, price, name, unit-price')
             
             driver_tmp = webdriver.Chrome()
             driver_tmp.get('https://www.target.com'+ tag.div.div.div.h3.a['href'])
@@ -64,12 +61,18 @@ def scraping(zipcode, product, store, printinfo = False):
             
             price = main_content.find('div', class_='styles__StyledSecondColumn-sc-y0ahq4-2 fgJgHt h-padding-h-default').div.div.div.span.span.text
             
+            unit_price = 'None'
+            
+            rating = 'None'
+            
             driver_tmp.close()
             
-            item = {"pic-url": pic, "price": price, "name": name, "unit-price": "None"}
+            item = {"pic-url": pic, "price": price, "name": name, "unit-price":unit_price , "rating": rating}
             items.append(item)
             
             if printinfo:
+                print(i)
+                print(' pics, price, name, unit-price')
                 print(pic, price, name, sep='\n')
                 print()
         except Exception as e:
@@ -82,7 +85,7 @@ def scraping(zipcode, product, store, printinfo = False):
         f.write('[')
         for item in items[:-1]:
             f.write(json.dumps(item))
-            f.write(',')
+            f.write(',\n')
         f.write(json.dumps(items[-1]))
         f.write(']')
         print(f'{store}  {zipcode}  {product} finished  total:', len(items))
@@ -94,7 +97,7 @@ products = ['milk', 'egg']
 
 for zipcode in zipcodes:
     for product in products:
-        scraping(zipcode, product, store, True)
+        scraping(zipcode, product, store)
 
 
 

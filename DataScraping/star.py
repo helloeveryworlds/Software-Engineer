@@ -13,8 +13,6 @@ import os
 
 
 
-
-
 def click(web, method, val, s_t = 1):
     button = web.find_element(method, val)
     button.click()
@@ -27,16 +25,21 @@ def scraping(zipcode, product, store, printinfo = False):
     driver = webdriver.Chrome()
     driver.get(url)
     driver.maximize_window()
-    
-    click(driver, By.ID, 'onetrust-accept-btn-handler')
-    click(driver, By.ID, 'onboardingCloseButton')
-    click(driver, By.ID, 'openFulfillmentModalButton')
-    bar = driver.find_element(By.XPATH, '//*[@id="storeFulfillmentModal"]/div/div/div[2]/store-fulfillment-tabs/div/div[1]/input')
-    bar.send_keys(zipcode)
-    click(driver, By.XPATH, '//*[@id="storeFulfillmentModal"]/div/div/div[2]/store-fulfillment-tabs/div/div[1]/span')
-    click(driver, By.XPATH, '//*[@id="fulfilmentInStore"]/div/div/div[1]/store-card/div[2]/div/a')
-    click(driver, By.ID, 'sortDropdown')
-    click(driver, By.ID, 'sortRule-1', 3)
+    try:
+        click(driver, By.ID, 'onetrust-accept-btn-handler')
+        click(driver, By.ID, 'onboardingCloseButton')
+        driver.execute_script("window.scrollTo(0, 0);")
+        click(driver, By.ID, 'openFulfillmentModalButton')
+        bar = driver.find_element(By.XPATH, '//*[@id="storeFulfillmentModal"]/div/div/div[2]/store-fulfillment-tabs/div/div[1]/input')
+        bar.send_keys(zipcode)
+        sleep(2)
+        click(driver, By.XPATH, '//*[@id="storeFulfillmentModal"]/div/div/div[2]/store-fulfillment-tabs/div/div[1]/span')
+        click(driver, By.XPATH, '//*[@id="fulfilmentInStore"]/div/div/div[1]/store-card/div[2]/div/a')
+        driver.execute_script("window.scrollBy(0, 100);")
+        click(driver, By.ID, 'sortDropdown')
+        click(driver, By.ID, 'sortRule-1', 3)
+    except:
+        return 
     # cookies # close # change zip # enter zip code # search # select first store # sort option # sort by price
     
     soup = BeautifulSoup(driver.page_source, 'html.parser')
@@ -46,21 +49,16 @@ def scraping(zipcode, product, store, printinfo = False):
     
     for i, tag in enumerate(tags[:]):
         try:
-            if printinfo:
-                print(i)
-                print(' pics, price, name, unit-price')
             
             pic_tag = tag.find_all('div', class_='product-card-container__image-container mt-3')
             if len(pic_tag)==0:
                 pic_tag = tag.find_all('div', class_='product-card-container__image-container mt-3 has-tooltip')
             pic = pic_tag[0].img['data-src']
-            #print(pic)
             
             price_tag = tag.find_all('div', class_='product-card-container__details mt-3')
             price_start = str(price_tag[0].div.span).find('</span>')
             price_end   = str(price_tag[0].div.span).find('<!')
             price = str(price_tag[0].div.span)[price_start+8: price_end-1]
-            #print(price)
             
             name_tag = tag.find_all('div', class_='product-title__text has-tooltip')
             if len(name_tag)==0:
@@ -68,15 +66,26 @@ def scraping(zipcode, product, store, printinfo = False):
                 name = name_tag[0].a.text
             else:
                 name = tag.find_all('div', class_='product-item-title-tooltip__inner')[0].text
-            #print(name)
             
             unit_price = tag.find_all('div', class_='product-title__details')[0].div.text[1:-1]
-            #print(unit_price)
+            num, measure = unit_price.split(f' / ')
+            if measure == '100ct':
+                unit_price = str(float(num)/100.0)
+            elif measure == 'Gal.':
+                unit_price = str(float(num)/3.79)
+            elif measure == 'Lb' or measure == 'pound':
+                unit_price = str(float(num)/0.45)
+            elif measure == 'Quart':
+                unit_price = str(float(num)/0.95)
             
-            item = {"pic-url": pic, "price": price, "name": name, "unit-price": unit_price}
+            rating = 'None'
+            
+            item = {"pic-url": pic, "price": price, "name": name, "unit-price": unit_price, "rating": rating}
             items.append(item)
             
             if printinfo:
+                print(i)
+                print(' pics, price, name, unit-price')
                 print(pic, price, name, unit_price, sep='\n')
                 print()
         except :
@@ -89,18 +98,22 @@ def scraping(zipcode, product, store, printinfo = False):
         f.write('[')
         for item in items[:-1]:
             f.write(json.dumps(item))
-            f.write(',')
+            f.write(',\n')
         f.write(json.dumps(items[-1]))
         f.write(']')
         print(f'{store}  {zipcode}  {product} finished  total:', len(items))
 
 
 store = 'star'
-zipcodes = ['02134', '02138']
-products = ['milk', 'egg']
+with open('zipcodes.txt', 'r') as f:
+    zipcodes = f.read()
+zipcodes = zipcodes.split(', ')
+with open('products.txt' ,'r') as f:
+    products = f.read()
+products = products.split(', ')
 
-for zipcode in zipcodes:
-    for product in products:
+for zipcode in zipcodes[:10]:
+    for product in products[:10]:
         scraping(zipcode, product, store)
 
 
