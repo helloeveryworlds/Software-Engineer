@@ -8,6 +8,7 @@ import SignUp from "../routes/sign-up/sign-up";
 import Shopping from "../routes/shopping/shopping";
 import UserInfo from "../routes/userinfo/userinfo";
 // import Fruits from "../routes/fruits/fruits";
+import searchResult from "./search-result/search-result";
 
 import SearchResult from "./search-result/search-result";
 function App() {
@@ -17,6 +18,8 @@ function App() {
         <Route path="/" element={<Navigation />}>
           {/* Landing page */}
           <Route index element={<Home />} />
+
+          <Route path="search-result" element={<SearchResult />} />
 
           {/* shopping page */}
           <Route path="shopping" element={<Shopping />} />
@@ -28,11 +31,10 @@ function App() {
           <Route path="signup" element={<SignUp />} />
 
           {/* user info page */}
-           <Route path="userinfo" element={<UserInfo />} />   
+          <Route path="userinfo" element={<UserInfo />} />
 
           {/* fruits page */}
           {/* <Route path="fruits" element={<Fruits />} /> */}
-
         </Route>
       </Routes>
     </Router>

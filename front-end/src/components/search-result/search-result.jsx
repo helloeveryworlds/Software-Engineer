@@ -1,4 +1,5 @@
 import React from "react";
+import WithRouter from "../with-router/with-router";
 
 class SearchResult extends React.Component {
   constructor(props) {
@@ -8,13 +9,18 @@ class SearchResult extends React.Component {
     };
   }
 
+  componentDidMount() {
+    const query = this.props.query;
+    this.setState({ searchQuery: query });
+  }
+
   render() {
     return (
       <div>
-        <h1>Search Result: {this.state.searchQuery}</h1>
+        <h1>Search Result: 5{this.state.searchQuery}</h1>
       </div>
     );
   }
 }
 
-export default SearchResult;
+export default WithRouter(SearchResult);

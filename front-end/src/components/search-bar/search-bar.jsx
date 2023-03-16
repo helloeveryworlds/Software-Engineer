@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import { Navigate } from "react-router-dom";
 import "./search-bar.css";
 
@@ -30,10 +30,7 @@ class SearchBar extends React.Component {
     return (
       <div className="search-container">
         {this.state.finished && (
-          <Navigate
-            to={`/search-result?query=${this.state.searchQuery}`}
-            replace={true}
-          />
+          <Navigate to={`search-result?query=${this.state.searchQuery}`} />
         )}
         <form onSubmit={this.handleSearchSubmit}>
           <input
