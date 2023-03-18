@@ -82,7 +82,7 @@ class Footer extends React.Component {
                 <a
                   href="https://github.com/helloeveryworlds/Software-Engineer"
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                   aria-label="Github"
                 >
                   <Github size="40px" />

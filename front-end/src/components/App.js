@@ -2,6 +2,7 @@ import React from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import Navigation from "../routes/navigation/navigation";
+import ErrorPage from "./error-page/error-page";
 import Home from "../routes/home/home";
 import SignIn from "../routes/sign-in/sign-in";
 import SignUp from "../routes/sign-up/sign-up";
@@ -14,6 +15,7 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <Navigation />,
+    errorElement: <ErrorPage />,
     children: [
       {
         index: true,

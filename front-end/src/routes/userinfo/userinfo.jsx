@@ -1,29 +1,10 @@
-import React, { Component }  from 'react';
+import React from "react";
 import "./userinfo.css";
 
 class UserInfo extends React.Component {
-
-    render() {
-        return (
-            <div id="userinfo">
-                
-
- 
-            </div>
-            );
-        };
-    }
+  render() {
+    return <div id="userinfo"></div>;
+  }
+}
 
 export default UserInfo;
-
-
-
-
-
-
-
-
-
-
-
-

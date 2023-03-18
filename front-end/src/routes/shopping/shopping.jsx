@@ -1,9 +1,9 @@
-import React, { Component } from "react";
-import { Outlet, Link } from "react-router-dom";
-import FruitsLogo from "../../assets/fruits.png";
-import DairyLogo from "../../assets/dairy.png";
-import MeatLogo from "../../assets/meat.png";
-import GrainsLogo from "../../assets/grains.png";
+import React from "react";
+// import { Outlet, Link } from "react-router-dom";
+// import FruitsLogo from "../../assets/fruits.png";
+// import DairyLogo from "../../assets/dairy.png";
+// import MeatLogo from "../../assets/meat.png";
+// import GrainsLogo from "../../assets/grains.png";
 import "./shopping.css";
 
 class Shopping extends React.Component {

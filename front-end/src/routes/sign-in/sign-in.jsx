@@ -1,30 +1,30 @@
 import React from "react";
 import { Fragment } from "react";
-import axios from "axios";
+// import axios from "axios";
 import "./sign-in.css";
-import { Button, Form, Input, message } from "antd";
+// import { Button, Form, Input, message } from "antd";
 class SignIn extends React.Component {
   constructor(props) {
     super(props);
-    this.handleChangeEmail = this.handleChangeEmail.bind(this)
-    this.handleChangePwd = this.handleChangePwd.bind(this)
-    this.handleSubmit = this.handleSubmit.bind(this)
+    this.handleChangeEmail = this.handleChangeEmail.bind(this);
+    this.handleChangePwd = this.handleChangePwd.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
     this.state = {
       username: "",
-      password: ""
-    }
+      password: "",
+    };
   }
 
   handleChangeEmail(e) {
     this.setState({
-      username: e.target.value
-    })
+      username: e.target.value,
+    });
   }
 
   handleChangePwd(e) {
     this.setState({
-      password: e.target.value
-    })
+      password: e.target.value,
+    });
   }
 
   handleSubmit(e) {
@@ -36,8 +36,7 @@ class SignIn extends React.Component {
         "Content-Type": "application/json",
       },
       credentials: "include",
-    })
-    .then((response) => {
+    }).then((response) => {
       if (response.status < 200 || response.status >= 300) {
         throw Error("Fail to log in");
       }
@@ -50,9 +49,21 @@ class SignIn extends React.Component {
         <div className="loginbox">
           <h1>Sign in</h1>
           <form onSubmit={this.handleSubmit}>
-            <input type="text" value={this.state.email} onChange={this.handleChangeEmail} name="" placeholder="Email" />
-            <input type="password" value={this.state.password} onChange={this.handleChangePwd} name="" placeholder="Password" />
-            <input type="submit" name="" value="Login"/>
+            <input
+              type="text"
+              value={this.state.email}
+              onChange={this.handleChangeEmail}
+              name=""
+              placeholder="Email"
+            />
+            <input
+              type="password"
+              value={this.state.password}
+              onChange={this.handleChangePwd}
+              name=""
+              placeholder="Password"
+            />
+            <input type="submit" name="" value="Login" />
             <p className="signuplink">
               <a href="/signup">Don't have an account?</a>
             </p>
