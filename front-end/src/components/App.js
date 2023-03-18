@@ -1,43 +1,53 @@
-// import "../styles/App.css";
-import { Routes, Route, BrowserRouter as Router } from "react-router-dom";
 import React from "react";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+
 import Navigation from "../routes/navigation/navigation";
 import Home from "../routes/home/home";
 import SignIn from "../routes/sign-in/sign-in";
 import SignUp from "../routes/sign-up/sign-up";
 import Shopping from "../routes/shopping/shopping";
 import UserInfo from "../routes/userinfo/userinfo";
-// import Fruits from "../routes/fruits/fruits";
-import searchResult from "./search-result/search-result";
-
 import SearchResult from "./search-result/search-result";
+// import Fruits from "../routes/fruits/fruits";
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Navigation />,
+    children: [
+      {
+        index: true,
+        element: <Home />,
+      },
+      {
+        path: "shopping",
+        element: <Shopping />,
+      },
+      {
+        path: "signin",
+        element: <SignIn />,
+      },
+      {
+        path: "signup",
+        element: <SignUp />,
+      },
+      {
+        path: "userinfo",
+        element: <UserInfo />,
+      },
+      {
+        path: "search-result/:query",
+        element: <SearchResult />,
+      },
+    ],
+  },
+]);
+
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Navigation />}>
-          {/* Landing page */}
-          <Route index element={<Home />} />
-
-          <Route path="search-result" element={<SearchResult />} />
-
-          {/* shopping page */}
-          <Route path="shopping" element={<Shopping />} />
-
-          {/* sign in page */}
-          <Route path="signin" element={<SignIn />} />
-
-          {/* sign up page */}
-          <Route path="signup" element={<SignUp />} />
-
-          {/* user info page */}
-          <Route path="userinfo" element={<UserInfo />} />
-
-          {/* fruits page */}
-          {/* <Route path="fruits" element={<Fruits />} /> */}
-        </Route>
-      </Routes>
-    </Router>
+    <React.StrictMode>
+      <RouterProvider router={router} />
+    </React.StrictMode>
   );
 }
 
