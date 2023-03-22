@@ -38,7 +38,7 @@ class Welcome extends Component {
           style={{ height: height, backgroundColor: "#FFF" }}>
           <Loader loading={this.state.isLoading} />
           
-          <StatusBar backgroundColor="#DDDDDD" barStyle="dark-content"/>
+          <StatusBar backgroundColor="#F4EFEF" barStyle="dark-content"/>
             <View style={{ marginVertical: height * 0.2 }}>
               <TextInput style={styles.optionContainer}/>
               <View style={{ bottom: 35, paddingStart: 20 }}>

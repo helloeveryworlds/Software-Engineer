@@ -14,7 +14,9 @@ import {
     DrawerItemList,
     DrawerItem,
   } from '@react-navigation/drawer';
-  
+
+import { FontAwesome5 } from "@expo/vector-icons"
+
 const DrawerDesign = (props) => {
   // console.log(props)
     return (
@@ -30,11 +32,18 @@ const DrawerDesign = (props) => {
           <DrawerItemList {...props} />
           
           <TouchableOpacity style={styles.customItem} onPress={()=> {
-            Alert.alert(null, "User Profile")
             props.navigation.navigate("UserInfo")}}>
             <UserIcon/>
           </TouchableOpacity>
         </DrawerContentScrollView>
+
+        <TouchableOpacity style={styles.cart} onPress={()=> {
+            props.navigation.navigate("Cart")}}>
+          <FontAwesome5 
+            name={"shopping-cart"} 
+            style={{ color: "#FF0080", alignSelf: "center", }}
+            size={25}/>
+        </TouchableOpacity>
         <Text style={{ fontSize: 16, textAlign: 'center', color: 'grey' }}>
           Groce Save
         </Text>
@@ -62,6 +71,9 @@ const DrawerDesign = (props) => {
       flexDirection: 'row',
       alignItems: 'center',
     },
+    cart:{
+      alignSelf: "center"
+    }
   });
   
   export default DrawerDesign;
