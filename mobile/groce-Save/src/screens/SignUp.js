@@ -434,7 +434,7 @@ class SignUp extends Component {
         style={styles.scrollView}
         keyboardShouldPersistTaps="always">
         
-        <StatusBar backgroundColor="#DDDDDD" barStyle="dark-content"/>
+        <StatusBar backgroundColor="#F4EFEF" barStyle="dark-content"/>
           <View>
           <Text style={styles.displayTextStyle}>CREATE ACCOUNT</Text>
           <View style={styles.emailTextStyleView}>

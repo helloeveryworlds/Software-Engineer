@@ -36,7 +36,7 @@ class ItemList extends Component {
         <ScrollView
           keyboardShouldPersistTaps="always" backgroundColor="#FFF">
           
-          <StatusBar backgroundColor="#DDDDDD" barStyle="dark-content"/>
+          <StatusBar backgroundColor="#F4EFEF" barStyle="dark-content"/>
               <View style={{ marginVertical: 15 }}>
               <TextInput 
               style={styles.optionContainer}
