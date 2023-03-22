@@ -78,12 +78,12 @@ class SignUp extends React.Component {
   handleSubmit(e) {
     const signupUrl = `/signup?username=${this.state.name}&email=${this.state.email}&password=${this.state.password}&address=${this.state.address}&zipcode=${this.state.zipcode}`;
 
-    fetch(signupUrl, {
+    return fetch(signupUrl, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      credentials: "include",
+      body: JSON.stringify(data),
     }).then((response) => {
       if (response.status < 200 || response.status >= 300) {
         throw Error("Fail to sign up");
