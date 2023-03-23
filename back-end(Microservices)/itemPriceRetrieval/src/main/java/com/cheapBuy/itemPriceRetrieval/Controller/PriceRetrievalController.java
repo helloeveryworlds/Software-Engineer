@@ -1,6 +1,8 @@
 package com.cheapBuy.itemPriceRetrieval.Controller;
 
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ForkJoinPool;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.async.DeferredResult;
 
+import com.cheapBuy.itemPriceRetrieval.Service.ItemService;
 import com.cheapBuy.itemPriceRetrieval.Service.StoreItemService;
 import com.cheapBuy.itemPriceRetrieval.Service.ZipCodeService;
 import com.cheapBuy.itemPriceRetrieval.dto.ItemListDTO;
@@ -31,12 +35,25 @@ public class PriceRetrievalController {
 	@Autowired
 	StoreItemService storeServ;
 	
+	@Autowired
+	ItemService itemServ;
+	
 	
 	@GetMapping(path="/zipcodes")
 	public ResponseEntity<?> priceRetrieval(){
 		try {
 			List<String> zips=zipserv.getAllZipCode();
 			return new ResponseEntity(zips,HttpStatus.OK);
+		}catch(Exception e) {
+			return new ResponseEntity("Please contact the admin",HttpStatus.NO_CONTENT);
+		}
+		
+	}
+	@GetMapping(path="/itemList")
+	public ResponseEntity<?> itemRetrieval(){
+		try {
+			Map<String,List<String>> retList=itemServ.itemRetrieve();
+			return new ResponseEntity(retList,HttpStatus.OK);
 		}catch(Exception e) {
 			return new ResponseEntity("Please contact the admin",HttpStatus.NO_CONTENT);
 		}
@@ -57,9 +74,19 @@ public class PriceRetrievalController {
 	
 	@PostMapping(value="/insertStoreData",consumes="application/json")
 	@ResponseBody
-	public ResponseEntity<?> insertStoreData(@RequestBody List<StoreDataDTO> itemList){
-		storeServ.saveStoreData(itemList);
-		return new ResponseEntity("WorkInProgress",HttpStatus.OK);
+	public DeferredResult<ResponseEntity<?>> insertStoreData(@RequestBody List<StoreDataDTO> itemList){
+		DeferredResult<ResponseEntity<?>> output = new DeferredResult<>();
+	    
+	    ForkJoinPool.commonPool().submit(() -> {
+	        try {
+	        	storeServ.saveStoreData(itemList);
+	        } catch (Exception e) {
+	        	System.out.println("Contact Admin");
+	        }
+	        output.setResult(ResponseEntity.ok("Data Received"));
+	    });
+	   
+	    return output;
 	}
 	
 	@GetMapping(path="/zipStoresList/{zipcode}")
