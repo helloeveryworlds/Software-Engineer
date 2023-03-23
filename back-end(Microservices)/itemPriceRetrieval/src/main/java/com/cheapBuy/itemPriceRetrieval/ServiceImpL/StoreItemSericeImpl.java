@@ -70,6 +70,7 @@ public class StoreItemSericeImpl implements StoreItemService {
 					Zipcode zipdata=zipRepo.findByCode(zip);
 					String list="[0]";
 					if(zipdata!=null) {
+						if (zipdate.getStoreList != null)
 						list=zipdata.getStoreList();
 					}else {
 						continue;
