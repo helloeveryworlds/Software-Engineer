@@ -6,6 +6,7 @@ import java.util.Map;
 public class StoreDataDTO {
 	
 	private String storeName;
+	private String zipCode;
 	private Map<String,ArrayList<Map<String,String>>> priceData;
 	public String getStoreName() {
 		return storeName;
@@ -18,6 +19,12 @@ public class StoreDataDTO {
 	}
 	public void setPriceData(Map<String, ArrayList<Map<String,String>>> priceData) {
 		this.priceData = priceData;
+	}
+	public String getZipCode() {
+		return zipCode;
+	}
+	public void setZipCode(String zipCode) {
+		this.zipCode = zipCode;
 	}
 
 	

@@ -1,12 +1,11 @@
 import React from "react";
 import 'react-native-gesture-handler';
 import { View, TouchableOpacity, Image, Text } from "react-native";
-import { createAppContainer } from "react-navigation";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import { Entypo } from "@expo/vector-icons";
+import { Entypo, FontAwesome5 } from "@expo/vector-icons";
 import UserIcon from './assets/svgs/user';
 import SignIn from "./src/screens/SignIn";
 import Welcome from "./src/screens/Welcome";
@@ -16,6 +15,9 @@ import Shop from "./src/screens/Shop";
 import ItemList from "./src/screens/ItemList";
 import DrawerDesign from './src/components/DrawerDesign';
 import SignUp from "./src/screens/SignUp";
+import { Provider } from 'react-redux';
+import Cart from './src/screens/Cart';
+import store from './store';
 import { 
   Nunito_200ExtraLight,
   Nunito_200ExtraLight_Italic,
@@ -77,6 +79,35 @@ function firstScreenStack({ navigation }) {
           },
         }}
       />
+      <Stack.Screen
+        name="Cart"
+        component={Cart}
+        options={{
+          title: '', //Set Header Title
+          headerLeft: () => (
+            <Image source={require('./assets/logo_.png')} resizeMode={'cover'}  marginStart={20}/>
+          ),
+          headerRight: () => (
+            // <View>
+            //   <TouchableOpacity style={{}} onPress={()=> {
+            //       props.navigation.navigate("Cart")}}>
+            //     <FontAwesome5 
+            //       name={"shopping-cart"} 
+            //       style={{ color: "#FF0080", alignSelf: "center", }}
+            //       size={25}/>
+            //   </TouchableOpacity>
+              <NavigationDrawerStructure navigationProps={navigation} />
+            // </View>
+          ),
+          headerStyle: {
+            backgroundColor: '#F4EFEF', //Set Header color
+          },
+          headerTintColor: '#000', //Set Header text color
+          headerTitleStyle: {
+            fontWeight: 'bold', //Set Header text style
+          },
+        }}
+      />
     </Stack.Navigator>
   );
 }
@@ -114,6 +145,35 @@ function secondScreenStack({ navigation }) {
           title: '', //Set Header Title
         }}
       />
+      <Stack.Screen
+        name="Cart"
+        component={Cart}
+        options={{
+          title: '', //Set Header Title
+          headerLeft: () => (
+            <Image source={require('./assets/logo_.png')} resizeMode={'cover'}  marginStart={20}/>
+          ),
+          headerRight: () => (
+            // <View>
+            //   <TouchableOpacity style={{}} onPress={()=> {
+            //       props.navigation.navigate("Cart")}}>
+            //     <FontAwesome5 
+            //       name={"shopping-cart"} 
+            //       style={{ color: "#FF0080", alignSelf: "center", }}
+            //       size={25}/>
+            //   </TouchableOpacity>
+              <NavigationDrawerStructure navigationProps={navigation} />
+            // </View>
+          ),
+          headerStyle: {
+            backgroundColor: '#F4EFEF', //Set Header color
+          },
+          headerTintColor: '#000', //Set Header text color
+          headerTitleStyle: {
+            fontWeight: 'bold', //Set Header text style
+          },
+        }}
+      />
     </Stack.Navigator>
   );
 }
@@ -136,6 +196,35 @@ function userInfoScreenStack({ navigation }) {
             backgroundColor: '#F4EFEF', //Set Header color
           },
           headerTintColor: '#fff', //Set Header text color
+          headerTitleStyle: {
+            fontWeight: 'bold', //Set Header text style
+          },
+        }}
+      />
+      <Stack.Screen
+        name="Cart"
+        component={Cart}
+        options={{
+          title: '', //Set Header Title
+          headerLeft: () => (
+            <Image source={require('./assets/logo_.png')} resizeMode={'cover'}  marginStart={20}/>
+          ),
+          headerRight: () => (
+            // <View>
+            //   <TouchableOpacity style={{}} onPress={()=> {
+            //       props.navigation.navigate("Cart")}}>
+            //     <FontAwesome5 
+            //       name={"shopping-cart"} 
+            //       style={{ color: "#FF0080", alignSelf: "center", }}
+            //       size={25}/>
+            //   </TouchableOpacity>
+              <NavigationDrawerStructure navigationProps={navigation} />
+            // </View>
+          ),
+          headerStyle: {
+            backgroundColor: '#F4EFEF', //Set Header color
+          },
+          headerTintColor: '#000', //Set Header text color
           headerTitleStyle: {
             fontWeight: 'bold', //Set Header text style
           },
@@ -209,6 +298,35 @@ function shopScreenStack({ navigation }) {
           },
         }}
       />
+      <Stack.Screen
+        name="Cart"
+        component={Cart}
+        options={{
+          title: '', //Set Header Title
+          headerLeft: () => (
+            <Image source={require('./assets/logo_.png')} resizeMode={'cover'}  marginStart={20}/>
+          ),
+          headerRight: () => (
+            // <View>
+            //   <TouchableOpacity style={{}} onPress={()=> {
+            //       props.navigation.navigate("Cart")}}>
+            //     <FontAwesome5 
+            //       name={"shopping-cart"} 
+            //       style={{ color: "#FF0080", alignSelf: "center", }}
+            //       size={25}/>
+            //   </TouchableOpacity>
+              <NavigationDrawerStructure navigationProps={navigation} />
+            // </View>
+          ),
+          headerStyle: {
+            backgroundColor: '#F4EFEF', //Set Header color
+          },
+          headerTintColor: '#000', //Set Header text color
+          headerTitleStyle: {
+            fontWeight: 'bold', //Set Header text style
+          },
+        }}
+      />
     </Stack.Navigator>
   );
 }
@@ -253,6 +371,7 @@ function mainScreenStack({ navigation }) {
           title: '', //Set Header Title
         }}
       />
+     
       <Stack.Screen
         name="PriceCompare"
         component={PriceCompare}
@@ -266,6 +385,7 @@ function mainScreenStack({ navigation }) {
 
 function App() {
   return (
+    <Provider store={store}>
     <NavigationContainer>
       <Drawer.Navigator
       initialRouteName="Welcome"
@@ -277,7 +397,7 @@ function App() {
         }}
         screenOptions={{
           drawerStyle: {
-            backgroundColor: '#DDDDDD',
+            backgroundColor: '#F4EFEF',
             width: 240,
           },
           headerShown: false,
@@ -307,6 +427,7 @@ function App() {
          />
       </Drawer.Navigator>
     </NavigationContainer>
+    </Provider>
   );
 }
 

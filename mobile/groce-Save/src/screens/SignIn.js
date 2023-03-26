@@ -46,19 +46,11 @@ class SignIn extends Component {
   state = initialState;
 
   handleUsername = (username) => {
-    var e = "@bu.edu"
     if(username != ""){
-      // console.log("Ah ah ah",username.includes(e))
-      if(username.includes(e) && username.endsWith(e)){
-      this.setState({ username: username, embu: "", us: "" });
-      }else if(username == "admin"){
         this.setState({ username: username, embu: "", us: "" });
       }else{
        this.setState({ username: username, embu: "empty", us: "empty" });
       }
-    }else {
-      this.setState({ username: username, us: "empty" });
-    }
   };
 
   handlePassword = (password) => {  
@@ -119,12 +111,46 @@ class SignIn extends Component {
       
     };
 
-    this.setState({ isLoading: true });
-    groceSaveService
-      // .post(`/login?username=${"fuhao@bu.edu"}&password=${"1234"}`)
-      .post(`/login?username=${payload.username}&password=${payload.password}`)
-      .then(onSuccess)
-      .catch(onFailure);
+    const loginUrl = `http://localhost:8080/login?username=${payload.username}&password=${payload.password}`;
+
+    fetch(loginUrl, {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    })
+    .then((response) => {
+      if (response.status == 200) {
+        console.log(response)
+      }
+      if (response.status < 200 || response.status >= 300) {
+        throw Error("Fail to log in");
+      }
+    });
+  
+    // this.setState({ isLoading: true });
+    // // const headers = 
+    // // {
+    // //   'Content-Type': 'application/json'
+    // // }
+    // // var axios = require('axios');
+        
+    //     var config = {
+    //       // method: 'post',
+    //       // url: 'https://telnetsuperapp.com.ng:8443/api/v1/accounts/login',
+          
+    //       headers: { 
+    //         'Content-Type': 'application/json'
+    //       },
+    //       credentials: "include",
+    //       // data : payload
+    //     };
+
+    // groceSaveService
+    //   .post(`/login?username=${payload.username}&password=${payload.password}`,config)
+    //   .then(onSuccess)
+    //   .catch(onFailure);
   }
 
   async removeItemValue(key) {
@@ -165,7 +191,7 @@ class SignIn extends Component {
           style={styles.scrollView}
           keyboardShouldPersistTaps="always">
           
-          <StatusBar backgroundColor="#DDDDDD" barStyle="dark-content"/>
+          <StatusBar backgroundColor="#F4EFEF" barStyle="dark-content"/>
             <View>
             <Text style={styles.displayTextStyle}>Signin</Text>
             <View style={styles.usernameTextStyleView}>
