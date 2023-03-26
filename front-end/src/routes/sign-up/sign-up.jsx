@@ -83,7 +83,7 @@ class SignUp extends React.Component {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(data),
+      // body: JSON.stringify(data),
     }).then((response) => {
       if (response.status < 200 || response.status >= 300) {
         throw Error("Fail to sign up");

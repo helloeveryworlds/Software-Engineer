@@ -30,9 +30,9 @@ class SearchBar extends React.Component {
     return (
       <div className="search-container">
         {this.state.finished && (
-          <Navigate to={`search-result?query=${this.state.searchQuery}`} />
+          <Navigate to={`search-result/${this.state.searchQuery}`} />
         )}
-        <form onSubmit={this.handleSearchSubmit}>
+        <form onSubmit={this.handleSearchSubmit} className="search-form">
           <input
             className="search-input"
             type="text"

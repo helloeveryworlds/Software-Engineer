@@ -1,26 +1,24 @@
-import React from "react";
-import WithRouter from "../with-router/with-router";
+import React, { useContext } from "react";
+import { useParams } from "react-router-dom";
 
-class SearchResult extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      searchQuery: "",
-    };
-  }
+import { ProductsContext } from "../../contexts/products.context";
 
-  componentDidMount() {
-    const query = this.props.query;
-    this.setState({ searchQuery: query });
-  }
+import "./search-result.css";
 
-  render() {
-    return (
-      <div>
-        <h1>Search Result: 5{this.state.searchQuery}</h1>
-      </div>
-    );
-  }
-}
+const SearchResult = () => {
+  // get parameters from string query
+  const { query } = useParams();
 
-export default WithRouter(SearchResult);
+  // // products data
+  const { data } = useContext(ProductsContext);
+
+  return (
+    <div>
+      <h1>
+        Search Result: {data.Vegetables[1]} {query}
+      </h1>
+    </div>
+  );
+};
+
+export default SearchResult;
