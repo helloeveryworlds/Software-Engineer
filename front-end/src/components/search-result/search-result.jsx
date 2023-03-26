@@ -11,11 +11,11 @@ const SearchResult = () => {
 
   // // products data
   const { data } = useContext(ProductsContext);
-
   return (
     <div>
       <h1>
-        Search Result: {data.Vegetables[1]} {query}
+        Search Result: {data["Vegetables"].items[0].name}
+        {query}
       </h1>
     </div>
   );

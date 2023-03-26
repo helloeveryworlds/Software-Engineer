@@ -1,11 +1,14 @@
 import React, { useContext } from "react";
-import "./shopping.css";
 
 import { ProductsContext } from "../../contexts/products.context";
 import SearchBar from "../../components/search-bar/search-bar";
+
+import "./shopping.css";
+
 const Shopping = () => {
   const { data } = useContext(ProductsContext);
   console.log(data);
+  // data["Vegetables"].items[0].name : you will get "Carrot"
 
   return (
     <div id="shopping-container">
