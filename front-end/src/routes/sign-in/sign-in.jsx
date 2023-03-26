@@ -1,8 +1,7 @@
 import React from "react";
 import { Fragment } from "react";
-// import axios from "axios";
 import "./sign-in.css";
-// import { Button, Form, Input, message } from "antd";
+import { Button, Form, Input, message } from "antd";
 class SignIn extends React.Component {
   constructor(props) {
     super(props);
@@ -28,8 +27,10 @@ class SignIn extends React.Component {
   }
 
   handleSubmit(e) {
-    const loginUrl = `/login?username=${this.state.email}&password=${this.state.password}`;
-
+    e.preventDefault();
+    const loginUrl = `/login?username=${this.state.username}&password=${this.state.password}`;
+    console.log(loginUrl);
+    
     fetch(loginUrl, {
       method: "POST",
       headers: {
@@ -37,6 +38,8 @@ class SignIn extends React.Component {
       },
       credentials: "include",
     }).then((response) => {
+      
+      console.log(response.status);
       if (response.status < 200 || response.status >= 300) {
         throw Error("Fail to log in");
       }
