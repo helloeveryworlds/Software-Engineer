@@ -10,23 +10,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a836269e-5ad6-43da-8c08-705f1fe95b5d" name="Changes" comment="">
-<<<<<<< HEAD
-      <change beforePath="$PROJECT_DIR$/.idea/artifacts/back_end_war_exploded.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/back_end_war_exploded.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bossmode/backend/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bossmode/backend/SecurityConfig.java" afterDir="false" />
-=======
       <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources/d9267f79-dca2-4a52-89bc-4719722988b2.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/d9267f79-dca2-4a52-89bc-4719722988b2.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front-end/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/../front-end/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../front-end/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/../front-end/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front-end/src/components/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/../front-end/src/components/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front-end/src/components/search-bar/search-bar.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../front-end/src/components/search-bar/search-bar.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front-end/src/routes/home/home.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../front-end/src/routes/home/home.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front-end/src/routes/shopping/shopping.css" beforeDir="false" afterPath="$PROJECT_DIR$/../front-end/src/routes/shopping/shopping.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front-end/src/routes/shopping/shopping.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../front-end/src/routes/shopping/shopping.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front-end/src/routes/userinfo/userinfo.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../front-end/src/routes/userinfo/userinfo.jsx" afterDir="false" />
->>>>>>> 54126990b1829e32c88ba498add06fc625473753
+      <change beforePath="$PROJECT_DIR$/../front-end/src/routes/sign-in/sign-in.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../front-end/src/routes/sign-in/sign-in.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -53,19 +43,26 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="mavenHome" value="Use Maven wrapper" />
+        <option name="useMavenConfig" value="true" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
   <component name="ProjectId" id="2LFrMuYpUE2CGjEtIslla5tibd0" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-<<<<<<< HEAD
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/fuhaoruan/Downloads/Software-Engineer-39aeabfdc838be21e00ac1573371abf536871c1f/back-end&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/fuhaoruan/Library/CloudStorage/OneDrive-Personal/Spring 2023/software engineer/SoftwareEnigneer/back-end&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
     &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
@@ -78,11 +75,6 @@
     ]
   }
 }</component>
-=======
-  <component name="PropertiesComponent">
-    <property name="WebServerToolWindowFactoryState" value="false" />
-  </component>
->>>>>>> 54126990b1829e32c88ba498add06fc625473753
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$" />
@@ -224,20 +216,12 @@
       <workItem from="1676946922102" duration="3562000" />
       <workItem from="1677010485281" duration="5857000" />
       <workItem from="1677023135572" duration="80000" />
-<<<<<<< HEAD
       <workItem from="1677084167104" duration="4875000" />
-      <workItem from="1677691991602" duration="656000" />
-      <workItem from="1677693776973" duration="5817000" />
-      <workItem from="1677793421211" duration="764000" />
-      <workItem from="1678306781696" duration="104000" />
-=======
-      <workItem from="1677084167104" duration="5786000" />
-      <workItem from="1677173370601" duration="1491000" />
-      <workItem from="1677471471719" duration="1133000" />
-      <workItem from="1677532496038" duration="1101000" />
-      <workItem from="1677534724934" duration="999000" />
-      <workItem from="1677557663800" duration="4851000" />
->>>>>>> 54126990b1829e32c88ba498add06fc625473753
+      <workItem from="1679431945809" duration="205000" />
+      <workItem from="1679432176417" duration="1690000" />
+      <workItem from="1679527579935" duration="469000" />
+      <workItem from="1679684283109" duration="88000" />
+      <workItem from="1679685027664" duration="75000" />
     </task>
     <servers />
   </component>
@@ -254,6 +238,5 @@
         </entry>
       </map>
     </option>
-    <option name="oldMeFiltersMigrated" value="true" />
   </component>
 </project>
