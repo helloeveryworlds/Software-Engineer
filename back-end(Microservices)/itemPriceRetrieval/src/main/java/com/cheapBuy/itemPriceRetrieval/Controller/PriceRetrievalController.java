@@ -91,7 +91,7 @@ public class PriceRetrievalController {
 	
 	@GetMapping(path="/zipStoresList/{zipcode}")
 	@ResponseBody
-	public ResponseEntity<?> zipStoresList(@RequestParam String zipcode){
+	public ResponseEntity<?> zipStoresList(@PathVariable String zipcode){
 		return new ResponseEntity(zipserv.storeList(zipcode),HttpStatus.OK);
 	}
 	

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.cheapBuy.itemPriceRetrieval.Repository.StoreRepo;
 import com.cheapBuy.itemPriceRetrieval.Repository.ZipCodeRepo;
 import com.cheapBuy.itemPriceRetrieval.Service.StoreItemService;
+import com.cheapBuy.itemPriceRetrieval.dto.ItemListDTO;
 import com.cheapBuy.itemPriceRetrieval.dto.StoreDataDTO;
 import com.cheapBuy.itemPriceRetrieval.dto.StoreRespDTO;
 import com.cheapBuy.itemPriceRetrieval.pojo.Store;
@@ -70,8 +71,8 @@ public class StoreItemSericeImpl implements StoreItemService {
 					Zipcode zipdata=zipRepo.findByCode(zip);
 					String list="[0]";
 					if(zipdata!=null) {
-						if (zipdate.getStoreList != null)
-						list=zipdata.getStoreList();
+						if(zipdata.getStoreList()!=null)
+							list=zipdata.getStoreList();
 					}else {
 						continue;
 					}
@@ -106,6 +107,22 @@ public class StoreItemSericeImpl implements StoreItemService {
 			System.out.println("Contact Admin");
 		}
 		return retList;
+	}
+
+	@Override
+	public void comparePrice(List<ItemListDTO> itemListS) {
+		try {
+			for(ItemListDTO i:itemListS) {
+				String zip=i.getZipCode();
+				Zipcode zipData=zipRepo.findByCode(zip);
+				if(zipData!=null) {
+					
+				}
+			}
+		}catch(Exception e) {
+			
+		}
+		
 	}
 
 }
