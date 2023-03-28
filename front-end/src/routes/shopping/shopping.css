@@ -8,16 +8,12 @@
   display: flex;
   flex-direction: column;
   background: #ffffff;
+  align-items: center;
 }
 
-/* .search-container {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  margin: 0 0 0 0;
-  padding: 0 0 0 0;
-} */
+.shopping-search-container {
+  width: 50%;
+}
 
 .shopping-categories {
   display: flex;

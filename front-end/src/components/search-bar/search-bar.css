@@ -5,8 +5,14 @@
   justify-content: center;
 }
 
+.search-form {
+  width: 80%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .search-input {
-  width: 60%;
   padding: 12px 24px;
   background-color: #d3dedd;
   transition: transform 250ms ease-in-out;

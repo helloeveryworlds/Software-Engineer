@@ -69,18 +69,22 @@ def scraping(zipcode, product, store, printinfo = False):
             
             unit_price = tag.find_all('div', class_='product-title__details')[0].div.text[1:-1]
             num, measure = unit_price.split(f' / ')
+            num = num[1:]
             if measure == '100ct':
                 unit_price = str(float(num)/100.0)
+                unit = 'ct'
             elif measure == 'Gal.':
                 unit_price = str(float(num)/3.79)
+                unit = 'kg'
             elif measure == 'Lb' or measure == 'pound':
                 unit_price = str(float(num)/0.45)
+                unit = 'kg'
             elif measure == 'Quart':
                 unit_price = str(float(num)/0.95)
+                unit = 'kg'
             
-            rating = 'None'
             
-            item = {"pic-url": pic, "price": price, "name": name, "unit-price": unit_price, "rating": rating}
+            item = {"pic-url": pic, "price": price, "name": name, "unit-price": unit_price, "unit": unit}
             items.append(item)
             
             if printinfo:
@@ -88,8 +92,8 @@ def scraping(zipcode, product, store, printinfo = False):
                 print(' pics, price, name, unit-price')
                 print(pic, price, name, unit_price, sep='\n')
                 print()
-        except :
-            print("ERROR")
+        except Exception as e:
+            print(f"ERROR : {e}")
             continue
     driver.close()
     
@@ -112,12 +116,17 @@ with open('products.txt' ,'r') as f:
     products = f.read()
 products = products.split(', ')
 
-for zipcode in zipcodes[:10]:
-    for product in products[:10]:
+for zipcode in zipcodes[:2]:
+    for product in products[:1]:
         scraping(zipcode, product, store)
 
 
-
+def f(text, count):
+    cate, items = text.split(' - ')
+    items = items.split(', ')
+    for i, item in enumerate(items):
+        print(f"insert into item (id, item_name, category) values ({count}, '{item}', '{cate}')")
+        count += 1
 
 
 

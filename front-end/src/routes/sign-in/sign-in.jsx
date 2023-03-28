@@ -1,8 +1,27 @@
-import React from "react";
+import React, {Component}  from "react";
 import { Fragment } from "react";
 // import axios from "axios";
 import "./sign-in.css";
+import { useLocation,useNavigate,useParams, Navigate } from 'react-router-dom';
 // import { Button, Form, Input, message } from "antd";
+
+function withRouter(Component) {
+  function ComponentWithRouterProp(props) {
+    let location = useLocation();
+    let navigate = useNavigate();
+    let params = useParams();
+    return (
+      <Component
+        {...props}
+        router={{ location, navigate, params }}
+      />
+    );
+  }
+
+  return ComponentWithRouterProp;
+}
+
+
 class SignIn extends React.Component {
   constructor(props) {
     super(props);
@@ -10,14 +29,15 @@ class SignIn extends React.Component {
     this.handleChangePwd = this.handleChangePwd.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.state = {
-      username: "",
+      success: false,
+      email: "",
       password: "",
     };
   }
 
   handleChangeEmail(e) {
     this.setState({
-      username: e.target.value,
+      email: e.target.value,
     });
   }
 
@@ -39,6 +59,8 @@ class SignIn extends React.Component {
     }).then((response) => {
       if (response.status < 200 || response.status >= 300) {
         throw Error("Fail to log in");
+      } else {
+        this.setState({success:true})
       }
     });
   }
@@ -46,6 +68,11 @@ class SignIn extends React.Component {
   render() {
     return (
       <Fragment>
+        {this.state.success && (
+
+          <Navigate to='/' replace='true' />
+
+        )}
         <div className="loginbox">
           <h1>Sign in</h1>
           <form onSubmit={this.handleSubmit}>
@@ -77,4 +104,4 @@ class SignIn extends React.Component {
   }
 }
 
-export default SignIn;
+export default withRouter(SignIn);

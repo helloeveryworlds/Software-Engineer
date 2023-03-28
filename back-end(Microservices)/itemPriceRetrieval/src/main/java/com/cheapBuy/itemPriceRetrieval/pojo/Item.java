@@ -11,7 +11,6 @@ public class Item {
 	private Long id;
 	private String itemName;
 	private String category;
-	private String data;
 	public Long getId() {
 		return id;
 	}
@@ -29,12 +28,6 @@ public class Item {
 	}
 	public void setCategory(String category) {
 		this.category = category;
-	}
-	public String getData() {
-		return data;
-	}
-	public void setData(String data) {
-		this.data = data;
 	}
 	
 }

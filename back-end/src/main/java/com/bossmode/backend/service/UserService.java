@@ -2,6 +2,7 @@ package com.bossmode.backend.service;
 
 import com.bossmode.backend.dao.UserDao;
 import com.bossmode.backend.entity.User;
+import com.bossmode.backend.entity.Cart;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,10 @@ public class UserService {
     }
 
     public void signUp(User user) {
+
+
+        Cart cart = new Cart();
+        user.setCart(cart);
         user.setEnabled(true);
         userDao.signUp(user);
     }
@@ -24,4 +29,6 @@ public class UserService {
         return userDao.getUser(email);
     }
 }
+
+
 

@@ -9,7 +9,8 @@ import SignUp from "../routes/sign-up/sign-up";
 import Shopping from "../routes/shopping/shopping";
 import UserInfo from "../routes/userinfo/userinfo";
 import SearchResult from "./search-result/search-result";
-// import Fruits from "../routes/fruits/fruits";
+
+import { ProductsProvider } from "../contexts/products.context";
 
 const router = createBrowserRouter([
   {
@@ -48,7 +49,9 @@ const router = createBrowserRouter([
 function App() {
   return (
     <React.StrictMode>
-      <RouterProvider router={router} />
+      <ProductsProvider>
+        <RouterProvider router={router} />
+      </ProductsProvider>
     </React.StrictMode>
   );
 }
