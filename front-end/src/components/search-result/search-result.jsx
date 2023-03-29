@@ -10,11 +10,11 @@ const SearchResult = () => {
   const { query } = useParams();
 
   // // products data
-  const { data } = useContext(ProductsContext);
+  const { itemList } = useContext(ProductsContext);
   return (
     <div>
       <h1>
-        Search Result: {data["Vegetables"].items[0].name}
+        Search Result: {itemList["Vegetables"].items[0].name}
         {query}
       </h1>
     </div>

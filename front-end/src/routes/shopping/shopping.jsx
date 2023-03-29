@@ -6,9 +6,9 @@ import SearchBar from "../../components/search-bar/search-bar";
 import "./shopping.css";
 
 const Shopping = () => {
-  const { data } = useContext(ProductsContext);
-  console.log(data);
-  // data["Vegetables"].items[0].name : you will get "Carrot"
+  const { itemList } = useContext(ProductsContext);
+  console.log(itemList);
+  // itemList["Vegetables"].items[0].name : you will get "Carrot"
 
   return (
     <div id="shopping-container">

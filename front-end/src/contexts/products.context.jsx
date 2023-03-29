@@ -1,6 +1,7 @@
-import React, { createContext } from "react";
+import React, { createContext, useState, useEffect } from "react";
+// import axios from "axios";
 
-const original_data = {
+const rawItemList = {
   "Main Dishes,https://images.albertsons-media.com/is/image/ABS/Meat-Seafood-Large-Tile-Combo2-552x276":
     [
       "Beef Steak,https://images.albertsons-media.com/is/image/ABS/Meat-Seafood-Large-Tile-Combo2-552x276",
@@ -58,8 +59,26 @@ export const ProductsContext = createContext({
 });
 
 export const ProductsProvider = ({ children }) => {
-  const data = processing_data(original_data);
-  const value = { data };
+  // const [rawItemList, setRawItemList] = useState([]);
+
+  // useEffect(() => {
+  //   axios
+  //     .get("http://localhost:8800/itemList", {
+  //       headers: {
+  //         accept: "application/json",
+  //       },
+  //     })
+  //     .then((response) => {
+  //       console.log(response.data);
+  //       setRawItemList(response.data);
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  // }, []);
+
+  const itemList = processing_data(rawItemList);
+  const value = { itemList };
 
   return (
     <ProductsContext.Provider value={value}>
