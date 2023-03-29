@@ -79,7 +79,7 @@ function firstScreenStack({ navigation }) {
           },
         }}
       />
-      <Stack.Screen
+      {/* <Stack.Screen
         name="Cart"
         component={Cart}
         options={{
@@ -107,7 +107,7 @@ function firstScreenStack({ navigation }) {
             fontWeight: 'bold', //Set Header text style
           },
         }}
-      />
+      /> */}
     </Stack.Navigator>
   );
 }
@@ -145,7 +145,7 @@ function secondScreenStack({ navigation }) {
           title: '', //Set Header Title
         }}
       />
-      <Stack.Screen
+      {/* <Stack.Screen
         name="Cart"
         component={Cart}
         options={{
@@ -173,7 +173,7 @@ function secondScreenStack({ navigation }) {
             fontWeight: 'bold', //Set Header text style
           },
         }}
-      />
+      /> */}
     </Stack.Navigator>
   );
 }
@@ -201,7 +201,7 @@ function userInfoScreenStack({ navigation }) {
           },
         }}
       />
-      <Stack.Screen
+      {/* <Stack.Screen
         name="Cart"
         component={Cart}
         options={{
@@ -229,7 +229,7 @@ function userInfoScreenStack({ navigation }) {
             fontWeight: 'bold', //Set Header text style
           },
         }}
-      />
+      /> */}
     </Stack.Navigator>
   );
 }
