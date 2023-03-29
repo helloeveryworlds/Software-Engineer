@@ -41,7 +41,7 @@ class SignIn extends React.Component {
     });
   }
 
-  handleChangePwd(e) {
+  handleChangePwd(e) {  
     this.setState({
       password: e.target.value,
     });
