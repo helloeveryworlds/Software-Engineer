@@ -2,6 +2,23 @@ import React from "react";
 import { Fragment } from "react";
 // import axios from "axios";
 import "./sign-up.css";
+import { useLocation,useNavigate,useParams, Navigate } from 'react-router-dom';
+
+function withRouter(Component) {
+  function ComponentWithRouterProp(props) {
+    let location = useLocation();
+    let navigate = useNavigate();
+    let params = useParams();
+    return (
+      <Component
+        {...props}
+        router={{ location, navigate, params }}
+      />
+    );
+  }
+
+  return ComponentWithRouterProp;
+}
 
 class SignUp extends React.Component {
   constructor(props) {
@@ -13,6 +30,7 @@ class SignUp extends React.Component {
     this.handleChangeZipcode = this.handleChangeZipcode.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.state = {
+      success: false,
       name: "",
       email: "",
       password: "",
@@ -76,18 +94,25 @@ class SignUp extends React.Component {
   } */
 
   handleSubmit(e) {
-    const signupUrl = `/signup?username=${this.state.name}&email=${this.state.email}&password=${this.state.password}&address=${this.state.address}&zipcode=${this.state.zipcode}`;
-
+    const signupUrl = `/signup`;
+    const data = {
+      username : this.state.name,
+      email: this.state.email,
+      password: this.state.password,
+      address: this.state.address,
+      zipcode: this.state.zipcode
+    }
     return fetch(signupUrl, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-
-      // body: JSON.stringify(data),
+      body: JSON.stringify(data),
     }).then((response) => {
       if (response.status < 200 || response.status >= 300) {
         throw Error("Fail to sign up");
+      } else {
+        this.setState({success:true})
       }
     });
   }
@@ -95,6 +120,9 @@ class SignUp extends React.Component {
   render() {
     return (
       <Fragment>
+        {this.state.success && (
+          <Navigate to='/signin' replace='true' />
+        )}
         <div className="signupbox">
           <h1>Create Account</h1>
           <form onSubmit={this.handleSubmit}>
@@ -145,4 +173,4 @@ class SignUp extends React.Component {
   }
 }
 
-export default SignUp;
+export default withRouter(SignUp);
