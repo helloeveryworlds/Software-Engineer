@@ -9,8 +9,9 @@ import SignUp from "../routes/sign-up/sign-up";
 import Shopping from "../routes/shopping/shopping";
 import UserInfo from "../routes/userinfo/userinfo";
 import SearchResult from "./search-result/search-result";
-
 import { ProductsProvider } from "../contexts/products.context";
+import ItemCart from "../routes/item-cart/item-cart";
+
 
 const router = createBrowserRouter([
   {
@@ -42,6 +43,10 @@ const router = createBrowserRouter([
         path: "search-result/:query",
         element: <SearchResult />,
       },
+      {
+        path: "item-cart/:category",
+        element: <ItemCart />,
+      }
     ],
   },
 ]);
