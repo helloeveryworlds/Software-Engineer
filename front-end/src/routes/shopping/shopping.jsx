@@ -1,14 +1,22 @@
-import React, { useContext } from "react";
-
+import React, { useState } from "react";
 import { ProductsContext } from "../../contexts/products.context";
 import SearchBar from "../../components/search-bar/search-bar";
-
 import "./shopping.css";
+import { useContext } from "react";
+import { useNavigate } from 'react-router-dom';
 
 const Shopping = () => {
   const { itemList } = useContext(ProductsContext);
-  console.log(itemList);
+ 
   // itemList["Vegetables"].items[0].name : you will get "Carrot"
+
+
+
+  const navigate = useNavigate();
+
+  const handleCategoryClick = (category) => {
+    navigate('/item-cart/'+category);
+  };
 
   return (
     <div id="shopping-container">
@@ -18,74 +26,35 @@ const Shopping = () => {
       <div className="shopping-categories">
         <div className="category-heading">
           <h4 id="category-heading-name">Categories</h4>
-          <hr></hr>
+          <hr />
         </div>
         <div className="categories">
           <ul className="item-list">
-            <li className="item" id="dairy"></li>
-            <li className="item" id="fruits"></li>
-            <li className="item" id="grains"></li>
-            <li className="item" id="meat"></li>
+            <li
+              className="item"
+              id="dairy"
+              onClick={() => handleCategoryClick("Dairy, Eggs, and Cheese")}
+            ></li>
+            <li
+              className="item"
+              id="fruits"
+              onClick={() => handleCategoryClick("Fruits and Vegetables")}
+            ></li>
+            <li
+              className="item"
+              id="grains"
+              onClick={() => handleCategoryClick("Grains and Pasta")}
+            ></li>
+            <li
+              className="item"
+              id="meat"
+              onClick={() => handleCategoryClick("Meat and Seafood")}
+            ></li>
           </ul>
         </div>
       </div>
     </div>
   );
 };
-
-//         <div id="shopping-container">
-//                 <div className="shopping-search-container">
-//                     <div className='shopping-search-bar'>
-//                         <form onSubmit={this.handleSearchSubmit} className="shopping-search-form">
-//                             <input
-//                                 className="shopping-search-input"
-//                                 type="text"
-//                                 placeholder="Search"
-//                             />
-//                         </form>
-//                     </div>
-//                 </div>
-//             <div className="shopping-categories">
-//                 <div className="category-heading">
-//                     <h4 id="category-heading-name">Categories</h4><hr></hr>
-//                 </div>
-//                 <div className="categories">
-//                     <ul className="item-list">
-//                         <li className="item" id="dairy">
-//                             <Link className="fruits-container" to="/dairy">
-//                                 <div>
-//                                     <img src={DairyLogo} alt="dairy-logo" className="dairy-png" />
-//                                 </div>
-//                             </Link>
-
-//                         </li>
-//                         <li className="item" id="fruits">
-//                             <Link className="fruits-container" to="/fruits">
-//                                 <div>
-//                                     <img src={FruitsLogo} alt="fruits-logo" className="fruits-png" />
-//                                 </div>
-//                             </Link>
-//                         </li>
-//                         <li className="item" id="grains">
-//                         <Link className="fruits-container" to="/grains">
-//                                 <div>
-//                                     <img src={GrainsLogo} alt="grains-logo" className="grains-png" />
-//                                 </div>
-//                             </Link>
-//                         </li>
-//                         <li className="item" id="meat">
-//                             <Link className="meat-container" to="/meat">
-//                                 <div>
-//                                     <img src={MeatLogo} alt="meat-logo" className="meat-png" />
-//                                 </div>
-//                             </Link>
-//                         </li>
-//                     </ul>
-//                 </div>
-//             </div>
-//         </div>
-//         );
-//     };
-// };
 
 export default Shopping;
