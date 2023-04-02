@@ -178,7 +178,4 @@ class SignUp extends React.Component {
   }
 }
 
-<<<<<<< HEAD
-export default withRouter(SignUp);
-=======
 export default withRouter(SignUp);
