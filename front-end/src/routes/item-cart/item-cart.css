@@ -1,4 +1,4 @@
-#shopping-container {
+#item-cart-container {
   font-family: "Inter";
   font-style: normal;
   font-weight: 400;
@@ -9,23 +9,23 @@
   flex-direction: column;
   background: #ffffff;
   align-items: center;
-  min-height: 55vh;
+  min-height: 60vh;
 }
 
-.shopping-search-container {
+.item-cart-search-container {
   width: 50%;
 }
 
-.shopping-categories {
+.item-cart-categories {
   display: flex;
   flex-direction: column;
 }
 
-.category-heading {
+.item-cart-heading {
   width: 100%;
 }
 
-.category-heading h4 {
+.item-cart-category-heading-name h4 {
   font-family: "Inter";
   font-style: normal;
   font-weight: 700;
@@ -36,7 +36,7 @@
   padding: 0 0 0 0;
 }
 
-.item-list {
+.item-cart-list {
   display: flex;
   flex-direction: row;
   justify-content: auto;
@@ -45,39 +45,24 @@
   flex-wrap: wrap;
 }
 
-.item {
-  width: 353px;
-  height: 338px;
+.item-cart-item{
+  display: flex;
+  flex-direction:column ;
+  justify-content: space-between;
+  width: 304px;
+  height: 331px;
 }
 
-#grains {
-  background-image: url(../../assets/grains.png);
-  background-repeat: no-repeat;
-}
-#dairy {
-  background-image: url(../../assets/dairy.png);
-  background-repeat: no-repeat;
-}
-#meat {
-  background-image: url(../../assets/meat.png);
-  background-repeat: no-repeat;
-}
-#fruits {
-  background-image: url(../../assets/fruits.png);
-  background-repeat: no-repeat;
-  
-}
-
-.shopping-search-container {
+.item-cart-search-container {
   padding: 12px;
 }
 
-.shopping-search-form {
+.item-cart-search-form {
   display: flex;
   justify-content: space-around;
 }
 
-.shopping-search-input {
+.item-cart-search-input {
   width: 20%;
   padding: 12px 24px;
   background-color: #d3dedd;
@@ -97,14 +82,14 @@
   transform-style: preserve-3d;
 }
 
-.shopping-search-input::placeholder {
+.item-cart-search-input::placeholder {
   color: color(#575756 a(0.8));
   text-transform: uppercase;
   letter-spacing: 1.5px;
   padding-left: 15px;
 }
 
-.shopping-search-input:hover {
+.item-cart-search-input:hover {
   padding: 12px 0;
   outline: 0;
   border: 1px solid transparent;
@@ -113,11 +98,11 @@
   background-position: 100% center;
 }
 
-.shopping-search-input:hover::placeholder {
+.item-cart-search-input:hover::placeholder {
   padding-left: 0;
 }
 
-.shopping-search-input:focus {
+.item-cart-search-input:focus {
   padding: 12px 0;
   outline: 0;
   border: 1px solid transparent;
@@ -126,6 +111,8 @@
   background-position: 100% center;
 }
 
-.shopping-search-input:focus::placeholder {
+.item-cart-search-input:focus::placeholder {
   padding-left: 0;
 }
+
+  
