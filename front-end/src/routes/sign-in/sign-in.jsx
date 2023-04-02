@@ -48,6 +48,7 @@ class SignIn extends React.Component {
   }
 
   handleSubmit(e) {
+    e.preventDefault();
     const loginUrl = `/login?username=${this.state.email}&password=${this.state.password}`;
 
     fetch(loginUrl, {
