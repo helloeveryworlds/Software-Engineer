@@ -10,12 +10,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a836269e-5ad6-43da-8c08-705f1fe95b5d" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../front-end/src/components/search-result/search-result.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../front-end/src/components/search-result/search-result.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front-end/src/contexts/products.context.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../front-end/src/contexts/products.context.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front-end/src/routes/shopping/shopping.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../front-end/src/routes/shopping/shopping.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/bossmode/backend/RestAuthenticationSuccessHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/bossmode/backend/dto/UserDetailsDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bossmode/backend/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bossmode/backend/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bossmode/backend/controller/SignInController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bossmode/backend/controller/SignInController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bossmode/backend/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bossmode/backend/service/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front-end/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/../front-end/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../front-end/src/routes/sign-in/sign-in.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../front-end/src/routes/sign-in/sign-in.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../front-end/src/routes/sign-up/sign-up.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../front-end/src/routes/sign-up/sign-up.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../mobile/groce-Save/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/../mobile/groce-Save/App.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -61,7 +64,7 @@
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/fuhaoruan/Library/CloudStorage/OneDrive-Personal/Spring 2023/software engineer/SoftwareEnigneer/back-end&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/fuhaoruan/Documents/Spring 2023/software engineer/SoftwareEnigneer/back-end&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
     &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
@@ -222,6 +225,12 @@
       <workItem from="1679684283109" duration="88000" />
       <workItem from="1679685027664" duration="75000" />
       <workItem from="1679841516432" duration="6966000" />
+      <workItem from="1680120205962" duration="574000" />
+      <workItem from="1680120815262" duration="111000" />
+      <workItem from="1680133241005" duration="2047000" />
+      <workItem from="1680226801365" duration="1692000" />
+      <workItem from="1680276570868" duration="316000" />
+      <workItem from="1680399158266" duration="5330000" />
     </task>
     <servers />
   </component>
