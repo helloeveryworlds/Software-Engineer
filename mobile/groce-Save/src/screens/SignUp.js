@@ -14,14 +14,15 @@ import {
   ImageBackground,
   Platform
 } from "react-native";
-// import AsyncStorage from '@react-native-async-storage/async-storage';
-// import { Dropdown } from "react-native-material-dropdown";
 import UserIcon from "../../assets/svgs/user";
 import { SimpleLineIcons, Foundation, Entypo, AntDesign, MaterialCommunityIcons, MaterialIcons, FontAwesome, FontAwesome5, Feather } from "@expo/vector-icons";
-// import groceSaveService, {
+import groceSaveService, {
+  setClientOnboardToken,
+} from "../service/GroceSaveService";
+// import groceSaveItemService, {
 //   setClientOnboardToken,
-// } from "../service/GroceSaveService";
-// import  Loader  from '../config/Loader';
+// } from "../service/GroceSaveItemService";
+// import  Loader  from '../../config/Loader';
 
 const { width, height } = Dimensions.get("window");
 
