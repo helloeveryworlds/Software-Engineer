@@ -14,7 +14,9 @@ import {
   Alert,
   Platform
 } from "react-native";
-// import Toast from 'react-native-tiny-toast';
+ import groceSaveItemService, {
+  setClientOnboardToken,
+} from "../service/GroceSaveItemService";
 import SearchIcon from "../../assets/svgs/search";
 import UserIcon from "../../assets/svgs/user";
 
@@ -27,6 +29,37 @@ const initialState = {
 
 class Shop extends Component {
   state = initialState;
+
+  messageList(userId) {
+    this.setState({ isLoading: true });
+
+    const msgList = [];
+    groceSaveItemService
+      .get(`/message/queryByUserId?userId=${userId}`)
+      .then(data => {
+        if (data.data.data != null) {
+          console.log("list: msgList", data.data.data);
+          this.setState({ isLoading: false });
+
+          this.setState({ list: data.data.data });
+          var dataa = data.data.data.filter((item) => item.categoryName != 'Classroom' 
+          && item.categoryName != 'Lecture' 
+          && item.categoryName != 'Food' 
+          && item.categoryName != 'Health' 
+          && item.categoryName != 'Transportation'
+           ).map(({categoryName, messageContent, messageId, messageTitle, messageStatus}) => ({categoryName, messageContent, messageId, messageTitle, messageStatus}));
+          console.log("Omooooooooo!!!!!",dataa);
+          this.setState({otherList: dataa});
+        } else {
+          this.setState({ noList: true, isLoading: false })
+        }
+      })
+      .catch((err) => {
+        console.log(err)
+        this.setState({ isLoading: false, isAuthorized: true });
+
+      });
+    }
 
   render() {
     LogBox.ignoreAllLogs(true);
