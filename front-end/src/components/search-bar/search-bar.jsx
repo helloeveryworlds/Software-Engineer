@@ -20,6 +20,7 @@ class SearchBar extends React.Component {
 
   handleSearchChange = (e) => {
     this.setState({ searchQuery: e.target.value });
+    this.props.onSearchQueryChange(e.target.value);
   };
 
   handleSearchSubmit = (e) => {

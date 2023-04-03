@@ -7,12 +7,17 @@ import { ProductsContext } from "../../contexts/products.context";
 import "./shopping.css";
 
 const Shopping = () => {
+  const [searchQuery, setSearchQuery] = React.useState("");
   const { itemList } = useContext(ProductsContext);
+
+  const handleSearchQueryChange = (query) => {
+    setSearchQuery(query);
+  };
 
   return (
     <div id="shopping-container">
       <div className="shopping-search-container">
-        <SearchBar />
+        <SearchBar onSearchQueryChange={handleSearchQueryChange}/>
       </div>
       <div className="shopping-categories">
         <div className="category-heading">
@@ -21,7 +26,7 @@ const Shopping = () => {
         </div>
         <div className="categories">
           {/* you can finish "category-card.css" first, then come back and write some css to display these category cards nicely */}
-          {itemList.map((category) => {
+          {itemList.filter(item => item.categoryName.toLowerCase().startsWith(searchQuery.toLowerCase())).map((category) => {
             return (
               <CategoryCard key={category.categoryName} category={category} />
             );
