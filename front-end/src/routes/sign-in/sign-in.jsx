@@ -41,13 +41,14 @@ class SignIn extends React.Component {
     });
   }
 
-  handleChangePwd(e) {
+  handleChangePwd(e) {  
     this.setState({
       password: e.target.value,
     });
   }
 
   handleSubmit(e) {
+    e.preventDefault();
     const loginUrl = `/login?username=${this.state.email}&password=${this.state.password}`;
 
     fetch(loginUrl, {
@@ -104,4 +105,4 @@ class SignIn extends React.Component {
   }
 }
 
-export default withRouter(SignIn);
+export default SignIn;
