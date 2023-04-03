@@ -24,23 +24,36 @@ const getCategoryItems = (categoryName, itemList) => {
 };
 
 const ItemPage = () => {
+  const [searchQuery, setSearchQuery] = React.useState("");
   const { category } = useParams();
   const { itemList } = useContext(ProductsContext);
-
   const categoryItems = getCategoryItems(category, itemList);
   const { categoryName, items } = categoryItems;
 
-  //   write HTML and css
+  const handleSearchQueryChange = (query) => {
+    setSearchQuery(query);
+  };
+
   return (
-    <div>
+    <div className="item-container">
       <div className="item-page-search-container">
-        <SearchBar />
+        <SearchBar
+          onSearchQueryChange={handleSearchQueryChange}
+          filter={true}
+        />
       </div>
       <div>
-        <h4>{categoryName}</h4>
-        {items.map((item) => {
-          return <ItemCard key={item.name} item={item} />;
-        })}
+        <h2 id="item-page-heading">{categoryName}</h2>
+        <hr></hr>
+        <div className="item-page-container">
+          {items
+            .filter((item) =>
+              item.name.toLowerCase().startsWith(searchQuery.toLowerCase())
+            )
+            .map((item) => {
+              return <ItemCard key={item.name} item={item} />;
+            })}
+        </div>
       </div>
     </div>
   );
