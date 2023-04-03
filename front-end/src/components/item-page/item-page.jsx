@@ -36,7 +36,7 @@ const ItemPage = () => {
 
   return (
     <div className="item-container">
-      <div className="item-page-search-container">
+      <div className="search-container">
         <SearchBar
           onSearchQueryChange={handleSearchQueryChange}
           filter={true}

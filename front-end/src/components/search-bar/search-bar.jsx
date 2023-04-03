@@ -26,12 +26,16 @@ class SearchBar extends React.Component {
   };
 
   handleSearchSubmit = (e) => {
+    const queryString = this.state.searchQuery
+      .replace(/\s/g, "-")
+      .toLowerCase();
+    this.setState({ searchQuery: queryString });
     this.setState({ finished: true });
   };
 
   render() {
     return (
-      <div className="search-container">
+      <div className="search-bar-container">
         {this.state.finished && (
           <Navigate to={`/search-result/${this.state.searchQuery}`} />
         )}

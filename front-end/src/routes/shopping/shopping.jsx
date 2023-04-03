@@ -16,7 +16,7 @@ const Shopping = () => {
 
   return (
     <div id="shopping-container">
-      <div className="shopping-search-container">
+      <div className="search-container">
         <SearchBar
           onSearchQueryChange={handleSearchQueryChange}
           filter={true}

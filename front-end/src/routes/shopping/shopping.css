@@ -1,5 +1,4 @@
 #shopping-container {
-  font-family: "Inter";
   font-style: normal;
   font-weight: 400;
   font-size: 48px;
@@ -12,8 +11,8 @@
   min-height: 55vh;
 }
 
-.shopping-search-container {
-  width: 50%;
+.search-container {
+  width: 40%;
   margin: 2% auto;
 }
 
@@ -30,7 +29,6 @@
 }
 
 .category-heading h4 {
-  font-family: "Inter";
   font-style: normal;
   font-weight: 700;
   font-size: 48px;
