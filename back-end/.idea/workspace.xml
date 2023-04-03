@@ -10,15 +10,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a836269e-5ad6-43da-8c08-705f1fe95b5d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/bossmode/backend/controller/CartController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/bossmode/backend/controller/ItemOrderController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/bossmode/backend/dao/OrderItemDao.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/bossmode/backend/service/CartService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/bossmode/backend/service/OrderItemService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/d9267f79-dca2-4a52-89bc-4719722988b2.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/d9267f79-dca2-4a52-89bc-4719722988b2.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/d9267f79-dca2-4a52-89bc-4719722988b2.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bossmode/backend/controller/CartController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bossmode/backend/controller/ItemOrderController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bossmode/backend/dao/CartDao.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bossmode/backend/dao/OrderItemDao.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bossmode/backend/entity/Cart.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bossmode/backend/entity/OrderItem.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/bossmode/backend/entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bossmode/backend/entity/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bossmode/backend/service/CartService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bossmode/backend/service/OrderItemService.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/bossmode/backend/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bossmode/backend/service/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../mobile/groce-Save/src/screens/SignIn.js" beforeDir="false" afterPath="$PROJECT_DIR$/../mobile/groce-Save/src/screens/SignIn.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -45,38 +51,20 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
-  <component name="MavenImportPreferences">
-    <option name="generalSettings">
-      <MavenGeneralSettings>
-        <option name="mavenHome" value="Use Maven wrapper" />
-        <option name="useMavenConfig" value="true" />
-      </MavenGeneralSettings>
-    </option>
-  </component>
   <component name="ProjectId" id="2LFrMuYpUE2CGjEtIslla5tibd0" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/fuhaoruan/Library/CloudStorage/OneDrive-Personal/Spring 2023/software engineer/SoftwareEnigneer/back-end&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;spring.configuration.checksum&quot;: &quot;a115a25065b29adfe4c0b73391cd5b3a&quot;
-  },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;mysql&quot;
-    ]
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$" />
@@ -219,12 +207,16 @@
       <workItem from="1677010485281" duration="5857000" />
       <workItem from="1677023135572" duration="80000" />
       <workItem from="1677084167104" duration="4875000" />
-      <workItem from="1679431945809" duration="205000" />
-      <workItem from="1679432176417" duration="1690000" />
-      <workItem from="1679527579935" duration="469000" />
-      <workItem from="1679684283109" duration="88000" />
-      <workItem from="1679685027664" duration="75000" />
-      <workItem from="1679841516432" duration="6966000" />
+      <workItem from="1677691991602" duration="656000" />
+      <workItem from="1677693776973" duration="5817000" />
+      <workItem from="1677793421211" duration="764000" />
+      <workItem from="1678306781696" duration="104000" />
+      <workItem from="1677084167104" duration="5786000" />
+      <workItem from="1677173370601" duration="1491000" />
+      <workItem from="1677471471719" duration="1133000" />
+      <workItem from="1677532496038" duration="1101000" />
+      <workItem from="1677534724934" duration="999000" />
+      <workItem from="1677557663800" duration="4851000" />
     </task>
     <servers />
   </component>
