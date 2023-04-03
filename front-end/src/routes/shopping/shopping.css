@@ -17,14 +17,13 @@
   margin: 2% auto;
 }
 
-.categories{
+.categories {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   flex-wrap: wrap;
   width: 100%;
 }
-
 
 .category-heading {
   width: 100%;

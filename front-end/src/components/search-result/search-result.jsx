@@ -6,15 +6,14 @@ import { ProductsContext } from "../../contexts/products.context";
 import "./search-result.css";
 
 const SearchResult = () => {
-  // get parameters from string query
   const { query } = useParams();
 
   // // products data
   const { itemList } = useContext(ProductsContext);
   return (
-    <div>
+    <div className="search-result-container">
       <h1>
-        Search Result: {itemList["Vegetables"].items[0].name}
+        Search Result: {itemList[0]["categoryName"]}
         {query}
       </h1>
     </div>
