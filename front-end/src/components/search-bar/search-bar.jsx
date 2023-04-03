@@ -13,16 +13,13 @@ class SearchBar extends React.Component {
   }
 
   handleKeyDown = (e) => {
-    if (!this.state.filter && e.key === "Enter") {
+    if (e.key === "Enter") {
       this.handleSearchSubmit();
     }
   };
 
   handleSearchChange = (e) => {
     this.setState({ searchQuery: e.target.value });
-    if (this.props.filter) {
-      this.props.onSearchQueryChange(e.target.value);
-    }
   };
 
   handleSearchSubmit = (e) => {
@@ -33,7 +30,7 @@ class SearchBar extends React.Component {
     return (
       <div className="search-container">
         {this.state.finished && (
-          <Navigate to={`/search-result/${this.state.searchQuery}`} />
+          <Navigate to={`search-result/${this.state.searchQuery}`} />
         )}
         <form onSubmit={this.handleSearchSubmit} className="search-form">
           <input
