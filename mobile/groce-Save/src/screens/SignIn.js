@@ -15,8 +15,6 @@ import {
   Platform
 } from "react-native";
 import UserIcon from "../../assets/svgs/user";
-
-// import AsyncStorage from '@react-native-async-storage/async-storage';
 import groceSaveService, {
   setClientOnboardToken,
 } from ".././service/GroceSaveService";
@@ -81,7 +79,7 @@ class SignIn extends Component {
   signnIn(payload){
     this.setState({ isLoading: false, isAuthorized: true });
 
-    console.log(payload);
+    console.log("Payloadddddd",payload);
 
     const onSuccess = ({ data }) => {
       // insert into db...
@@ -114,18 +112,19 @@ class SignIn extends Component {
     const loginUrl = `http://localhost:8080/login?username=${payload.username}&password=${payload.password}`;
 
     fetch(loginUrl, {
-      method: "post",
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       credentials: "include",
     })
     .then((response) => {
+      console.log("Backend Responnse",response)
       if (response.status == 200) {
-        console.log(response)
+        console.log("It is 200 status...",response.data)
       }
-      if (response.status < 200 || response.status >= 300) {
-        throw Error("Fail to log in");
+      if (response.status != 200) {
+        throw Error("Fail to log in "+response.status);
       }
     });
   
@@ -138,7 +137,7 @@ class SignIn extends Component {
         
     //     var config = {
     //       // method: 'post',
-    //       // url: 'https://telnetsuperapp.com.ng:8443/api/v1/accounts/login',
+    //       // url: 'https:/
           
     //       headers: { 
     //         'Content-Type': 'application/json'
