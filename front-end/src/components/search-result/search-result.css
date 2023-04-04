@@ -20,4 +20,26 @@
 }
 
 .search-result {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  margin-bottom: 10%;
+}
+
+@media screen and (max-width: 576px) {
+  .search-result-heading h4 {
+    font-size: 1.4rem;
+    font-weight: 600;
+  }
+
+  .search-result-heading span {
+    color: #bbbbbb;
+    font-size: 1.2rem;
+    font-weight: normal;
+  }
+
+  .search-result {
+    justify-content: center;
+  }
 }

@@ -5,8 +5,6 @@ import SearchBar from "../search-bar/search-bar";
 import ItemCard from "../item-card/item-card";
 import { ProductsContext } from "../../contexts/products.context";
 
-import "./item-page.css";
-
 const getCategoryItems = (categoryName, itemList) => {
   let items;
 
@@ -35,17 +33,19 @@ const ItemPage = () => {
   };
 
   return (
-    <div className="item-container">
+    <div id="shopping-container">
       <div className="search-container">
         <SearchBar
           onSearchQueryChange={handleSearchQueryChange}
           filter={true}
         />
       </div>
-      <div>
-        <h2 id="item-page-heading">{categoryName}</h2>
-        <hr></hr>
-        <div className="item-page-container">
+      <div className="shopping-body">
+        <div className="category-heading">
+          <h4>{categoryName}</h4>
+          <hr />
+        </div>
+        <div className="categories">
           {items
             .filter((item) =>
               item.name.toLowerCase().startsWith(searchQuery.toLowerCase())

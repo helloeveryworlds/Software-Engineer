@@ -39,7 +39,7 @@ const SearchResult = () => {
           <h4>
             Search Result:{" "}
             {queryArray.map((query) => {
-              return <span>{query} </span>;
+              return <span key={query}>{query} </span>;
             })}
           </h4>
           <hr />
@@ -47,7 +47,7 @@ const SearchResult = () => {
 
         <div className="search-result">
           {queryResult.map((item) => {
-            return <ItemCard item={item} />;
+            return <ItemCard key={item.name} item={item} />;
           })}
         </div>
       </div>

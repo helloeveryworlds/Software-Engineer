@@ -22,9 +22,9 @@ const Shopping = () => {
           filter={true}
         />
       </div>
-      <div className="shopping-categories">
+      <div className="shopping-body">
         <div className="category-heading">
-          <h4 id="category-heading-name">Categories</h4>
+          <h4>Categories</h4>
           <hr />
         </div>
         <div className="categories">
