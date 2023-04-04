@@ -8,9 +8,10 @@ import {
     ScrollView,
     Dimensions
   } from "react-native";
-  import React from "react";
+  import React, { useRef } from "react";
   import { useDispatch, useSelector } from "react-redux";
   import { addToCart, decrementQuantity, incrementQuantity, removeFromCart } from "../components/CartReducer";
+
   const { width, height } = Dimensions.get("window");
 
   const Cart = () => {
@@ -53,8 +54,18 @@ import {
         dispatch(decrementQuantity(item));
       }
     }
+
+
+    const scrollRef = useRef();
+
+    const onPressTouch = () => {
+      scrollRef.current?.scrollToEnd({
+        animated: true,
+      });
+    }
+
     return (
-      <ScrollView style={{ backgroundColor: "#FFF" }}>
+      <ScrollView  ref={scrollRef}  onContentSizeChange={() => onPressTouch()} style={{ backgroundColor: "#FFF" }}>
       <SafeAreaView>
         <Text style={{ textAlign: "center", fontSize: 16 }}>
           Cart
@@ -87,7 +98,9 @@ import {
                   </Text>
                 </Pressable>
               ) : (
-                <Pressable onPress={() => addItemToCart(item)}>
+                <Pressable onPress={() => { 
+                onPressTouch()
+                addItemToCart(item)}}>
                   <Text
                     style={{
                       borderColor: "gray",

@@ -9,19 +9,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a836269e-5ad6-43da-8c08-705f1fe95b5d" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/d9267f79-dca2-4a52-89bc-4719722988b2.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/d9267f79-dca2-4a52-89bc-4719722988b2.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front-end/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/../front-end/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front-end/src/components/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/../front-end/src/components/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front-end/src/components/search-bar/search-bar.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../front-end/src/components/search-bar/search-bar.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front-end/src/routes/home/home.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../front-end/src/routes/home/home.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front-end/src/routes/shopping/shopping.css" beforeDir="false" afterPath="$PROJECT_DIR$/../front-end/src/routes/shopping/shopping.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front-end/src/routes/shopping/shopping.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../front-end/src/routes/shopping/shopping.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front-end/src/routes/userinfo/userinfo.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../front-end/src/routes/userinfo/userinfo.jsx" afterDir="false" />
-    </list>
+    <list default="true" id="a836269e-5ad6-43da-8c08-705f1fe95b5d" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -53,9 +41,11 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">
-    <property name="WebServerToolWindowFactoryState" value="false" />
-  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "node.js.selected.package.tslint": "(autodetect)"
+  }
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$" />

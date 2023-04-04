@@ -28,6 +28,10 @@ const DrawerDesign = (props) => {
           resizeMode={'cover'}
           style={styles.sideMenuProfileIcon}
         />
+
+        <Text style={{ fontSize: 16, textAlign: 'center', color: 'grey' }}>
+          User
+        </Text>
         <DrawerContentScrollView {...props}>
           <DrawerItemList {...props} />
           

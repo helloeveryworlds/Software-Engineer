@@ -22,7 +22,7 @@ import groceSaveService, {
 // import groceSaveItemService, {
 //   setClientOnboardToken,
 // } from "../service/GroceSaveItemService";
-// import  Loader  from '../../config/Loader';
+import  Loader  from '../components/Loader';
 
 const { width, height } = Dimensions.get("window");
 

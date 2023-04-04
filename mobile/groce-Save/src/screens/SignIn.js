@@ -14,11 +14,11 @@ import {
   LogBox,
   Platform
 } from "react-native";
-import UserIcon from "../../assets/svgs/user";
 import groceSaveService, {
   setClientOnboardToken,
 } from ".././service/GroceSaveService";
-// import  Loader  from '../config/Loader';
+import  Loader  from '../components/Loader';
+// import Toast from 'react-native-tiny-toast';
 
 const { width, height } = Dimensions.get("window");
 
@@ -33,6 +33,7 @@ const initialState = {
   last_name: "",
   token: "",
   embu: "",
+  correct: "",
   checked: false,
   checkedDB: false,
   isAuthorized: false, 
@@ -46,6 +47,7 @@ class SignIn extends Component {
   handleUsername = (username) => {
     if(username != ""){
         this.setState({ username: username, embu: "", us: "" });
+        this.validate(username);
       }else{
        this.setState({ username: username, embu: "empty", us: "empty" });
       }
@@ -59,10 +61,24 @@ class SignIn extends Component {
     } 
   };
 
+  validate = (text) => {
+    console.log(text);
+    let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
+    if (reg.test(text) === false) {
+      console.log("Email is Not Correct");
+      this.setState({ email: text, correct: false })
+      return false;
+    }
+    else {
+      this.setState({ email: text, correct: true })
+      console.log("Email is Correct");
+    }
+  }
+
   onPressLogin() {
     this.setState({ isLoading: true });
 
-    const { username, password, embu } = this.state;
+    const { username, password, embu, correct } = this.state;
     
     if(username == ""){
       this.setState({ isLoading: false, us: "empty" });
@@ -85,71 +101,54 @@ class SignIn extends Component {
       // insert into db...
       // this._storeData(data);  
       console.log("Dataaa:::::",data);
-      Alert(null,"Login successfully")
-      // this.setState({ isLoading: false })
-      
-      // if (data.msg == "Login successfully" ) {
-      //   if(data.data.role == roleCheck){
-      //   this.props.navigation.navigate(route, {
-      //     username: data.data.userName,
-      //     username: data.data.username,
-      //     role: role
-      //   });
-      // }else{
-      //   Alert.alert(null,data.data.role == "prof" ? role+" isn't your role. Your role is professor" : role+" isn't your role. Your role is "+data.data.role)
-      // }
-      // } else {
-      //   Alert.alert(null,data.msg)
-      // }
+        if(data){
+          // Toast.show('Login successfully',{
+          //   position: Toast.position.center,
+          //   containerStyle:{ backgroundColor:"#1e5228", borderRadius: 20, padding: 10, margin: 10 },
+          //   duration: Toast.duration.SHORT,
+          //   delay: 0,
+          //   textStyle: {color: "#FFF", fontFamily: "Nunito_400Regular", fontSize: 13},
+          //   imgStyle: {},
+          //   mask: true,
+          //   maskStyle:{},
+          // })
+        Alert(null,"Login successfully")
+        this.props.navigation.navigate("Shop");
+      }
     };
 
     const onFailure = (error) => {
       console.log(error);
+      if(error){
         this.setState({ isLoading: false });
-      
+          if (error.response.status == 400) {
+              this.setState({ isLoading: false });
+              Alert.alert('Info: ', 'Ensure you enter the details required')
+          } else if (error.response.status == 500) {
+              this.setState({ isLoading: false });
+              Alert.alert('Info: ', 'Ensure you enter the details required')
+          } else if (error.response.status == 401) {
+              this.setState({ isLoading: false });
+              Alert.alert('Info: ', 'UnAunthorized')
+          } else if (error.response.status == 404) {
+              this.setState({ isLoading: false });
+              Alert.alert('Info: ', 'Not Found')
+          }
+        }
     };
 
-    const loginUrl = `http://localhost:8080/login?username=${payload.username}&password=${payload.password}`;
-
-    fetch(loginUrl, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-    })
-    .then((response) => {
-      console.log("Backend Responnse",response)
-      if (response.status == 200) {
-        console.log("It is 200 status...",response.data)
-      }
-      if (response.status != 200) {
-        throw Error("Fail to log in "+response.status);
-      }
-    });
-  
     // this.setState({ isLoading: true });
-    // // const headers = 
-    // // {
-    // //   'Content-Type': 'application/json'
-    // // }
-    // // var axios = require('axios');
-        
-    //     var config = {
-    //       // method: 'post',
-    //       // url: 'https:/
-          
-    //       headers: { 
-    //         'Content-Type': 'application/json'
-    //       },
-    //       credentials: "include",
-    //       // data : payload
-    //     };
+        // var config = {
+        //   headers: { 
+        //     'Content-Type': 'application/json'
+        //   },
+        //   credentials: "include",
+        // };
 
-    // groceSaveService
-    //   .post(`/login?username=${payload.username}&password=${payload.password}`,config)
-    //   .then(onSuccess)
-    //   .catch(onFailure);
+    groceSaveService
+      .post(`/login?username=${payload.username}&password=${payload.password}`)
+      .then(onSuccess)
+      .catch(onFailure);
   }
 
   async removeItemValue(key) {
@@ -191,6 +190,7 @@ class SignIn extends Component {
           keyboardShouldPersistTaps="always">
           
           <StatusBar backgroundColor="#F4EFEF" barStyle="dark-content"/>
+          <Loader loading={this.state.isLoading} />
             <View>
             <Text style={styles.displayTextStyle}>Signin</Text>
             <View style={styles.usernameTextStyleView}>
@@ -230,6 +230,7 @@ class SignIn extends Component {
               </View>
               {this.state.us == "empty" && this.state.username == "" && <Text style={styles.invalidPasswordTextStyle}>E-mail is empty</Text>}
               {this.state.embu == "empty" && this.state.username != "" && <Text style={styles.invalidPasswordTextStyle}>E-mail does not exist</Text>}
+              {!this.state.correct && this.state.username != "" && <Text style={styles.invalidPasswordTextStyle}>E-mail is not correct</Text>}
             </View>
             
             <View style={styles.passwordTextStyleView}>
