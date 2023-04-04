@@ -1,4 +1,3 @@
-
 .item-card {
   display: flex;
   flex-direction: column;
@@ -27,26 +26,23 @@
 }
 
 .item-card__button {
-  background-color: #1B6EBB;
-  padding:0.5em 1em 0.5em 1em;
+  background-color: #1b6ebb;
+  padding: 0.5em 1em 0.5em 1em;
   color: black;
   border: none;
   border-radius: 15px;
   padding: 10px;
   cursor: pointer;
-  border:none;
-  position:relative;
-  overflow:hidden;
-  transition:transform 0.1s;
-  z-index:1;
-  display:block;
-  font:inter;
+  border: none;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.1s;
+  z-index: 1;
+  display: block;
+  font: inter;
 }
 
 .item-card__button:hover {
   background-color: #0069d9;
   cursor: pointer;
-}  
-
-
-
+}

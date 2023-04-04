@@ -16,21 +16,29 @@ const Shopping = () => {
 
   return (
     <div id="shopping-container">
-      <div className="shopping-search-container">
-        <SearchBar onSearchQueryChange={handleSearchQueryChange}/>
+      <div className="search-container">
+        <SearchBar
+          onSearchQueryChange={handleSearchQueryChange}
+          filter={true}
+        />
       </div>
-      <div className="shopping-categories">
+      <div className="shopping-body">
         <div className="category-heading">
-          <h4 id="category-heading-name">Categories</h4>
+          <h4>Categories</h4>
           <hr />
         </div>
         <div className="categories">
-          {/* you can finish "category-card.css" first, then come back and write some css to display these category cards nicely */}
-          {itemList.filter(item => item.categoryName.toLowerCase().startsWith(searchQuery.toLowerCase())).map((category) => {
-            return (
-              <CategoryCard key={category.categoryName} category={category} />
-            );
-          })}
+          {itemList
+            .filter((item) =>
+              item.categoryName
+                .toLowerCase()
+                .startsWith(searchQuery.toLowerCase())
+            )
+            .map((category) => {
+              return (
+                <CategoryCard key={category.categoryName} category={category} />
+              );
+            })}
         </div>
       </div>
     </div>
