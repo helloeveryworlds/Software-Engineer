@@ -1,56 +1,44 @@
-import React, { useState } from "react";
-import { ProductsContext } from "../../contexts/products.context";
+import React, { useContext } from "react";
+
 import SearchBar from "../../components/search-bar/search-bar";
+import CategoryCard from "../../components/category-card/category-card";
+import { ProductsContext } from "../../contexts/products.context";
+
 import "./shopping.css";
-import { useContext } from "react";
-import { useNavigate } from 'react-router-dom';
 
 const Shopping = () => {
+  const [searchQuery, setSearchQuery] = React.useState("");
   const { itemList } = useContext(ProductsContext);
- 
-  // itemList["Vegetables"].items[0].name : you will get "Carrot"
 
-
-
-  const navigate = useNavigate();
-
-  const handleCategoryClick = (category) => {
-    navigate('/item-cart/'+category);
+  const handleSearchQueryChange = (query) => {
+    setSearchQuery(query);
   };
 
   return (
     <div id="shopping-container">
-      <div className="shopping-search-container">
-        <SearchBar />
+      <div className="search-container">
+        <SearchBar
+          onSearchQueryChange={handleSearchQueryChange}
+          filter={true}
+        />
       </div>
-      <div className="shopping-categories">
+      <div className="shopping-body">
         <div className="category-heading">
-          <h4 id="category-heading-name">Categories</h4>
+          <h4>Categories</h4>
           <hr />
         </div>
         <div className="categories">
-          <ul className="item-list">
-            <li
-              className="item"
-              id="dairy"
-              onClick={() => handleCategoryClick("Dairy, Eggs, and Cheese")}
-            ></li>
-            <li
-              className="item"
-              id="fruits"
-              onClick={() => handleCategoryClick("Fruits and Vegetables")}
-            ></li>
-            <li
-              className="item"
-              id="grains"
-              onClick={() => handleCategoryClick("Grains and Pasta")}
-            ></li>
-            <li
-              className="item"
-              id="meat"
-              onClick={() => handleCategoryClick("Meat and Seafood")}
-            ></li>
-          </ul>
+          {itemList
+            .filter((item) =>
+              item.categoryName
+                .toLowerCase()
+                .startsWith(searchQuery.toLowerCase())
+            )
+            .map((category) => {
+              return (
+                <CategoryCard key={category.categoryName} category={category} />
+              );
+            })}
         </div>
       </div>
     </div>

@@ -57,12 +57,19 @@ class SignIn extends React.Component {
         "Content-Type": "application/json",
       },
       credentials: "include",
-    }).then((response) => {
+    }).then((response) =>{
       if (response.status < 200 || response.status >= 300) {
         throw Error("Fail to log in");
-      } else {
-        this.setState({success:true})
       }
+      return response.json(); 
+    })
+    .then((data) => {
+        console.log(data)
+        localStorage.setItem("name", data.name)
+        localStorage.setItem("email", data.email)
+        localStorage.setItem("address", data.address)
+        localStorage.setItem("zipCode", data.zipCode)
+        this.setState({success:true})
     });
   }
 

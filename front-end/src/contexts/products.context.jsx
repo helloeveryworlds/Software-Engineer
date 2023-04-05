@@ -1,4 +1,5 @@
-import React, { createContext, useState, useEffect } from "react";
+import React, { createContext } from "react";
+// import { useState, useEffect} from 'react';
 // import axios from "axios";
 
 const rawItemList = {
@@ -42,14 +43,17 @@ const processing_data = (original_data) => {
 
   Object.keys(original_data).forEach((ele) => {
     const arrays = ele.split(",");
-    data[arrays[0]] = {};
-    data[arrays[0]]["imageUrl"] = arrays[1];
-    data[arrays[0]]["items"] = [];
+
+    let temp = {};
+    temp["categoryName"] = arrays[0];
+    temp["imageUrl"] = arrays[1];
+    temp["items"] = [];
 
     original_data[ele].forEach((ele) => {
       let item = ele.split(",");
-      data[arrays[0]]["items"].push({ name: item[0], imageUrl: item[1] });
+      temp["items"].push({ name: item[0], imageUrl: item[1] });
     });
+    data.push(temp);
   });
   return data;
 };
