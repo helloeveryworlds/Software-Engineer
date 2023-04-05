@@ -18,7 +18,6 @@ import groceSaveService, {
   setClientOnboardToken,
 } from ".././service/GroceSaveService";
 import  Loader  from '../components/Loader';
-// import Toast from 'react-native-tiny-toast';
 
 const { width, height } = Dimensions.get("window");
 
@@ -27,10 +26,6 @@ const initialState = {
   us: "",
   password: "", 
   pa: "",
-  errors: {}, 
-  role: "",
-  first_name: "",
-  last_name: "",
   token: "",
   embu: "",
   correct: "",
@@ -41,8 +36,12 @@ const initialState = {
   secureTextEntry: true,
 };
 
-class SignIn extends Component {
+class SignIn extends React.Component {
   state = initialState;
+
+  constructor(props) {
+    super(props);
+  }
 
   handleUsername = (username) => {
     if(username != ""){
@@ -66,11 +65,11 @@ class SignIn extends Component {
     let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
     if (reg.test(text) === false) {
       console.log("Email is Not Correct");
-      this.setState({ email: text, correct: false })
+      this.setState({ username: text, correct: false })
       return false;
     }
     else {
-      this.setState({ email: text, correct: true })
+      this.setState({ username: text, correct: true })
       console.log("Email is Correct");
     }
   }
@@ -88,38 +87,27 @@ class SignIn extends Component {
       this.setState({ isLoading: false, pa: "empty" });
     }else{
     const payload = { username, password };
-    this.signnIn(payload)
+    this.signnIn(payload);
   }
   } 
 
   signnIn(payload){
-    this.setState({ isLoading: false, isAuthorized: true });
-
     console.log("Payloadddddd",payload);
 
     const onSuccess = ({ data }) => {
-      // insert into db...
-      // this._storeData(data);  
+    this.setState({ isLoading: false });
+
       console.log("Dataaa:::::",data);
         if(data){
-          // Toast.show('Login successfully',{
-          //   position: Toast.position.center,
-          //   containerStyle:{ backgroundColor:"#1e5228", borderRadius: 20, padding: 10, margin: 10 },
-          //   duration: Toast.duration.SHORT,
-          //   delay: 0,
-          //   textStyle: {color: "#FFF", fontFamily: "Nunito_400Regular", fontSize: 13},
-          //   imgStyle: {},
-          //   mask: true,
-          //   maskStyle:{},
-          // })
-        Alert(null,"Login successfully")
+          console.log("Hereeeeeeeeeeeeeeeeeeeeeee")
+        Alert(null,"Login successfully");
         this.props.navigation.navigate("Shop");
       }
     };
 
     const onFailure = (error) => {
       console.log(error);
-      if(error){
+      if(error.response.status){
         this.setState({ isLoading: false });
           if (error.response.status == 400) {
               this.setState({ isLoading: false });
@@ -136,14 +124,6 @@ class SignIn extends Component {
           }
         }
     };
-
-    // this.setState({ isLoading: true });
-        // var config = {
-        //   headers: { 
-        //     'Content-Type': 'application/json'
-        //   },
-        //   credentials: "include",
-        // };
 
     groceSaveService
       .post(`/login?username=${payload.username}&password=${payload.password}`)
@@ -229,7 +209,6 @@ class SignIn extends Component {
               />
               </View>
               {this.state.us == "empty" && this.state.username == "" && <Text style={styles.invalidPasswordTextStyle}>E-mail is empty</Text>}
-              {this.state.embu == "empty" && this.state.username != "" && <Text style={styles.invalidPasswordTextStyle}>E-mail does not exist</Text>}
               {!this.state.correct && this.state.username != "" && <Text style={styles.invalidPasswordTextStyle}>E-mail is not correct</Text>}
             </View>
             
@@ -287,7 +266,7 @@ class SignIn extends Component {
             </View>
 
             <TouchableOpacity
-                onPress={this.onPressLogin.bind(this)}
+                onPress={()=> this.onPressLogin()}
                 style={{ alignSelf: "center", width: width * 0.81, height: 40, backgroundColor: "#52A860", marginBottom: 5, opacity: 1, marginTop: 60,  }}>
                 <Text style={styles.loginButtonText}>Submit</Text>
             </TouchableOpacity>
@@ -315,7 +294,6 @@ class SignIn extends Component {
   );
   }
 }
-
 
 export default SignIn ;
 

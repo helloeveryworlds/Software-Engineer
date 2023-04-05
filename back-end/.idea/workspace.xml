@@ -12,7 +12,11 @@
     <list default="true" id="a836269e-5ad6-43da-8c08-705f1fe95b5d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/bossmode/backend/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bossmode/backend/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bossmode/backend/controller/SignInController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bossmode/backend/controller/SignInController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/bossmode/backend/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bossmode/backend/service/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front-end/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/../front-end/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front-end/src/routes/sign-in/sign-in.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../front-end/src/routes/sign-in/sign-in.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front-end/src/routes/sign-up/sign-up.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../front-end/src/routes/sign-up/sign-up.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

@@ -106,7 +106,7 @@ class Shop extends Component {
                 resizeMode: 'center',
                 marginTop: 0,
                 alignSelf: "center",
-                paddingVertical: 20,
+                paddingVertical: 0,
             }}
             />
         </View>
@@ -254,7 +254,7 @@ const styles = StyleSheet.create({
     height: 35,
     borderRadius: 50,
     alignSelf: "center",
-    marginTop: Platform.OS === "ios" ? -10: 10,
+    marginTop: Platform.OS === "ios" ? -10: -10,
   },
   viewBtn: {
     backgroundColor: "green",
@@ -262,7 +262,7 @@ const styles = StyleSheet.create({
     height: 35,
     borderRadius: 50,
     alignSelf: "center",
-    marginTop: Platform.OS === "ios" ? -10: 10,
+    marginTop: Platform.OS === "ios" ? -10: -10,
   },
   itemBtnDetails: {
     fontSize: 16,

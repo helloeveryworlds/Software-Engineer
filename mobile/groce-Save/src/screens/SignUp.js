@@ -19,9 +19,6 @@ import { SimpleLineIcons, Foundation, Entypo, AntDesign, MaterialCommunityIcons,
 import groceSaveService, {
   setClientOnboardToken,
 } from "../service/GroceSaveService";
-// import groceSaveItemService, {
-//   setClientOnboardToken,
-// } from "../service/GroceSaveItemService";
 import  Loader  from '../components/Loader';
 
 const { width, height } = Dimensions.get("window");
@@ -29,74 +26,25 @@ const { width, height } = Dimensions.get("window");
 const initialState = {
   email: "",
   em: "",
-  embu: "",
+  ad: "",
   us: "",
   username: "",
   password: "", 
   pa: "",
   name: "",
-  cpa: "",
-  showCpa: "",
-  buId: "",
-  bui: "",
-  userType: "Select Option",
-  uty: "",
+  zc: "",
   address: "",
-  cod: "",
-  backendCode: 0,
-  errors: {}, 
-  role: "",
-  first_name: "",
-  last_name: "",
   zipcode: "",
-  qu: "",
-  answer: "",
-  ans: "",
-  token: "",
-  showCountDown: false,
-  checked: false,
-  checkedDB: false,
-  isAuthorized: false, 
-  isLoading: false, 
-  secureTextEntry: true,
-  seconds: 30,
-  time: {}, 
-  questList: [],
-  optionList: [
-    {
-      value: "Select Option",
-      label: "Select Option",
-    },
-    {
-        value: "student",
-        label: "Student",
-    },
-    {
-        value: "prof",
-        label: "Professor",
-    }
-],
+  correct: ""
 };
 
 class SignUp extends Component {
   state = initialState;
 
-  constructor() {
-    super();
-    this.timer = 0;
-    this.startTimer = this.startTimer.bind(this);
-    this.countDown = this.countDown.bind(this);
-  }
-
   handleEmail = (email) => {
-    var e = "@bu.edu"
     if(email != ""){
-      console.log("Ah ah ah",email.includes(e))
-      if(email.includes(e) && email.endsWith(e)){
-      this.setState({ email: email, embu: "", em: "" });
-      }else{
-       this.setState({ email: email, embu: "empty", em: "empty" });
-      }
+      this.validate(email);
+      this.setState({ email: email, em: "" });
     }else {
       this.setState({ email: email, em: "empty" });
     }
@@ -112,136 +60,39 @@ class SignUp extends Component {
 
   handleName = (name) => {  
     if(name != ""){
-      if(name != this.state.password){
-        this.setState({ name: name, showCpa: "empty", cpa: "empty" });
-      }else{
-        this.setState({ name: name, cpa: "" });
-      }
-    }else {
-      this.setState({ name: name, cpa: "empty", showCpa: "" });
-    } 
-    
-  };
-
-  handleUsername = (username) => {  
-    if(username != ""){
-      this.setState({ username: username, us: "" });
-    }else {
-      this.setState({ username: username, us: "empty" });
-    } 
-  };
-
-  handleBUId = (buId) => {  
-    if(buId != ""){
-      this.setState({ buId: buId, bui: "" });
-    }else {
-      this.setState({ buId: buId, bui: "empty" });
-    } 
-  };
-
-  handleUserType = (userType) => {  
-    if(userType != "Select Option"){
-      this.setState({ userType: userType, uty: "" });
-    }else {
-      this.setState({ userType: userType, uty: "empty" });
-    } 
+        this.setState({ name: name, us: ""});
+    }else{
+        this.setState({ name: name, us: "empty" });
+    }
   };
 
   handleAddress = (address) => {  
     if(address != ""){
-      this.setState({ address: address, cod: "" });
+      this.setState({ address: address, ad: "" });
     }else {
-      this.setState({ address: address, cod: "empty" });
+      this.setState({ address: address, ad: "empty" });
     } 
   };
 
   handleZipcode = (zipcode) => {  
-    if(zipcode != "Select zipcode"){
-      this.setState({ zipcode: zipcode, qu: "" });
+    if(zipcode != ""){
+      this.setState({ zipcode: zipcode, zc: "" });
     }else {
-      this.setState({ zipcode: zipcode, qu: "empty" });
+      this.setState({ zipcode: zipcode, zc: "empty" });
     } 
   };
 
-  handleAnswer = (answer) => {  
-    if(answer != ""){
-      this.setState({ answer: answer, ans: "" });
-    }else {
-      this.setState({ answer: answer, ans: "empty" });
-    } 
-  };
-
-  startTimer() {
-    this.getProfCode();
-    // Alert.alert(null, "You will receive the code via E-mail..", [{text: 'Ok', onPress: ()=> {
-      if(this.state.email != ""){
-      this.setState({ seconds: 30, showCountDown: true })
-      this.timer = setInterval(this.countDown, 1000);
-      }else{
-        this.setState({ isLoading: false, em: "empty" });
-        Alert.alert(null,'Email not yet entered.')
-      }
-    // }}] )
-  }
-
-  countDown() {
-    // Remove one second, set state so a re-render happens.
-    let seconds = this.state.seconds - 1;
-    this.setState({
-      time: this.secondsToTime(seconds),
-      seconds: seconds,
-    });
-    
-    // Check if we're at zero.
-    if (seconds == 0) { 
-      clearInterval(this.timer);
+  validate = (text) => {
+    console.log(text);
+    let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
+    if (reg.test(text) === false) {
+      console.log("Email is Not Correct");
+      this.setState({ email: text, correct: false })
+      return false;
     }
-  }
-
-  secondsToTime(secs){
-    let hours = Math.floor(secs / (60 * 60));
-
-    let divisor_for_minutes = secs % (60 * 60);
-    let minutes = Math.floor(divisor_for_minutes / 60);
-
-    let divisor_for_seconds = divisor_for_minutes % 60;
-    let seconds = Math.ceil(divisor_for_seconds);
-
-    let obj = {
-      "h": hours,
-      "m": minutes,
-      "s": seconds
-    };
-    return obj;
-  }
-
-  getProfCode() {
-    this.setState({ isLoading: true });
-    if(this.state.email){
-    const fbList = [];
-
-    // groceSaveService
-    //   .get(`/user/getCode?email=${this.state.email}`)
-    //   .then((data) => {
-    //     if(data.data.data != null){
-    //     this.setState({ isLoading: false, isAuthorized: true, visible: true, backendCode: data.data.data });
-    //     console.log("Dataaaaaaaaaa: ", data.data.data);
-    //     Alert.alert(null, "Your code is "+data.data.data)
-    //     }else {
-    //       this.setState({ isLoading: false, visible: true });
-    //       Alert.alert(null,data.data.msg)
-    //     this.setState({ message: "No Available Feedback" });
-        
-    //     console.log("fbList: ", fbList);
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     console.log(err)
-    //     this.setState({ isLoading: false, isAuthorized: true });
-    //   });
-    }else{
-      this.setState({ isLoading: false, em: "empty" });
-      Alert.alert(null,'Email not yet entered.')
+    else {
+      this.setState({ email: text, correct: true })
+      console.log("Email is Correct");
     }
   }
 
@@ -276,69 +127,35 @@ class SignUp extends Component {
 
   componentDidMount() {
     this.zipcodesList()
-    let timeLeftVar = this.secondsToTime(this.state.seconds);
-    this.setState({ time: timeLeftVar });
   }
 
-  onPressLogin() {
+  onPressSubmit() {
     this.setState({ isLoading: true });
 
-    const { embu, email, password, userType, username, buId, name, code, backendCode, zipcode, answer } = this.state;
+    const { email, password, userType, name, code, backendCode, zipcode, address} = this.state;
     
-    if(userType == "Select Option"){
-      this.setState({ isLoading: false, uty: "empty" });
-      // Alert.alert(null,'Email field is empty')
-    }else if(email == ""){
-      this.setState({ isLoading: false, em: "empty" });
-      // Alert.alert(null,'Password field is empty')
-    }else if(email != "" && embu == "empty"){
-      this.setState({ isLoading: false, embu: "empty" });
-      // Alert.alert(null,'Password field is empty')
-    }else if(username == ""){
+    if(name == ""){
       this.setState({ isLoading: false, us: "empty" });
       // Alert.alert(null,'Password field is empty')
-    }else if(buId == ""){
-      this.setState({ isLoading: false, bui: "empty" });
+    }else if(email == ""){
+      this.setState({ isLoading: false, em: "empty" });
       // Alert.alert(null,'Password field is empty')
     }else if(password == ""){
       this.setState({ isLoading: false, pa: "empty" });
       // Alert.alert(null,'Password field is empty')
-    }else if(name == ""){
-      this.setState({ isLoading: false, cpa: "empty" });
-      // Alert.alert(null,'Password field is empty')
-    }else if(password != name){
-      this.setState({ isLoading: false, cpa: "empty", showCpa: "empty" });
-      // Alert.alert(null,'Password field is empty')
-    }else if(userType == "prof" && code == ""){
-      this.setState({ isLoading: false, cod: "empty" });
+    }else if(address == ""){
+      this.setState({ isLoading: false, ad: "empty" });
       // Alert.alert(null,'Password field is empty')
     }else if(zipcode == "Select zipcode"){
-      this.setState({ isLoading: false, qu: "empty" });
-      // Alert.alert(null,'Password field is empty')
-    }else if(answer == ""){
-      this.setState({ isLoading: false, ans: "empty" });
+      this.setState({ isLoading: false, zc: "empty" });
       // Alert.alert(null,'Password field is empty')
     }else{
-      const role = userType
-      const buID = buId
-      const userName = username
-      const payload = { email, password, role, buID, userName, zipcode, answer };
-      if(userType == "prof" && code != ""){
-        if(code == backendCode){
-          this.signUp(payload)
-        }else{
-          this.setState({ isLoading: false, cod: "empty" });
-          Alert.alert(null,"Code isn't correct!")
-        }
-      } else if(userType == "student"){
+      const payload = { email, password, address, name, zipcode };
       this.signUp(payload)
-      }
-      
   }
   } 
 
   signUp(payload){
-  // const checkedPayload = { email, password, checked };
   this.setState({ isLoading: false, isAuthorized: true });
 
   console.log(payload);
@@ -347,12 +164,11 @@ class SignUp extends Component {
     // insert into db...
     // this._storeData(data);
     
-  //   setClientOnboardToken(data.token);
     this.setState({ isLoading: false, isAuthorized: true });
     console.log("Dataaa",data);
-    if (data.msg == "Register successfully"){
-      Alert.alert(null, data.msg+": Account created, Click Ok to login..", [{
-        text: 'Ok', onPress: () => this.props.navigation.navigate("Welcome")
+    if (data){
+      Alert.alert(null, "Register successfully", [{
+        text: 'Ok', onPress: () => this.props.navigation.navigate("SignIn")
       }])
     }else{
       Alert.alert(data.msg)
@@ -383,10 +199,10 @@ class SignUp extends Component {
   };
 
   this.setState({ isLoading: true });
-  //  groceSaveService
-  //   .post("/user/register", payload)
-  //   .then(onSuccess)
-  //   .catch(onFailure);
+   groceSaveService
+    .post("/signup", payload)
+    .then(onSuccess)
+    .catch(onFailure);
   }
 
   async removeItemValue(key) {
@@ -462,19 +278,16 @@ class SignUp extends Component {
               fontSize={16}
               underlineColorAndroid="transparent"
               autoCapitalize="none"
-              
               returnKeyType="next"
               placeholder={"Name"}
               placeholderTextColor={"#979797"}
-              // style={{fontFamily: "Nunito_400Regular",}}
-              onSubmitEditing={() => { this.secondTextInput.focus(); }}
+              onSubmitEditing={() => { this.emailTextInput.focus(); }}
               blurOnSubmit={false}
               value={this.state.name}
               onChangeText={this.handleName}
             />
             </View>
-            {/* {this.state.us == "empty" && this.state.email == "" && <Text style={styles.invalidPasswordTextStyle}>E-mail is empty</Text>}
-            {this.state.embu == "empty" && this.state.email != "" && <Text style={styles.invalidPasswordTextStyle}>E-mail does not exist</Text>} */}
+            {this.state.us == "empty" && this.state.name == "" && <Text style={styles.invalidPasswordTextStyle}>Name is empty</Text>}
           </View>
           
           <View style={styles.emailTextStyleView}>
@@ -488,7 +301,7 @@ class SignUp extends Component {
             <TextInput
               backgroundColor={"#F4EFEF"}
               borderWidth = {1}
-              borderColor={this.state.us == "empty" ? 'red' : "transparent"}
+              borderColor={this.state.em == "empty" ? 'red' : "transparent"}
               width = {width * 0.81}
               height= {56}
               // borderRadius = {10}
@@ -505,15 +318,15 @@ class SignUp extends Component {
               returnKeyType="next"
               placeholder={"Email"}
               placeholderTextColor={"#979797"}
-              // style={{fontFamily: "Nunito_400Regular",}}
-              onSubmitEditing={() => { this.secondTextInput.focus(); }}
+              ref={(input) => { this.emailTextInput = input; }}
+              onSubmitEditing={() => { this.passwordTextInput.focus(); }}
               blurOnSubmit={false}
               value={this.state.email}
               onChangeText={this.handleEmail}
             />
             </View>
-            {this.state.us == "empty" && this.state.email == "" && <Text style={styles.invalidPasswordTextStyle}>E-mail is empty</Text>}
-            {this.state.embu == "empty" && this.state.email != "" && <Text style={styles.invalidPasswordTextStyle}>E-mail does not exist</Text>}
+            {!this.state.correct && this.state.email != "" && <Text style={styles.invalidPasswordTextStyle}>E-mail is not correct</Text>}
+            {this.state.em == "empty" && this.state.email == "" && <Text style={styles.invalidPasswordTextStyle}>E-mail is empty</Text>}
           </View>
 
           <View style={styles.passwordTextStyleView}>
@@ -541,8 +354,8 @@ class SignUp extends Component {
               placeholderTextColor={"#979797"}
               underlineColorAndroid="transparent"
               autoCapitalize="none"
-              // style={{fontFamily: "Nunito_400Regular",}}
-              ref={(input) => { this.secondTextInput = input; }}
+              ref={(input) => { this.passwordTextInput = input; }}
+              onSubmitEditing={() => { this.addressTextInput.focus(); }}
               value={this.state.password}
               secureTextEntry={this.state.secureTextEntry?true:false}
               onChangeText={this.handlePassword}
@@ -554,7 +367,6 @@ class SignUp extends Component {
             </View>
 
             </View>
-            {this.state.password == "12345" && this.state.pa == "empty" && <Text style={styles.invalidPasswordTextStyle}>Invalid Password</Text>}
           {this.state.pa == "empty" && this.state.password == "" && <Text style={styles.invalidPasswordTextStyle}>Password is empty</Text>}
           </View>
 
@@ -569,7 +381,7 @@ class SignUp extends Component {
             <TextInput
               backgroundColor={"#F4EFEF"}
               borderWidth = {1}
-              borderColor={this.state.us == "empty" ? 'red' : "transparent"}
+              borderColor={this.state.ad == "empty" ? 'red' : "transparent"}
               width = {width * 0.81}
               height= {56}
               // borderRadius = {10}
@@ -584,16 +396,15 @@ class SignUp extends Component {
               autoCapitalize="none"
               returnKeyType="next"
               placeholder={"Address"}
-              placeholderTextColor={"#979797"}
-              // style={{fontFamily: "Nunito_400Regular",}}
-              onSubmitEditing={() => { this.secondTextInput.focus(); }}
+              placeholderTextColor={"#979797"} 
+              ref={(input) => { this.addressTextInput = input; }}
+              onSubmitEditing={() => { this.zipcodeTextInput.focus(); }}
               blurOnSubmit={false}
               value={this.state.address}
               onChangeText={this.handleAddress}
             />
             </View>
-            {/* {this.state.us == "empty" && ///this.state.email == "" && <Text style={styles.invalidPasswordTextStyle}>E-mail is empty</Text>}
-            {this.state.embu == "empty" && this.state.email != "" && <Text style={styles.invalidPasswordTextStyle}>E-mail does not exist</Text>} */}
+            {this.state.ad == "empty" && this.state.address == "" && <Text style={styles.invalidPasswordTextStyle}>Address is empty</Text>}
           </View>
 
           <View style={styles.emailTextStyleView}>
@@ -607,7 +418,7 @@ class SignUp extends Component {
             <TextInput
               backgroundColor={"#F4EFEF"}
               borderWidth = {1}
-              borderColor={this.state.us == "empty" ? 'red' : "transparent"}
+              borderColor={this.state.zc == "empty" ? 'red' : "transparent"}
               width = {width * 0.81}
               height= {56}
               // borderRadius = {10}
@@ -623,19 +434,17 @@ class SignUp extends Component {
               returnKeyType="next"
               placeholder={"Zip code"}
               placeholderTextColor={"#979797"}
-              // style={{fontFamily: "Nunito_400Regular",}}
-              onSubmitEditing={() => { this.secondTextInput.focus(); }}
+              ref={(input) => { this.zipcodeTextInput = input; }}
               blurOnSubmit={false}
               value={this.state.zipcode}
               onChangeText={this.handleZipcode}
             />
             </View>
-            {/* {this.state.us == "empty" && this.state.email == "" && <Text style={styles.invalidPasswordTextStyle}>E-mail is empty</Text>}
-            {this.state.embu == "empty" && this.state.email != "" && <Text style={styles.invalidPasswordTextStyle}>E-mail does not exist</Text>} */}
+            {this.state.zc == "empty" && this.state.zipcode == "" && <Text style={styles.invalidPasswordTextStyle}>Zip code is empty</Text>}
           </View>
 
           <TouchableOpacity
-              onPress={this.onPressLogin.bind(this)}
+              onPress={this.onPressSubmit.bind(this)}
               style={{ alignSelf: "center", width: width * 0.81, height: 40, backgroundColor: "#52A860", marginBottom: 5, opacity: 1, marginTop: 60,  }}>
               <Text style={styles.loginButtonText}>Submit</Text>
           </TouchableOpacity>
@@ -643,7 +452,6 @@ class SignUp extends Component {
             <Text style={styles.dontHaveAccountTextStyle}>Have an account?{" "}</Text>
             <TouchableOpacity
                 onPress={() =>
-                  // Alert.alert(null, "Signup")
                   this.props.navigation.navigate("SignIn")
                 }>
             <Text style={styles.dontHaveAccountMintTextStyle}>Sign in</Text>

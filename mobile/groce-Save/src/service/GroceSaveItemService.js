@@ -1,7 +1,8 @@
 import axios from 'axios';
+import { Platform } from "react-native"; 
 
 let GroceSaveItemService = axios.create({
-    baseURL: 'http://localhost:8800/', 
+    baseURL: Platform.OS === "ios" ? 'http://localhost:8800/' : 'http://10.0.2.2:8800/', 
     timeout: 10000,
   });
 
