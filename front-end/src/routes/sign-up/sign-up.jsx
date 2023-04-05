@@ -104,16 +104,15 @@ class SignUp extends React.Component {
       zipcode: this.state.zipcode
     }
     
-    return fetch(signupUrl, {
+    fetch(signupUrl, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       credentials: "include",
       body: JSON.stringify(data),
-    })
-    
-    .then((response) => {
+    }).then((response) => {
+      alert("sign up success")
       if (response.status < 200 || response.status >= 300) {
         throw Error("Fail to sign up");
       } else {
