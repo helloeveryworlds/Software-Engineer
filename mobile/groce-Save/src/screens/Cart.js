@@ -6,6 +6,7 @@ import {
     Pressable,
     SafeAreaView,
     ScrollView,
+    TouchableOpacity,
     Dimensions
   } from "react-native";
   import React, { useRef } from "react";
@@ -173,6 +174,10 @@ import {
             </Pressable>
           </View>
         ))}
+        {cart.length != 0 && 
+        <TouchableOpacity style={styles.itemBtn}>
+          <Text style={styles.itemBtnDetails}>Checkout</Text>
+        </TouchableOpacity>}
       </SafeAreaView>
       </ScrollView>
     );
@@ -180,4 +185,19 @@ import {
   
   export default Cart;
   
-  const styles = StyleSheet.create({});
+  const styles = StyleSheet.create({
+    itemBtn: {
+      backgroundColor: "#9BC0F1",
+      width: width * 0.40,
+      height: 35,
+      borderRadius: 50,
+      alignSelf: "center",
+      marginVertical: Platform.OS === "ios" ? 20: 20,
+    },
+    itemBtnDetails: {
+      fontSize: 17,
+      padding: 5,
+      textAlign: "center",
+    },
+    
+  });
