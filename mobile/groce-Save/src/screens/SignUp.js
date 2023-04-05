@@ -14,7 +14,6 @@ import {
   ImageBackground,
   Platform
 } from "react-native";
-import UserIcon from "../../assets/svgs/user";
 import { SimpleLineIcons, Foundation, Entypo, AntDesign, MaterialCommunityIcons, MaterialIcons, FontAwesome, FontAwesome5, Feather } from "@expo/vector-icons";
 import groceSaveService, {
   setClientOnboardToken,
@@ -34,8 +33,10 @@ const initialState = {
   name: "",
   zc: "",
   address: "",
-  zipcode: "",
-  correct: ""
+  zipCode: "",
+  correct: "",
+  isLoading: false, 
+  secureTextEntry: true,
 };
 
 class SignUp extends Component {
@@ -74,11 +75,11 @@ class SignUp extends Component {
     } 
   };
 
-  handleZipcode = (zipcode) => {  
-    if(zipcode != ""){
-      this.setState({ zipcode: zipcode, zc: "" });
+  handleZipcode = (zipCode) => {  
+    if(zipCode != ""){
+      this.setState({ zipCode: zipCode, zc: "" });
     }else {
-      this.setState({ zipcode: zipcode, zc: "empty" });
+      this.setState({ zipCode: zipCode, zc: "empty" });
     } 
   };
 
@@ -132,7 +133,7 @@ class SignUp extends Component {
   onPressSubmit() {
     this.setState({ isLoading: true });
 
-    const { email, password, userType, name, code, backendCode, zipcode, address} = this.state;
+    const { email, password, userType, name, code, backendCode, zipCode, address} = this.state;
     
     if(name == ""){
       this.setState({ isLoading: false, us: "empty" });
@@ -146,11 +147,11 @@ class SignUp extends Component {
     }else if(address == ""){
       this.setState({ isLoading: false, ad: "empty" });
       // Alert.alert(null,'Password field is empty')
-    }else if(zipcode == "Select zipcode"){
+    }else if(zipCode == "Select zipcode"){
       this.setState({ isLoading: false, zc: "empty" });
       // Alert.alert(null,'Password field is empty')
     }else{
-      const payload = { email, password, address, name, zipcode };
+      const payload = { email, password, address, name, zipCode };
       this.signUp(payload)
   }
   } 
@@ -160,18 +161,20 @@ class SignUp extends Component {
 
   console.log(payload);
 
-  const onSuccess = ({ data }) => {
+  const onSuccess = ( data ) => {
     // insert into db...
     // this._storeData(data);
     
     this.setState({ isLoading: false, isAuthorized: true });
     console.log("Dataaa",data);
-    if (data){
+    if (data.status == 201){
       Alert.alert(null, "Register successfully", [{
         text: 'Ok', onPress: () => this.props.navigation.navigate("SignIn")
       }])
     }else{
-      Alert.alert(data.msg)
+      // Alert.alert(null, "Register successfully", [{
+      //   text: 'Ok', onPress: () => this.props.navigation.navigate("SignIn")
+      // }])
     }
   };
 
@@ -252,6 +255,7 @@ class SignUp extends Component {
         keyboardShouldPersistTaps="always">
         
         <StatusBar backgroundColor="#F4EFEF" barStyle="dark-content"/>
+        <Loader loading={this.state.isLoading} />
           <View>
           <Text style={styles.displayTextStyle}>CREATE ACCOUNT</Text>
           <View style={styles.emailTextStyleView}>
@@ -436,11 +440,11 @@ class SignUp extends Component {
               placeholderTextColor={"#979797"}
               ref={(input) => { this.zipcodeTextInput = input; }}
               blurOnSubmit={false}
-              value={this.state.zipcode}
+              value={this.state.zipCode}
               onChangeText={this.handleZipcode}
             />
             </View>
-            {this.state.zc == "empty" && this.state.zipcode == "" && <Text style={styles.invalidPasswordTextStyle}>Zip code is empty</Text>}
+            {this.state.zc == "empty" && this.state.zipCode == "" && <Text style={styles.invalidPasswordTextStyle}>Zip code is empty</Text>}
           </View>
 
           <TouchableOpacity
