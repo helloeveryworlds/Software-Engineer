@@ -14,7 +14,7 @@ import {
   ImageBackground,
   Platform
 } from "react-native";
-import { SimpleLineIcons, Foundation, Entypo, AntDesign, MaterialCommunityIcons, MaterialIcons, FontAwesome, FontAwesome5, Feather } from "@expo/vector-icons";
+import { FontAwesome } from "@expo/vector-icons";
 import groceSaveService, {
   setClientOnboardToken,
 } from "../service/GroceSaveService";
@@ -127,7 +127,7 @@ class SignUp extends Component {
     }
 
   componentDidMount() {
-    this.zipcodesList()
+    // this.zipcodesList()
   }
 
   onPressSubmit() {
@@ -164,7 +164,7 @@ class SignUp extends Component {
   const onSuccess = ( data ) => {
     // insert into db...
     // this._storeData(data);
-    
+    ``
     this.setState({ isLoading: false, isAuthorized: true });
     console.log("Dataaa",data);
     if (data.status == 201){
@@ -187,13 +187,13 @@ class SignUp extends Component {
     }
     if(error.response.status == 400){
       this.setState({ isLoading: false });
-      Alert.alert('Info: ',error.response.data.non_field_errors[0])
+      Alert.alert('Info: ','Invalid Credentials')
     } else if(error.response.status == 500){
       this.setState({ isLoading: false });
       Alert.alert('Info: ','Ensure your Network is Stable')
     } else if(error.response.status == 401){
       this.setState({ isLoading: false });
-      Alert.alert(null,error.response.data)
+      Alert.alert(null,"Unauthorized")
     } else if(error.response.status == 404){
       this.setState({ isLoading: false });
       Alert.alert('Info: ','User not found')
@@ -305,10 +305,9 @@ class SignUp extends Component {
             <TextInput
               backgroundColor={"#F4EFEF"}
               borderWidth = {1}
-              borderColor={this.state.em == "empty" ? 'red' : "transparent"}
+              borderColor={this.state.em == "empty" || !this.state.correct && this.state.email != "" ? 'red' : "transparent"}
               width = {width * 0.81}
               height= {56}
-              // borderRadius = {10}
               textAlign = "left"
               paddingTop = {8}
               paddingBottom ={8}
@@ -348,7 +347,6 @@ class SignUp extends Component {
               borderColor={this.state.pa == "empty" ? 'red' : "transparent"}
               width= {width * 0.81}
               height= {56}
-              // borderRadius= {10}
               paddingTop = {8}
               paddingBottom = {8}
               paddingStart ={15}
@@ -367,6 +365,21 @@ class SignUp extends Component {
             {this.state.password ? 
             <TouchableOpacity 
             onPress={this.updateSecureTextEntry.bind(this)}>
+              {this.state.secureTextEntry ?
+                <View
+                style={{alignSelf: "flex-end", right: 33, marginTop: 20, }}>
+                <FontAwesome
+                 name="eye"
+                 size={16}/>
+                </View>
+                 :
+                 <View
+                 style={{alignSelf: "flex-end", right: 33, marginTop: 20, }}>
+                  <FontAwesome
+                  name="eye-slash"
+                  size={16}/>
+                 </View>
+                }
             </TouchableOpacity> : null} 
             </View>
 
@@ -388,7 +401,6 @@ class SignUp extends Component {
               borderColor={this.state.ad == "empty" ? 'red' : "transparent"}
               width = {width * 0.81}
               height= {56}
-              // borderRadius = {10}
               textAlign = "left"
               paddingTop = {8}
               paddingBottom ={8}

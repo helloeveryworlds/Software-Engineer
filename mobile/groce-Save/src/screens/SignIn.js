@@ -7,17 +7,16 @@ import {
   StyleSheet,
   ScrollView,
   ImageBackground,
-  Image,
   StatusBar,
   Alert,
   Dimensions,
   LogBox,
   Platform
 } from "react-native";
-import groceSaveService, {
-  setClientOnboardToken,
-} from ".././service/GroceSaveService";
+import groceSaveService from ".././service/GroceSaveService";
+import { FontAwesome } from "@expo/vector-icons";
 import  Loader  from '../components/Loader';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const { width, height } = Dimensions.get("window");
 
@@ -87,48 +86,56 @@ class SignIn extends React.Component {
       this.setState({ isLoading: false, pa: "empty" });
     }else{
     const payload = { username, password };
-    this.signnIn(payload);
+    this.submitSignIn(payload);
   }
   } 
 
-  signnIn(payload){
-    console.log("Payloadddddd",payload);
-
-    const onSuccess = ({ data }) => {
-    this.setState({ isLoading: false });
-
-      console.log("Dataaa:::::",data);
-        if(data){
-          console.log("Hereeeeeeeeeeeeeeeeeeeeeee")
-        Alert(null,"Login successfully");
-        this.props.navigation.navigate("Shop");
-      }
-    };
-
-    const onFailure = (error) => {
-      console.log(error);
-      if(error.response.status){
-        this.setState({ isLoading: false });
-          if (error.response.status == 400) {
-              this.setState({ isLoading: false });
-              Alert.alert('Info: ', 'Ensure you enter the details required')
-          } else if (error.response.status == 500) {
-              this.setState({ isLoading: false });
-              Alert.alert('Info: ', 'Ensure you enter the details required')
-          } else if (error.response.status == 401) {
-              this.setState({ isLoading: false });
-              Alert.alert('Info: ', 'UnAunthorized')
-          } else if (error.response.status == 404) {
-              this.setState({ isLoading: false });
-              Alert.alert('Info: ', 'Not Found')
-          }
+  submitSignIn(payload){
+      this.setState({ isLoading: false, isAuthorized: true });
+    
+      console.log(payload);
+    
+      const onSuccess = ( data ) => {
+        // insert into db...
+        this._storeData(data);
+        
+        this.setState({ isLoading: false, isAuthorized: true });
+        console.log("Dataaa",data);
+        if (data.status == 200){
+          Alert.alert(null, "Login successfully", [{
+            text: 'Ok', onPress: () => this.props.navigation.navigate("Welcome")
+          }])
         }
-    };
-
-    groceSaveService
-      .post(`/login?username=${payload.username}&password=${payload.password}`)
-      .then(onSuccess)
-      .catch(onFailure);
+      };
+    
+      const onFailure = (error) => {
+        console.log(error && error.response);
+        this.setState({ isLoading: false });
+        if(error.response == null){
+          this.setState({ isLoading: false });
+          Alert.alert('Info: ','Network Error')
+        }
+        if(error.response.status == 400){
+          this.setState({ isLoading: false });
+          Alert.alert('Info: ','Invalid Credentials')
+        } else if(error.response.status == 500){
+          this.setState({ isLoading: false });
+          Alert.alert('Info: ','Ensure your Network is Stable')
+        } else if(error.response.status == 401){
+          this.setState({ isLoading: false });
+          Alert.alert(null,"Unauthorized")
+        } else if(error.response.status == 404){
+          this.setState({ isLoading: false });
+          Alert.alert('Info: ','User not found')
+        }
+        this.setState({ errors: error.response.data, isLoading: false });
+      };
+    
+      this.setState({ isLoading: true });
+       groceSaveService
+        .post(`/login?username=${payload.username}&password=${payload.password}`)
+        .then(onSuccess)
+        .catch(onFailure);
   }
 
   async removeItemValue(key) {
@@ -184,10 +191,9 @@ class SignIn extends React.Component {
               <TextInput
                 backgroundColor={"#F4EFEF"}
                 borderWidth = {1}
-                borderColor={this.state.us == "empty" ? 'red' : "transparent"}
+                borderColor={this.state.us == "empty" || !this.state.correct && this.state.username != "" ? 'red' : "transparent"}
                 width = {width * 0.81}
                 height= {56}
-                // borderRadius = {10}
                 textAlign = "left"
                 paddingTop = {8}
                 paddingBottom ={8}
@@ -201,7 +207,6 @@ class SignIn extends React.Component {
                 returnKeyType="next"
                 placeholder={"Email"}
                 placeholderTextColor={"#979797"}
-                // style={{fontFamily: "Nunito_400Regular",}}
                 onSubmitEditing={() => { this.secondTextInput.focus(); }}
                 blurOnSubmit={false}
                 value={this.state.username}
@@ -227,7 +232,6 @@ class SignIn extends React.Component {
                 borderColor={this.state.pa == "empty" ? 'red' : "transparent"}
                 width= {width * 0.81}
                 height= {56}
-                // borderRadius= {10}
                 paddingTop = {8}
                 paddingBottom = {8}
                 paddingStart ={15}
@@ -237,7 +241,6 @@ class SignIn extends React.Component {
                 placeholderTextColor={"#979797"}
                 underlineColorAndroid="transparent"
                 autoCapitalize="none"
-                // style={{fontFamily: "Nunito_400Regular",}}
                 ref={(input) => { this.secondTextInput = input; }}
                 value={this.state.password}
                 secureTextEntry={this.state.secureTextEntry?true:false}
@@ -246,17 +249,19 @@ class SignIn extends React.Component {
               {this.state.password ? 
               <TouchableOpacity 
               onPress={this.updateSecureTextEntry.bind(this)}>
-                {/* {this.state.secureTextEntry ?
+                {this.state.secureTextEntry ?
                 <View
                 style={{alignSelf: "flex-end", right: 33, marginTop: 20, }}>
-                <EyeOpenIcon/>
+                <FontAwesome
+                 name="eye"/>
                 </View>
                  :
                  <View
                  style={{alignSelf: "flex-end", right: 33, marginTop: 20, }}>
-                 <EyeCloseIcon/>
+                  <FontAwesome
+                 name="eye-slash"/>
                  </View>
-                } */}
+                }
                 
               </TouchableOpacity> : null} 
               </View>
@@ -323,9 +328,7 @@ const styles = StyleSheet.create({
     color: "black",
     alignSelf: "center",
     paddingEnd: 10,
-    // width: 100,
     paddingVertical: Platform.OS === "ios" ? 10 : 10,
-    // fontFamily: "Nunito_700Bold",
     opacity: 1,
   },
   displayTextStyle: {
@@ -337,19 +340,16 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     marginTop: 35,
     marginBottom: 40,
-    // fontFamily: "Nunito_700Bold",
     opacity: 1,
   },
   usernameTextStyle: {
     fontSize: 12,
     color: "#002A14",
-    // fontFamily: "Nunito_400Regular",
     textAlign: "left",
     paddingBottom: 5,
     paddingLeft: 5,
     opacity: 1,
     fontWeight: "400",
-    // this.state.us == "empty" ? 'pink' : 
   },
   welcomeTextStyle: {
     fontSize: 20,
@@ -371,7 +371,6 @@ const styles = StyleSheet.create({
   passwordTextStyle: {
     fontSize: 12,
     color: "#002A14",
-    // fontFamily: "Nunito_400Regular",
     textAlign: "left",
     paddingBottom: 5,
     paddingLeft: 5,
@@ -381,13 +380,11 @@ const styles = StyleSheet.create({
   invalidPasswordTextStyle: {
     fontSize: 12,
     color: "#FF0000",
-    // fontFamily: "Nunito_400Regular",
     alignSelf: "flex-start",
     paddingLeft: 5,
     textAlign: "left",
     opacity: 1,
     top: 5,
-    // marginBottom: 10
   },
   linearGradient: {
     flex: 1,
@@ -408,7 +405,6 @@ const styles = StyleSheet.create({
     fontSize: Platform.OS === "ios" ? 16 : 16,
     color: "#52A860",
     marginEnd: 25,
-    // fontFamily: "Nunito_400Regular",
     textAlign: "right",
     marginTop: 5, 
     marginBottom: 2,
@@ -421,7 +417,6 @@ const styles = StyleSheet.create({
     opacity: 1,
     marginStart: 5,
     fontWeight: "700",
-    // fontFamily: "Nunito_400Regular",
     alignSelf: "center",
   },
   dontHaveAccountMintTextStyle: {
@@ -430,9 +425,7 @@ const styles = StyleSheet.create({
     marginBottom: 1,
     fontWeight: "700",
     opacity: 1,
-    // fontFamily: "Nunito_400Regular",
     alignSelf: "center",
-    // textDecorationLine: "underline"
   },
   buttonView: {
     borderWidth: 1,
@@ -469,7 +462,6 @@ const styles = StyleSheet.create({
     color: "white",
     textAlign: "center",
     alignItems: "center",
-    // fontFamily: "Nunito_400Regular",
     padding: 5,
     fontWeight: "400",
     fontSize: Platform.OS === "ios" ? 20 : 20,
@@ -477,11 +469,9 @@ const styles = StyleSheet.create({
   signUpButtonText: {
     color: "#4848FF",
     textAlign: "center",
-    // fontFamily: "Nunito_400Regular",
   },
   scrollView: {
     flex: 1,
-    // backgroundColor: "#E5E5E5",
   },
   errorMessageContainerStyle: {
     backgroundColor: "#fee8e6",

@@ -1,11 +1,10 @@
-import React from "react";
+import React, { useEffect, useState }  from "react";
 import 'react-native-gesture-handler';
 import { View, TouchableOpacity, Image, Text } from "react-native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import { Entypo, FontAwesome5 } from "@expo/vector-icons";
+import { Entypo } from "@expo/vector-icons";
 import UserIcon from './assets/svgs/user';
 import SignIn from "./src/screens/SignIn";
 import Welcome from "./src/screens/Welcome";
@@ -18,32 +17,18 @@ import SignUp from "./src/screens/SignUp";
 import { Provider } from 'react-redux';
 import Cart from './src/screens/Cart';
 import store from './store';
-import { 
-  Nunito_200ExtraLight,
-  Nunito_200ExtraLight_Italic,
-  Nunito_300Light,
-  Nunito_300Light_Italic,
-  Nunito_400Regular,
-  Nunito_400Regular_Italic,
-  Nunito_600SemiBold,
-  Nunito_600SemiBold_Italic,
-  Nunito_700Bold,
-  Nunito_700Bold_Italic,
-  Nunito_800ExtraBold,
-  Nunito_800ExtraBold_Italic,
-  Nunito_900Black,
-  Nunito_900Black_Italic,
-  useFonts
-} from '@expo-google-fonts/nunito';
-import AppLoading from 'expo-app-loading';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const dataSend = (response) => {
+  const data = response;
+  return data;
+}
 
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
 
 const NavigationDrawerStructure = (props) => {
-  //Structure for the navigatin Drawer
   const toggleDrawer = () => {
-    //Props to open/close the drawer
     props.navigationProps.toggleDrawer();
   };
 
@@ -63,7 +48,7 @@ function firstScreenStack({ navigation }) {
         name="Welcome"
         component={Welcome}
         options={{
-          title: '', //Set Header Title
+          title: '', 
           headerLeft: () => (
             <Image source={require('./assets/logo_.png')} resizeMode={'cover'}  marginStart={20}/>
           ),
@@ -71,43 +56,14 @@ function firstScreenStack({ navigation }) {
             <NavigationDrawerStructure navigationProps={navigation} />
           ),
           headerStyle: {
-            backgroundColor: '#F4EFEF', //Set Header color
+            backgroundColor: '#F4EFEF', 
           },
-          headerTintColor: '#fff', //Set Header text color
+          headerTintColor: '#fff', 
           headerTitleStyle: {
-            fontWeight: 'bold', //Set Header text style
+            fontWeight: 'bold', 
           },
         }}
       />
-      {/* <Stack.Screen
-        name="Cart"
-        component={Cart}
-        options={{
-          title: '', //Set Header Title
-          headerLeft: () => (
-            <Image source={require('./assets/logo_.png')} resizeMode={'cover'}  marginStart={20}/>
-          ),
-          headerRight: () => (
-            // <View>
-            //   <TouchableOpacity style={{}} onPress={()=> {
-            //       props.navigation.navigate("Cart")}}>
-            //     <FontAwesome5 
-            //       name={"shopping-cart"} 
-            //       style={{ color: "#FF0080", alignSelf: "center", }}
-            //       size={25}/>
-            //   </TouchableOpacity>
-              <NavigationDrawerStructure navigationProps={navigation} />
-            // </View>
-          ),
-          headerStyle: {
-            backgroundColor: '#F4EFEF', //Set Header color
-          },
-          headerTintColor: '#000', //Set Header text color
-          headerTitleStyle: {
-            fontWeight: 'bold', //Set Header text style
-          },
-        }}
-      /> */}
     </Stack.Navigator>
   );
 }
@@ -124,56 +80,27 @@ function secondScreenStack({ navigation }) {
           <NavigationDrawerStructure navigationProps={navigation} />
         ),
         headerStyle: {
-          backgroundColor: '#F4EFEF', //Set Header color  #F4EFEF
+          backgroundColor: '#F4EFEF', 
         },
-        headerTintColor: '#fff', //Set Header text color
+        headerTintColor: '#fff', 
         headerTitleStyle: {
-          fontWeight: 'bold', //Set Header text style
+          fontWeight: 'bold', 
         },
       }}>
       <Stack.Screen
         name="SignIn"
         component={SignIn}
         options={{
-          title: '', //Set Header Title
+          title: '', 
         }}
       />
       <Stack.Screen
         name="SignUp"
         component={SignUp}
         options={{
-          title: '', //Set Header Title
+          title: '', 
         }}
       />
-      {/* <Stack.Screen
-        name="Cart"
-        component={Cart}
-        options={{
-          title: '', //Set Header Title
-          headerLeft: () => (
-            <Image source={require('./assets/logo_.png')} resizeMode={'cover'}  marginStart={20}/>
-          ),
-          headerRight: () => (
-            // <View>
-            //   <TouchableOpacity style={{}} onPress={()=> {
-            //       props.navigation.navigate("Cart")}}>
-            //     <FontAwesome5 
-            //       name={"shopping-cart"} 
-            //       style={{ color: "#FF0080", alignSelf: "center", }}
-            //       size={25}/>
-            //   </TouchableOpacity>
-              <NavigationDrawerStructure navigationProps={navigation} />
-            // </View>
-          ),
-          headerStyle: {
-            backgroundColor: '#F4EFEF', //Set Header color
-          },
-          headerTintColor: '#000', //Set Header text color
-          headerTitleStyle: {
-            fontWeight: 'bold', //Set Header text style
-          },
-        }}
-      /> */}
     </Stack.Navigator>
   );
 }
@@ -185,7 +112,7 @@ function userInfoScreenStack({ navigation }) {
         name="UserInfo"
         component={UserInfo}
         options={{
-          title: '', //Set Header Title
+          title: '', 
           headerLeft: () => (
             <Image source={require('./assets/logo_.png')} resizeMode={'cover'}  marginStart={20}/>
           ),
@@ -193,43 +120,14 @@ function userInfoScreenStack({ navigation }) {
             <NavigationDrawerStructure navigationProps={navigation} />
           ),
           headerStyle: {
-            backgroundColor: '#F4EFEF', //Set Header color
+            backgroundColor: '#F4EFEF', 
           },
-          headerTintColor: '#fff', //Set Header text color
+          headerTintColor: '#fff', 
           headerTitleStyle: {
-            fontWeight: 'bold', //Set Header text style
+            fontWeight: 'bold', 
           },
         }}
       />
-      {/* <Stack.Screen
-        name="Cart"
-        component={Cart}
-        options={{
-          title: '', //Set Header Title
-          headerLeft: () => (
-            <Image source={require('./assets/logo_.png')} resizeMode={'cover'}  marginStart={20}/>
-          ),
-          headerRight: () => (
-            // <View>
-            //   <TouchableOpacity style={{}} onPress={()=> {
-            //       props.navigation.navigate("Cart")}}>
-            //     <FontAwesome5 
-            //       name={"shopping-cart"} 
-            //       style={{ color: "#FF0080", alignSelf: "center", }}
-            //       size={25}/>
-            //   </TouchableOpacity>
-              <NavigationDrawerStructure navigationProps={navigation} />
-            // </View>
-          ),
-          headerStyle: {
-            backgroundColor: '#F4EFEF', //Set Header color
-          },
-          headerTintColor: '#000', //Set Header text color
-          headerTitleStyle: {
-            fontWeight: 'bold', //Set Header text style
-          },
-        }}
-      /> */}
     </Stack.Navigator>
   );
 }
@@ -242,7 +140,7 @@ function shopScreenStack({ navigation }) {
         name="Shop"
         component={Shop}
         options={{
-          title: '', //Set Header Title
+          title: '', 
           headerLeft: () => (
             <Image source={require('./assets/logo_.png')} resizeMode={'cover'}  marginStart={20}/>
           ),
@@ -250,11 +148,11 @@ function shopScreenStack({ navigation }) {
             <NavigationDrawerStructure navigationProps={navigation} />
           ),
           headerStyle: {
-            backgroundColor: '#F4EFEF', //Set Header color
+            backgroundColor: '#F4EFEF', 
           },
-          headerTintColor: '#fff', //Set Header text color
+          headerTintColor: '#fff', 
           headerTitleStyle: {
-            fontWeight: 'bold', //Set Header text style
+            fontWeight: 'bold', 
           },
         }}
       />
@@ -262,7 +160,7 @@ function shopScreenStack({ navigation }) {
         name="ItemList"
         component={ItemList}
         options={{
-          title: '', //Set Header Title
+          title: '', 
           headerLeft: () => (
             <Image source={require('./assets/logo_.png')} resizeMode={'cover'}  marginStart={20}/>
           ),
@@ -270,11 +168,11 @@ function shopScreenStack({ navigation }) {
             <NavigationDrawerStructure navigationProps={navigation} />
           ),
           headerStyle: {
-            backgroundColor: '#F4EFEF', //Set Header color
+            backgroundColor: '#F4EFEF', 
           },
-          headerTintColor: '#000', //Set Header text color
+          headerTintColor: '#000', 
           headerTitleStyle: {
-            fontWeight: 'bold', //Set Header text style
+            fontWeight: 'bold', 
           },
         }}
       />
@@ -282,7 +180,7 @@ function shopScreenStack({ navigation }) {
         name="PriceCompare"
         component={PriceCompare}
         options={{
-          title: '', //Set Header Title
+          title: '', 
           headerLeft: () => (
             <Image source={require('./assets/logo_.png')} resizeMode={'cover'}  marginStart={20}/>
           ),
@@ -290,11 +188,11 @@ function shopScreenStack({ navigation }) {
             <NavigationDrawerStructure navigationProps={navigation} />
           ),
           headerStyle: {
-            backgroundColor: '#F4EFEF', //Set Header color
+            backgroundColor: '#F4EFEF', 
           },
-          headerTintColor: '#000', //Set Header text color
+          headerTintColor: '#000', 
           headerTitleStyle: {
-            fontWeight: 'bold', //Set Header text style
+            fontWeight: 'bold', 
           },
         }}
       />
@@ -302,81 +200,20 @@ function shopScreenStack({ navigation }) {
         name="Cart"
         component={Cart}
         options={{
-          title: '', //Set Header Title
+          title: '', 
           headerLeft: () => (
             <Image source={require('./assets/logo_.png')} resizeMode={'cover'}  marginStart={20}/>
           ),
           headerRight: () => (
-            // <View>
-            //   <TouchableOpacity style={{}} onPress={()=> {
-            //       props.navigation.navigate("Cart")}}>
-            //     <FontAwesome5 
-            //       name={"shopping-cart"} 
-            //       style={{ color: "#FF0080", alignSelf: "center", }}
-            //       size={25}/>
-            //   </TouchableOpacity>
               <NavigationDrawerStructure navigationProps={navigation} />
-            // </View>
           ),
           headerStyle: {
-            backgroundColor: '#F4EFEF', //Set Header color
+            backgroundColor: '#F4EFEF', 
           },
-          headerTintColor: '#000', //Set Header text color
+          headerTintColor: '#000', 
           headerTitleStyle: {
-            fontWeight: 'bold', //Set Header text style
+            fontWeight: 'bold', 
           },
-        }}
-      />
-    </Stack.Navigator>
-  );
-}
-
-function mainScreenStack({ navigation }) {
-  return (
-    <Stack.Navigator
-      initialRouteName="Welcome"
-      screenOptions={{
-        headerLeft: () => (
-          <Image source={require('./assets/logo_.png')} resizeMode={'cover'} marginStart={20}/>
-        ),
-        headerRight: () => (
-          <NavigationDrawerStructure navigationProps={navigation} />
-        ),
-        headerStyle: {
-          backgroundColor: '#F4EFEF', //Set Header color  #F4EFEF
-        },
-        headerTintColor: '#fff', //Set Header text color
-        headerTitleStyle: {
-          fontWeight: 'bold', //Set Header text style
-        },
-      }}>
-      <Stack.Screen
-        name="Welcome"
-        component={Welcome}
-        options={{
-          title: '', //Set Header Title
-        }}
-      />
-      <Stack.Screen
-        name="UserInfo"
-        component={UserInfo}
-        options={{
-          title: '', //Set Header Title
-        }}
-      />
-      <Stack.Screen
-        name="Shop"
-        component={Shop}
-        options={{
-          title: '', //Set Header Title
-        }}
-      />
-     
-      <Stack.Screen
-        name="PriceCompare"
-        component={PriceCompare}
-        options={{
-          title: '', //Set Header Title
         }}
       />
     </Stack.Navigator>
@@ -384,6 +221,27 @@ function mainScreenStack({ navigation }) {
 }
 
 function App() {
+  const [data, setData] = useState({});
+  const _retrieveData = () => {
+    AsyncStorage.getItem("userDetails").then((res) => {
+      const response = JSON.parse(res);
+      if (res !== null) {
+        console.log("Response...", response.data);
+        // return response;
+        setData(response.data)
+        // window.myGlobalVar = response.data; 
+        
+  
+      } else {
+        console.log("No response...", response);
+      }
+    });
+  }
+  
+  useEffect(() => {
+      _retrieveData()
+    });
+
   return (
     <Provider store={store}>
     <NavigationContainer>
@@ -402,7 +260,7 @@ function App() {
           },
           headerShown: false,
         }}
-        drawerContent={(props) => <DrawerDesign {...props} />}>
+        drawerContent={(props) => <DrawerDesign data={data} {...props} />}>
         <Drawer.Screen
           name="Welcome"
           options={{ drawerLabel: 'Home', color: "#52A860" }}

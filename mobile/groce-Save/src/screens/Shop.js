@@ -11,11 +11,13 @@ import {
   Image,
   TextInput,
   FlatList,
-  Platform
+  Platform,
+  Alert
 } from "react-native";
  import groceSaveItemService from "../service/GroceSaveItemService";
 import SearchIcon from "../../assets/svgs/search";
 import  Loader  from '../components/Loader';
+import { FontAwesome5 } from "@expo/vector-icons"
 
 const { width, height } = Dimensions.get("window");
 
@@ -26,6 +28,13 @@ const initialState = {
   list: [],
   mainList: [],
   mainData: {},
+  indexes: [],
+  indexesCount: [],
+  indexesCountSub: [],
+  indexesSub: [],
+  newCartList: [],
+  selectedItemsList: [],
+  filteredData: [],
 };
 
 class Shop extends Component {
@@ -33,8 +42,7 @@ class Shop extends Component {
 
   handleInput = (input) => {  
     if(input != ""){
-      this.itemList(input)
-      // this.search(input)
+      this.search(input)
       this.setState({ input: input, in: "" });
     }else {
       this.setState({ input: input, in: "empty" });
@@ -68,35 +76,37 @@ class Shop extends Component {
         this.setState({ isLoading: false, isAuthorized: true });
 
       });
+    
     }
 
     componentDidMount(){
       this.itemList();
     }
 
-    search = txt => {
-      if(txt == ""){
-        this.setState({ mainData: {} })
-      }else{
-      let text = txt.toLowerCase()
-      let tracks = this.state.mainData[txt]
-      let filterTracks =  tracks.filter(item => {
-      if(item.toLowerCase().match(text)) {
-        return item
-      }
-      })
-      if(filterTracks.length != 0){
-        this.setState({ mainData: filterTracks })
-      }else{
-        this.setState({ mainData: {} })
-      }
+    addToCart(item, key){
+      this.state.selectedItemsList.push({
+        id: key+"",
+        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRqg_OBzcVDnKHv1d3hyVk_WlCo43pzit4CJQ&usqp=CAU",
+        name: item,
+      });
+
+      this.setState({ newCartList: [...this.state.selectedItemsList] });
     }
+
+    toCart(){
+      this.props.navigation.navigate("Cart", {
+        array: this.state.newCartList
+      })
     }
 
     renderElement(item, key){
       const { mainData, list } = this.state;
+      const selectedItems = []
+
+      selectedItems.push({ key })
+      console.log("selectedItems selectedItems selectedItems",selectedItems)
       return(
-        <View style={styles.itemContainer}>
+        <View style={styles.itemContainer} key={key}>
         
         <View style={styles.details}>
         <View style={{ backgroundColor: "#FFF"}}>
@@ -122,25 +132,162 @@ class Shop extends Component {
 
         {!list ? 
         <TouchableOpacity
-            style={styles.viewBtn}
-            onPress={()=> {this.scrollView.scrollTo({x: 0, y: 0, animated: true}) 
+            key={key}
+            style={{ 
+            backgroundColor: this.state.indexes.includes(key) ? "#808080" : "green",
+            width: width * 0.30,
+            height: 35,
+            borderRadius: 50,
+            alignSelf: "center",
+            marginTop: Platform.OS === "ios" ? -10: -10,}}
+            onPress={()=> { 
+            // this.changeColorState(key) 
+            this.sendIndex(key)
+            // this.state.indexes
+            this.scrollView.scrollTo({x: 0, y: 0, animated: true}) 
             this.setState({ list: mainData[item], click: "clicked", input: item })}}>
             <Text style={styles.viewBtnDetails}>View Category</Text>
-        </TouchableOpacity> :
+        </TouchableOpacity> : 
+        !this.state.indexesSub.includes(key) ?
         <TouchableOpacity
-        style={styles.itemBtn}
-        onPress={()=> this.props.navigation.navigate("Cart")}>
+          key={key}
+          style={{
+            backgroundColor: this.state.indexesSub.includes(key) ? "#1B6EBB60" : "#1B6EBB" ,
+            width: width * 0.30, 
+            height: 35,
+            borderRadius: 50,
+            alignSelf: "center",
+            marginTop: Platform.OS === "ios" ? -10: -10,
+          }}
+          onPress={()=> { 
+            this.sendIndexSub(key)
+            this.addToCart(item, key)
+          }}>
         <Text style={styles.itemBtnDetails}>Add to cart</Text>
-        </TouchableOpacity>}
+        </TouchableOpacity> : 
+        <TouchableOpacity
+        key={key}
+        style={{
+          backgroundColor: this.state.indexesSub.includes(key) ? "#1B6EBB60" : "#1B6EBB" ,
+          width: width * 0.30, 
+          height: 35,
+          borderRadius: 50,
+          alignSelf: "center",
+          marginTop: Platform.OS === "ios" ? -10: -10,
+        }}
+        onPress={()=> { 
+          this.removeItemFromList(key)
+        }}>
+      <Text style={styles.itemBtnDetails}>Remove</Text>
+      </TouchableOpacity>}
         </View>
         </View>
         </View>
       );
     }
 
+    sendIndex(index){
+      this.state.indexesCount.push(
+        index
+      );
+
+      this.setState({ indexes: [...this.state.indexesCount] });
+    }
+
+    sendIndexSub(index){
+      this.state.indexesCountSub.push(
+        index
+      );
+
+      this.setState({ indexesSub: [...this.state.indexesCountSub] });
+    }
+
+    removeItemFromList(index){
+      let newList = this.state.indexesCountSub;
+      newList.splice(index,1); 
+      this.setState({indexesSub: [...newList]})
+     }
+
+    changeColorState(index) {
+      let indexes = this.state.indexes.slice(0);
+      if(indexes.indexOf(index) == -1)
+          indexes.push(index);
+      else{
+          let id = indexes.indexOf(index);
+          indexes.splice(id, 1)
+      }
+      this.setState({indexes});
+  }
+
+  changeColorStateSub(index) {
+    let indexesSub = this.state.indexesSub.slice(0);
+    if(indexesSub.indexOf(index) == -1)
+    indexesSub.push(index);
+    else{
+        let id = indexesSub.indexOf(index);
+        indexesSub.splice(id, 1)
+    }
+    this.setState({indexesSub});
+  }
+
+  search = (text) => {
+    if (text) {
+      const newData = this.state.mainList.filter(
+        function (item) {
+          const itemData = item
+            ? item.toUpperCase()
+            : ''.toUpperCase();
+          const textData = text.toUpperCase();
+          return itemData.indexOf(textData) > -1;
+      });
+      
+      this.setState({ filteredData: newData, text: text })
+      if(text != ""){
+        this.setState({ input: text, in: "" });
+      }else {
+        this.setState({ input: text, in: "empty" });
+      } 
+
+    } else {
+      this.setState({ filteredData: this.state.mainList })
+    }
+  };
+
+  itemView = ({item, index}) => {
+    return (
+      <Text
+        style={styles.itemStyle}
+        onPress={() => this.getItem(item, index)}>
+        {item}
+      </Text>
+    );
+  };
+
+  itemSeparatorView = () => {
+    return (
+      <View
+        style={{
+          height: 0.5,
+          width: '100%',
+          backgroundColor: '#C8C8C8',
+        }}
+      />
+    );
+  };
+
+  getItem = (item, index) => {
+    this.setState({ input: item, filteredData: [], click: "clicked" })
+    // this.sendIndex(index)
+    if(this.state.mainList.includes(item)){
+    this.itemList(item)
+    }else{
+      Alert.alert(null,"Catergory not here")
+    }
+  };
+
   render() {
     LogBox.ignoreAllLogs(true);
-    const { click, list, mainList, input } = this.state;
+    const { click, list, mainList, input, newCartList, indexesCountSub } = this.state;
     console.log(list)
 
       return (
@@ -153,11 +300,21 @@ class Shop extends Component {
               <View style={{ marginVertical: 5 }}>
               <TextInput 
               style={styles.optionContainer}
-              onChangeText={this.handleInput}
+              value={this.state.input}
+              onChangeText={(text)=> this.search(text)}
               />
               <View style={{ bottom: 35, paddingStart: width * 0.16 }}>
               <SearchIcon/>
               </View>
+
+              <FlatList
+                data={this.state.filteredData}
+                style={{ backgroundColor: "#FFF" }}
+                keyExtractor={(item, index) => index.toString()}
+                ItemSeparatorComponent={this.itemSeparatorView}
+                renderItem={this.itemView}
+              />
+
               {!list ? 
               <Text style={styles.infoTextStyle}>Categories</Text> : <Text style={styles.infoTextStyle}>{input}</Text>}
               
@@ -175,11 +332,23 @@ class Shop extends Component {
                 </TouchableOpacity>
                 : null}
 
+                {newCartList.length != 0 && 
+                <View>
+                  <View style={styles.best}>
+                  <Text style={{  }}>{indexesCountSub.length}</Text>
+                  </View>
+                <TouchableOpacity onPress={()=> this.toCart()}>
+                  <FontAwesome5 
+                  name={"shopping-cart"} 
+                  style={{ color: "#FF0080", alignSelf: "flex-end", marginEnd : 30 }}
+                  size={25}/>
+                  </TouchableOpacity>
+                  </View>}
                 {!list ? 
                   <FlatList
                     data={mainList}
-                    renderItem={({ item, key }) => (
-                      this.renderElement(item, key)
+                    renderItem={({ item, index }) => (
+                      this.renderElement(item, index)
                     )}
                     numColumns={2}
                     keyExtractor={(item, index) => index}
@@ -187,8 +356,8 @@ class Shop extends Component {
                    :
                   <FlatList
                    data={list}
-                   renderItem={({ item, key }) => (
-                     this.renderElement(item, key)
+                   renderItem={({ item, index }) => (
+                     this.renderElement(item, index)
                    )}
                    numColumns={2}
                    keyExtractor={(item, index) => index}
@@ -213,6 +382,14 @@ const styles = StyleSheet.create({
   image: {
     flex: 1,
     width: Platform.OS === "ios" ? width : width,
+  },
+  containerr: {
+    backgroundColor: 'white',
+  },
+  itemStyle: {
+    padding: 10,
+    marginStart: 70,
+    width: width * 0.5
   },
   optionContainer: {
       borderRadius: 20,
@@ -239,6 +416,20 @@ const styles = StyleSheet.create({
     flex: 1,
     width: Platform.OS === "ios" ? width : width,
   },
+  best: {
+    backgroundColor: "#EFDB6F",
+    paddingVertical: 4,
+    paddingHorizontal: 9,
+    fontSize: 11,
+    width: 25,
+    height: 25,
+    position: "absolute",
+    right: 3,
+    top: -15,
+    marginRight: 10,
+    borderRadius: 100,
+  },
+  
   itemContainer: {
     flex: 1,
     borderRadius: 30,

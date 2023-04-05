@@ -9,6 +9,7 @@ import {
   Dimensions,
   LogBox,
   Image,
+  FlatList,
   TextInput,
   ImageBackground,
   Alert,
@@ -23,10 +24,62 @@ const { width, height } = Dimensions.get("window");
 
 const initialState = { 
   isLoading: false, 
+  text: "",
+  list: [
+    { store: "Whole Food" },
+    { store: "Target" },
+    { store: "Star Market" },
+  ],
+  filteredData: []
 };
 
 class Welcome extends Component {
   state = initialState;
+
+  search = (text) => {
+    if (text) {
+      const newData = this.state.list.filter(
+        function (item) {
+          const itemData = item.store
+            ? item.store.toUpperCase()
+            : ''.toUpperCase();
+          const textData = text.toUpperCase();
+          return itemData.indexOf(textData) > -1;
+      });
+      
+      this.setState({ filteredData: newData, text: text })
+
+    } else {
+      this.setState({ filteredData: this.state.list })
+    }
+  };
+
+  itemView = ({item}) => {
+    return (
+      <Text
+        style={styles.itemStyle}
+        onPress={() => this.getItem(item)}>
+        {item.store}
+      </Text>
+    );
+  };
+
+  itemSeparatorView = () => {
+    return (
+      <View
+        style={{
+          height: 0.5,
+          width: '100%',
+          backgroundColor: '#C8C8C8',
+        }}
+      />
+    );
+  };
+
+  getItem = (item) => {
+    Alert.alert(null,"Yes we have "+item.store+" on our list of stores to search!")
+  };
+
 
   render() {
     LogBox.ignoreAllLogs(true);
@@ -40,10 +93,22 @@ class Welcome extends Component {
           
           <StatusBar backgroundColor="#F4EFEF" barStyle="dark-content"/>
             <View style={{ marginVertical: height * 0.2 }}>
-              <TextInput style={styles.optionContainer}/>
+              <TextInput 
+              style={styles.optionContainer}
+              placeholder={"Search available stores"}
+              onChangeText={(input) => this.search(input)}
+              />
+
               <View style={{ bottom: 35, paddingStart: 20 }}>
               <SearchIcon/>
               </View>
+              <FlatList
+                data={this.state.filteredData}
+                style={{ backgroundColor: "#FFF" }}
+                keyExtractor={(item, index) => index.toString()}
+                ItemSeparatorComponent={this.itemSeparatorView}
+                renderItem={this.itemView}
+              />
             <View flexDirection="row" alignSelf="center" marginTop={10} marginBottom={10}>
             <Text style={styles.infoTextStyle}>The right store with the right price</Text>
             </View>
@@ -107,6 +172,21 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
+  },
+  containerr: {
+    backgroundColor: 'white',
+  },
+  itemStyle: {
+    padding: 10,
+  },
+  textInputStyle: {
+    height: 40,
+    borderWidth: 1,
+    paddingLeft: 20,
+    margin: 5,
+    width: width * 0.50,
+    borderColor: '#009688',
+    backgroundColor: '#FFFFFF',
   },
   bigText:{
     fontSize: 36,
