@@ -6,18 +6,24 @@ import {
     Pressable,
     SafeAreaView,
     ScrollView,
+    TouchableOpacity,
+    Alert,
     Dimensions
   } from "react-native";
-  import React, { useRef } from "react";
+  import React, { useRef, useState } from "react";
   import { useDispatch, useSelector } from "react-redux";
   import { addToCart, decrementQuantity, incrementQuantity, removeFromCart } from "../components/CartReducer";
+  import  Loader  from '../components/Loader';
+  import groceSaveItemService from "../service/GroceSaveItemService";
 
   const { width, height } = Dimensions.get("window");
 
-  const Cart = () => {
+  const Cart = ({ route, navigation }) => {
+    const { array } = route.params;
     const cart = useSelector((state) => state.cart.cart);
     console.log(cart);
     const dispatch = useDispatch();
+    const [ isLoading, setIsLoading ] = useState(false);
     const images = [
       {
         id: "0",
@@ -38,6 +44,7 @@ import {
         name: "chocolate",
       },
     ];
+    
     const addItemToCart = (item) => {
       dispatch(addToCart(item));
     };
@@ -54,7 +61,63 @@ import {
         dispatch(decrementQuantity(item));
       }
     }
+    
+    const submitCheckOut = () => {
+      const list = []
+      setIsLoading(true);
+      var itemsWithQuantity = {};
 
+      cart.map((items) =>
+        (
+          itemsWithQuantity[items.name] = items.quantity+""
+        ))
+      
+      const zipCode = "02134"
+      list.push({
+        zipCode,
+        itemsWithQuantity
+      })
+
+  console.log(list);
+
+  const onSuccess = ( data ) => {
+    setIsLoading(false);
+    
+    console.log("Dataaa",data);
+    if (data.status == 200){
+      Alert.alert(null, "Checkout successfully,\nIt's free so no need to pay!", [{
+        text: 'Ok', onPress: () => navigation.navigate("Shop")
+      }])
+    }
+  };
+
+  const onFailure = (error) => {
+    console.log(error && error.response);
+      setIsLoading(false);
+    if(error.response == null){
+      setIsLoading(false);
+      Alert.alert('Info: ','Network Error')
+    }
+    if(error.response.status == 400){
+      setIsLoading(false);
+      Alert.alert('Info: ',error.response.data.non_field_errors[0])
+    } else if(error.response.status == 500){
+      setIsLoading(false);
+      Alert.alert('Info: ','Ensure your Network is Stable')
+    } else if(error.response.status == 401){
+      setIsLoading(false);
+      Alert.alert(null,error.response.data)
+    } else if(error.response.status == 404){
+      setIsLoading(false);
+      Alert.alert('Info: ','User not found')
+    }
+  };
+
+   groceSaveItemService
+    .post("/comparePrice", list)
+    .then(onSuccess)
+    .catch(onFailure);
+    }
 
     const scrollRef = useRef();
 
@@ -67,11 +130,12 @@ import {
     return (
       <ScrollView  ref={scrollRef}  onContentSizeChange={() => onPressTouch()} style={{ backgroundColor: "#FFF" }}>
       <SafeAreaView>
+        <Loader loading={isLoading} />
         <Text style={{ textAlign: "center", fontSize: 16 }}>
           Cart
         </Text>
-        
-        {images.map((item) => (
+        {!array ? null : 
+        array.map((item) => (
           <Pressable
             key={item.id}
             style={{ flexDirection: "row", alignItems: "center" }}
@@ -115,7 +179,8 @@ import {
               )}
             </View>
           </Pressable>
-        ))}
+        ))
+        }
         {cart.length != 0 && 
         <Text style={{ textAlign: "center", fontSize: 14, backgroundColor: "#808080", color: "#FFF", width: width, padding: 10 }}>
           Star Market
@@ -173,6 +238,12 @@ import {
             </Pressable>
           </View>
         ))}
+        {cart.length != 0 && 
+        <TouchableOpacity 
+          style={styles.itemBtn}
+          onPress={()=> submitCheckOut()}>
+          <Text style={styles.itemBtnDetails}>Checkout</Text>
+        </TouchableOpacity>}
       </SafeAreaView>
       </ScrollView>
     );
@@ -180,4 +251,19 @@ import {
   
   export default Cart;
   
-  const styles = StyleSheet.create({});
+  const styles = StyleSheet.create({
+    itemBtn: {
+      backgroundColor: "#9BC0F1",
+      width: width * 0.40,
+      height: 35,
+      borderRadius: 50,
+      alignSelf: "center",
+      marginVertical: Platform.OS === "ios" ? 20: 20,
+    },
+    itemBtnDetails: {
+      fontSize: 17,
+      padding: 5,
+      textAlign: "center",
+    },
+    
+  });

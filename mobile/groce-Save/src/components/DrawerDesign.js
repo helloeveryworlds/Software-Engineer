@@ -4,7 +4,6 @@ import {
     StyleSheet,
     Image,
     Text,
-    Alert,
     StatusBar,
     TouchableOpacity
   } from 'react-native';
@@ -15,23 +14,23 @@ import {
     DrawerItem,
   } from '@react-navigation/drawer';
 
-import { FontAwesome5 } from "@expo/vector-icons"
-
 const DrawerDesign = (props) => {
-  // console.log(props)
+  console.log("Dataaaaaaaaaa",props.data)
     return (
       <SafeAreaView style={{ flex: 1 }}>
         <StatusBar backgroundColor="#F4EFEF" barStyle="dark-content"/>
-        {/*Top Large Image */}
         <Image
           source={require('../.././assets/logo_.png')} 
           resizeMode={'cover'}
           style={styles.sideMenuProfileIcon}
         />
 
-        <Text style={{ fontSize: 16, textAlign: 'center', color: 'grey' }}>
+          {props.data.name ? 
+          <Text style={{ fontSize: 16, textAlign: 'center',  backgroundColor: 'grey', color: "#FFF", padding: 5,  }}>
+          {props.data.name}
+        </Text> : <Text style={{ fontSize: 16, textAlign: 'center', color: 'grey' }}>
           User
-        </Text>
+        </Text>}
         <DrawerContentScrollView {...props}>
           <DrawerItemList {...props} />
           
@@ -41,13 +40,6 @@ const DrawerDesign = (props) => {
           </TouchableOpacity>
         </DrawerContentScrollView>
 
-        <TouchableOpacity style={styles.cart} onPress={()=> {
-            props.navigation.navigate("Cart")}}>
-          <FontAwesome5 
-            name={"shopping-cart"} 
-            style={{ color: "#FF0080", alignSelf: "center", }}
-            size={25}/>
-        </TouchableOpacity>
         <Text style={{ fontSize: 16, textAlign: 'center', color: 'grey' }}>
           Groce Save
         </Text>
