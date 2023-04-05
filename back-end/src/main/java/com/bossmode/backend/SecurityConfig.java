@@ -52,6 +52,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .failureForwardUrl("/login?error=true");
         http
                 .authorizeRequests()
+                .antMatchers("/signup").permitAll() // Add this line to allow access to /signup
                 .antMatchers("/*").hasAuthority("ROLE_USER")
                 .anyRequest().permitAll();
     }
