@@ -18,20 +18,52 @@ import {
 import DetailsIcon from "../../assets/svgs/details";
 import LocationIcon from "../../assets/svgs/location";
 import TimedIcon from "../../assets/svgs/timed";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const { width, height } = Dimensions.get("window");
 
 const initialState = { 
   isLoading: false, 
   name: "",
+  email: "",
+  zipcode: "",
+  address: ""
 };
 
 class UserInfo extends Component {
   state = initialState;
 
+  _retrieveData = () => {
+    AsyncStorage.getItem("userDetails").then((res) => {
+      const response = JSON.parse(res);
+      if (res !== null) {
+        console.log("Response...", response.data);
+        this.setState({
+          name: response.data.name,
+          email: response.data.email,
+          zipcode: response.data.zipCode,
+          address: response.data.address
+        });
+
+  
+      } else {
+        console.log("No response...", response);
+      }
+    });
+  }
+
+  componentDidMount(){
+    this._retrieveData();
+  }
+  
   render() {
     LogBox.ignoreAllLogs(true);
-   
+    const { name,
+            email,
+            zipcode,
+            address 
+          } = this.state;
+
       return (
         <ScrollView
           keyboardShouldPersistTaps="always" backgroundColor="#FFF">
@@ -65,17 +97,17 @@ class UserInfo extends Component {
                 <View style={{ marginHorizontal: 10, marginTop: 30, width: width * 0.5 }}>
                 <View style={{ flexDirection: "row", justifyContent: "space-between", marginStart: 10, }}>
                 <Text style={styles.userDetails}>Zip code:</Text>
-                <Text style={styles.userDetails_}>02215</Text>
+                <Text style={styles.userDetails_}>{zipcode}</Text>
                 </View>
 
                 <View style={{ flexDirection: "row", justifyContent: "space-between", marginStart: 10, marginTop: 20, }}>
                 <Text style={styles.userDetails}>Address:</Text>
-                <Text style={styles.userDetails_}>Lorem ipsum dolor sit amet</Text>
+                <Text style={styles.userDetails_}>{address}</Text>
                 </View>
 
                 <View style={{ flexDirection: "row", justifyContent: "space-between", marginStart: 10, marginTop: 20, }}>
                 <Text style={styles.userDetails}>Email:</Text>
-                <Text style={styles.userDetails_}>johndoe@gmail.com</Text>
+                <Text style={styles.userDetails_}>{email}</Text>
                 </View>
                 </View>
 

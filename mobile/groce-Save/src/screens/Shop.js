@@ -25,6 +25,7 @@ const initialState = {
   isLoading: false, 
   click: "",
   input: "",
+  updatedList: [],
   list: [],
   mainList: [],
   mainData: {},
@@ -96,6 +97,12 @@ class Shop extends Component {
     toCart(){
       this.props.navigation.navigate("Cart", {
         array: this.state.newCartList
+      })
+    }
+
+    pushingUpdated(){
+      this.state.updatedList.push({
+        
       })
     }
 
