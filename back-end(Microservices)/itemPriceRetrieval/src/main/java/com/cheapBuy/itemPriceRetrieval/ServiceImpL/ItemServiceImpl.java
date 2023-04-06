@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +16,8 @@ import com.cheapBuy.itemPriceRetrieval.pojo.Item;
 
 @Service
 public class ItemServiceImpl implements ItemService{
+	
+	Logger logger = LoggerFactory.getLogger(ItemServiceImpl.class);
 	@Autowired
 	ItemRepo itemRepo;
 	
@@ -35,7 +39,7 @@ public class ItemServiceImpl implements ItemService{
 				}
 			}
 		}catch(Exception e) {
-			System.out.println("Contact Admin");
+			logger.error("An error occured in ItemService:- Item retrieve ");
 		}
 		return retMap;
 	}
