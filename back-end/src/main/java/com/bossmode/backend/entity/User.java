@@ -24,8 +24,9 @@ public class User implements Serializable{
     private boolean enabled;
     private String address;
     private String zipCode;
-
-
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(unique = true)//自动生成cart ID
+    private Cart cart;
     public String getAddress() {
         return address;
     }
@@ -73,5 +74,11 @@ public class User implements Serializable{
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
+    public Cart getCart() {
+        return cart;
+    }
 
+    public void setCart(Cart cart) {
+        this.cart = cart;
+    }
 }

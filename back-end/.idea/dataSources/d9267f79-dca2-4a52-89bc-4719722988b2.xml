@@ -156,117 +156,125 @@
       <DataType>int|0s</DataType>
       <Position>4</Position>
     </column>
-    <foreign-key id="37" parent="11" name="FK4wkjkwqa9nfydm2sd2xc7xblk">
+    <column id="37" parent="11" name="name">
+      <DataType>varchar(255)|0s</DataType>
+      <Position>5</Position>
+    </column>
+    <column id="38" parent="11" name="url">
+      <DataType>varchar(255)|0s</DataType>
+      <Position>6</Position>
+    </column>
+    <foreign-key id="39" parent="11" name="FK4wkjkwqa9nfydm2sd2xc7xblk">
       <ColNames>cart_id</ColNames>
       <RefColNames>id</RefColNames>
       <RefTableName>cart</RefTableName>
     </foreign-key>
-    <index id="38" parent="11" name="PRIMARY">
+    <index id="40" parent="11" name="PRIMARY">
       <ColNames>id</ColNames>
       <Type>btree</Type>
       <Unique>1</Unique>
     </index>
-    <index id="39" parent="11" name="FK4wkjkwqa9nfydm2sd2xc7xblk">
+    <index id="41" parent="11" name="FK4wkjkwqa9nfydm2sd2xc7xblk">
       <ColNames>cart_id</ColNames>
       <Type>btree</Type>
     </index>
-    <key id="40" parent="11" name="PRIMARY">
+    <key id="42" parent="11" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <Primary>1</Primary>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
     </key>
-    <column id="41" parent="12" name="id">
+    <column id="43" parent="12" name="id">
       <AutoIncrement>3</AutoIncrement>
       <DataType>bigint|0s</DataType>
       <NotNull>1</NotNull>
       <Position>1</Position>
     </column>
-    <column id="42" parent="12" name="data_list">
+    <column id="44" parent="12" name="data_list">
       <DataType>longtext|0s</DataType>
       <Position>2</Position>
     </column>
-    <column id="43" parent="12" name="store_name">
+    <column id="45" parent="12" name="store_name">
       <DataType>varchar(255)|0s</DataType>
       <Position>3</Position>
     </column>
-    <index id="44" parent="12" name="PRIMARY">
+    <index id="46" parent="12" name="PRIMARY">
       <ColNames>id</ColNames>
       <Type>btree</Type>
       <Unique>1</Unique>
     </index>
-    <key id="45" parent="12" name="PRIMARY">
+    <key id="47" parent="12" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <Primary>1</Primary>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
     </key>
-    <column id="46" parent="13" name="email">
+    <column id="48" parent="13" name="email">
       <DataType>varchar(255)|0s</DataType>
       <NotNull>1</NotNull>
       <Position>1</Position>
     </column>
-    <column id="47" parent="13" name="address">
+    <column id="49" parent="13" name="address">
       <DataType>varchar(255)|0s</DataType>
       <Position>2</Position>
     </column>
-    <column id="48" parent="13" name="enabled">
+    <column id="50" parent="13" name="enabled">
       <DataType>bit(1)|0s</DataType>
       <NotNull>1</NotNull>
       <Position>3</Position>
     </column>
-    <column id="49" parent="13" name="name">
+    <column id="51" parent="13" name="name">
       <DataType>varchar(255)|0s</DataType>
       <Position>4</Position>
     </column>
-    <column id="50" parent="13" name="password">
+    <column id="52" parent="13" name="password">
       <DataType>varchar(255)|0s</DataType>
       <Position>5</Position>
     </column>
-    <column id="51" parent="13" name="zipCode">
+    <column id="53" parent="13" name="zipCode">
       <DataType>varchar(255)|0s</DataType>
       <Position>6</Position>
     </column>
-    <column id="52" parent="13" name="cart_id">
+    <column id="54" parent="13" name="cart_id">
       <DataType>int|0s</DataType>
       <Position>7</Position>
     </column>
-    <foreign-key id="53" parent="13" name="FKtqa69bib34k2c0jhe7afqsao6">
+    <foreign-key id="55" parent="13" name="FKtqa69bib34k2c0jhe7afqsao6">
       <ColNames>cart_id</ColNames>
       <RefColNames>id</RefColNames>
       <RefTableName>cart</RefTableName>
     </foreign-key>
-    <index id="54" parent="13" name="PRIMARY">
+    <index id="56" parent="13" name="PRIMARY">
       <ColNames>email</ColNames>
       <Type>btree</Type>
       <Unique>1</Unique>
     </index>
-    <index id="55" parent="13" name="UK_47dq8urpj337d3o65l3fsjph3">
+    <index id="57" parent="13" name="UK_47dq8urpj337d3o65l3fsjph3">
       <ColNames>cart_id</ColNames>
       <Type>btree</Type>
       <Unique>1</Unique>
     </index>
-    <key id="56" parent="13" name="PRIMARY">
+    <key id="58" parent="13" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <Primary>1</Primary>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
     </key>
-    <key id="57" parent="13" name="UK_47dq8urpj337d3o65l3fsjph3">
+    <key id="59" parent="13" name="UK_47dq8urpj337d3o65l3fsjph3">
       <UnderlyingIndexName>UK_47dq8urpj337d3o65l3fsjph3</UnderlyingIndexName>
     </key>
-    <column id="58" parent="14" name="code">
+    <column id="60" parent="14" name="code">
       <DataType>varchar(255)|0s</DataType>
       <NotNull>1</NotNull>
       <Position>1</Position>
     </column>
-    <column id="59" parent="14" name="store_list">
+    <column id="61" parent="14" name="store_list">
       <DataType>varchar(255)|0s</DataType>
       <Position>2</Position>
     </column>
-    <index id="60" parent="14" name="PRIMARY">
+    <index id="62" parent="14" name="PRIMARY">
       <ColNames>code</ColNames>
       <Type>btree</Type>
       <Unique>1</Unique>
     </index>
-    <key id="61" parent="14" name="PRIMARY">
+    <key id="63" parent="14" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <Primary>1</Primary>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
