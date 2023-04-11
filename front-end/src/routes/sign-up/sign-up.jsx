@@ -101,7 +101,7 @@ class SignUp extends React.Component {
       email: this.state.email,
       password: this.state.password,
       address: this.state.address,
-      zipcode: this.state.zipcode
+      zipCode: this.state.zipcode
     }
     
     fetch(signupUrl, {
