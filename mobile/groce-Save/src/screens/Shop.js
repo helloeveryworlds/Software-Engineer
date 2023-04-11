@@ -17,7 +17,9 @@ import {
  import groceSaveItemService from "../service/GroceSaveItemService";
 import SearchIcon from "../../assets/svgs/search";
 import  Loader  from '../components/Loader';
-import { FontAwesome5 } from "@expo/vector-icons"
+import { FontAwesome5 } from "@expo/vector-icons";
+import { useDispatch, useSelector } from "react-redux";
+import { addToshop, removeFromShop, incrementItems, decrementItems } from "../components/CartReducer";  
 
 const { width, height } = Dimensions.get("window");
 
@@ -57,6 +59,9 @@ class Shop extends Component {
       .get('/itemList')
       .then(data => {
         if(data){
+          // accountcode.split(',')[1].trim();
+          // console.log(result);
+          // console.log("itemList itemList itemList itemList", data.data[input].split(',')[1].trim())
           this.setState({ isLoading: false });
         if(input != ""){
         const info = data.data[input];
@@ -85,10 +90,11 @@ class Shop extends Component {
     }
 
     addToCart(item, key){
+      this.scrollView.scrollTo({x: 0, y: 0, animated: true}) 
       this.state.selectedItemsList.push({
         id: key+"",
-        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRqg_OBzcVDnKHv1d3hyVk_WlCo43pzit4CJQ&usqp=CAU",
-        name: item,
+        image: item.substring(item.indexOf(",") + 1),
+        name: item.split(',')[0].trim(),
       });
 
       this.setState({ newCartList: [...this.state.selectedItemsList] });
@@ -100,15 +106,66 @@ class Shop extends Component {
       })
     }
 
-    pushingUpdated(){
-      this.state.updatedList.push({
+    removeFromCart(index){
+      let newList = this.state.selectedItemsList;
+      newList.splice(index,1); 
+      this.setState({ newCartList: newList })
+     }
+
+    //  removeItemFromList(index){
+    //   let new_place_set = this.state.place_set;
+    //   new_place_set.splice(index,1); 
+    //   this.setState({destinationsList: new_place_set})
+    //   this.setState({location: ''})
+    //   this.setState({purpose: ''})
+    //  }
+
+    // joinData = () => {
+    //   if (this.state.location != "" && this.state.purpose != "") {
+    //     this.handlePurpose.clear()
+    //     this.setState({location: ''})
+    //     this.setState({purpose: ''})
+  
+    //     this.state.place_set.push({
+    //       location: this.state.location,
+    //       purpose: this.state.purpose,
+    //     });
+    //     this.setState({ destinationsList: [...this.state.place_set] });
+    //   } else {
+    //     Alert.alert("Info: ", "Please enter Destination/Purpose", [
+    //       { text: "Ok" },
+    //     ]);
+    //   }
+    //   this.setState({ editVisible: false });
+    // };
+
+    pushingUpdated(key){
+      if(this.state.input != "" && key && this.state.click != ""){
+      console.log("Check it out",this.state.input, key, this.state.click)
+      let arr = [];
+      let keyArr = []
+      let obj = {}
+
+      if(this.state.updatedList.includes(this.state.input)){
+      }else{
+      // keyArr.push(key)
+      // arr.push(this.state.input) 
+      // arr = keyArr
         
-      })
+      obj[this.state.input] = [key]
+      console.log("hereer obj",this.state.updatedList)
+      // this.state.updatedList.push(obj)
+      // console.log("hereer",this.state.updatedList)
+      }
+      }
     }
 
     renderElement(item, key){
-      const { mainData, list } = this.state;
+      this.pushingUpdated(key);
+
+      const { mainData, list, click } = this.state;
       const selectedItems = []
+      console.log("itemitemitem",item.substring(item.indexOf(",") + 1))
 
       selectedItems.push({ key })
       console.log("selectedItems selectedItems selectedItems",selectedItems)
@@ -117,19 +174,21 @@ class Shop extends Component {
         
         <View style={styles.details}>
         <View style={{ backgroundColor: "#FFF"}}>
-        <Image 
-            source={require("../../assets/fru.png")}
-            style={{
-                resizeMode: 'center',
-                marginTop: 0,
-                alignSelf: "center",
-                paddingVertical: 0,
-            }}
-            />
+        {click ? 
+          <Image 
+            source={{ uri: item.substring(item.indexOf(",") + 1) }}
+            style={{ width: 100, height: 100, borderRadius: 8, alignSelf: "center" }}
+            key={key}
+            /> 
+            : 
+          <Image 
+            source={{url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsUhUsM8JuZ4MKDjlPNox4QuV81hnoccTW_A&usqp=CAU"}}//require("../../assets/grocery.png")}
+            style={{ width: 100, height: 100, alignSelf: "center" }}
+            />}
         </View>
         <View style={{ backgroundColor: "#F6F6F6", padding: 12, borderBottomLeftRadius: 10, borderBottomRightRadius: 10 }}>
-        {!list ? <Text key={key} style={styles.mainTextDetails} > { item } </Text> : 
-        <Text key={key} style={styles.textDetails} > { item } </Text>}
+        {!list ? <Text key={key} style={styles.mainTextDetails} > { item.split(',')[0].trim() } </Text> : 
+        <Text key={key} style={styles.textDetails} > { item.split(',')[0].trim() } </Text>}
         {!list ? <View style={styles.viewSpace}/> :
         <View>
         <Text style={styles.numDetails}>$0.71/LB</Text>
@@ -148,9 +207,7 @@ class Shop extends Component {
             alignSelf: "center",
             marginTop: Platform.OS === "ios" ? -10: -10,}}
             onPress={()=> { 
-            // this.changeColorState(key) 
             this.sendIndex(key)
-            // this.state.indexes
             this.scrollView.scrollTo({x: 0, y: 0, animated: true}) 
             this.setState({ list: mainData[item], click: "clicked", input: item })}}>
             <Text style={styles.viewBtnDetails}>View Category</Text>
@@ -167,8 +224,12 @@ class Shop extends Component {
             marginTop: Platform.OS === "ios" ? -10: -10,
           }}
           onPress={()=> { 
+            
             this.sendIndexSub(key)
             this.addToCart(item, key)
+
+            // if(this.state.List(""))
+            // addToshop(item, key)
           }}>
         <Text style={styles.itemBtnDetails}>Add to cart</Text>
         </TouchableOpacity> : 
@@ -183,7 +244,7 @@ class Shop extends Component {
           marginTop: Platform.OS === "ios" ? -10: -10,
         }}
         onPress={()=> { 
-          this.removeItemFromList(key)
+          this.removeFromCart(key)
         }}>
       <Text style={styles.itemBtnDetails}>Remove</Text>
       </TouchableOpacity>}
@@ -208,12 +269,6 @@ class Shop extends Component {
 
       this.setState({ indexesSub: [...this.state.indexesCountSub] });
     }
-
-    removeItemFromList(index){
-      let newList = this.state.indexesCountSub;
-      newList.splice(index,1); 
-      this.setState({indexesSub: [...newList]})
-     }
 
     changeColorState(index) {
       let indexes = this.state.indexes.slice(0);
@@ -342,12 +397,12 @@ class Shop extends Component {
                 {newCartList.length != 0 && 
                 <View>
                   <View style={styles.best}>
-                  <Text style={{  }}>{indexesCountSub.length}</Text>
+                  <Text style={{  }}>{newCartList.length}</Text>
                   </View>
                 <TouchableOpacity onPress={()=> this.toCart()}>
                   <FontAwesome5 
                   name={"shopping-cart"} 
-                  style={{ color: "#FF0080", alignSelf: "flex-end", marginEnd : 30 }}
+                  style={{ color: "#FF0080", alignSelf: "flex-end", marginEnd : 30, marginBottom: 10 }}
                   size={25}/>
                   </TouchableOpacity>
                   </View>}
@@ -485,7 +540,8 @@ const styles = StyleSheet.create({
   backText: {
     textDecorationLine: "underline",
     fontWeight: "500",
-    color: "blue"
+    color: "blue",
+    marginBottom: 10
   },
   mainTextDetails: {
     fontSize: 17,

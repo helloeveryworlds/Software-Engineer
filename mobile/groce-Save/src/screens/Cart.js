@@ -10,12 +10,13 @@ import {
     Alert,
     Dimensions
   } from "react-native";
-  import React, { useRef, useState } from "react";
+  import React, { useRef, useState, useEffect } from "react";
   import { useDispatch, useSelector } from "react-redux";
   import { addToCart, decrementQuantity, incrementQuantity, removeFromCart } from "../components/CartReducer";
   import  Loader  from '../components/Loader';
   import groceSaveItemService from "../service/GroceSaveItemService";
-
+  import AsyncStorage from '@react-native-async-storage/async-storage';
+  
   const { width, height } = Dimensions.get("window");
 
   const Cart = ({ route, navigation }) => {
@@ -23,27 +24,25 @@ import {
     const cart = useSelector((state) => state.cart.cart);
     console.log(cart);
     const dispatch = useDispatch();
+
     const [ isLoading, setIsLoading ] = useState(false);
-    const images = [
-      {
-        id: "0",
-        image:
-          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRqg_OBzcVDnKHv1d3hyVk_WlCo43pzit4CJQ&usqp=CAU",
-        name: "icecream",
-      },
-      {
-        id: "1",
-        image:
-          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT85O96gPiso_j2gaS0cePTBY4mCR3pumV6tw&usqp=CAU",
-        name: "biscuit",
-      },
-      {
-        id: "2",
-        image:
-          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSicQWeRoxxLEr1RLIp8dJtw-NQvSE4xtlhwA&usqp=CAU",
-        name: "chocolate",
-      },
-    ];
+    const [userData, setUserData] = useState({});
+
+    const _retrieveData = () => {
+      AsyncStorage.getItem("userDetails").then((res) => {
+        const response = JSON.parse(res);
+        if (res !== null) {
+          console.log("Response...", response.data);
+          setUserData(response.data) 
+        } else {
+          console.log("No response...", response);
+        }
+      });
+    }
+  
+    useEffect(() => {
+      _retrieveData()
+    });
     
     const addItemToCart = (item) => {
       dispatch(addToCart(item));
@@ -63,6 +62,7 @@ import {
     }
     
     const submitCheckOut = () => {
+      if(userData){
       const list = []
       setIsLoading(true);
       var itemsWithQuantity = {};
@@ -72,7 +72,7 @@ import {
           itemsWithQuantity[items.name] = items.quantity+""
         ))
       
-      const zipCode = "02134"
+      const zipCode = userData.zipCode
       list.push({
         zipCode,
         itemsWithQuantity
@@ -117,6 +117,11 @@ import {
     .post("/comparePrice", list)
     .then(onSuccess)
     .catch(onFailure);
+    } else {
+      Alert.alert(null, "Please sign in to Checkout successfully!", [{
+        text: 'Ok', onPress: () => navigation.navigate("SignIn")
+      }])
+    }
     }
 
     const scrollRef = useRef();

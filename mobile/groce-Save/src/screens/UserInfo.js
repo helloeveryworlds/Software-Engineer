@@ -97,17 +97,17 @@ class UserInfo extends Component {
                 <View style={{ marginHorizontal: 10, marginTop: 30, width: width * 0.5 }}>
                 <View style={{ flexDirection: "row", justifyContent: "space-between", marginStart: 10, }}>
                 <Text style={styles.userDetails}>Zip code:</Text>
-                <Text style={styles.userDetails_}>{zipcode}</Text>
+                {zipcode ? <Text style={styles.userDetails_}>{zipcode}</Text> : <Text style={styles.userDetails_}>nil</Text>}
                 </View>
 
                 <View style={{ flexDirection: "row", justifyContent: "space-between", marginStart: 10, marginTop: 20, }}>
                 <Text style={styles.userDetails}>Address:</Text>
-                <Text style={styles.userDetails_}>{address}</Text>
+                {address ? <Text style={styles.userDetails_}>{address}</Text> : <Text style={styles.userDetails_}>nil</Text>}
                 </View>
 
                 <View style={{ flexDirection: "row", justifyContent: "space-between", marginStart: 10, marginTop: 20, }}>
                 <Text style={styles.userDetails}>Email:</Text>
-                <Text style={styles.userDetails_}>{email}</Text>
+                {email ? <Text style={styles.userDetails_}>{email}</Text> : <Text style={styles.userDetails_}>nil</Text>}
                 </View>
                 </View>
 
