@@ -126,10 +126,10 @@ public class StoreItemSericeImpl implements StoreItemService {
 				map1.put("zipCode", zip);
 				Zipcode zipData=zipRepo.findByCode(zip);
 				Map<String,Object> bestByCategory=new HashMap<>();
-				String lowestAvgStoreName="";
-				double lowestAvgTotalPrice=0.0;
-				String lowestTotalPriceStoreName="";
-				double lowestTotalPriceStorePrice=0.0;
+				String lowestAvgStoreName="Not all items are available. Check individual stores.";
+				Double lowestAvgTotalPrice=0.0;
+				String lowestTotalPriceStoreName="Not all items are available. Check individual stores.";
+				Double lowestTotalPriceStorePrice=0.0;
 				Map<String,Integer>itemList=i.getItemsWithQuantity();
 				Set<String> items=itemList.keySet();
 				Map<String,Object> storeMap=new HashMap<>();
@@ -145,10 +145,11 @@ public class StoreItemSericeImpl implements StoreItemService {
 						JSONObject jsonData=new JSONObject(data);
 						double totalStorePrice=0.0;
 						double totalStoreAvgPrice=0.0;
+						boolean missingItem=false;
 						for(String item:items) {
+							Map<String,Object> itemTemp=new HashMap<>();
 							if(jsonData.has(item)) {
 								JSONObject tempItem=(JSONObject) jsonData.get(item);
-								Map<String,Object> itemTemp=new HashMap<>();
 								double itemPrice=tempItem.getDouble("price");
 								double avgPrice=tempItem.getDouble("avgPrice");
 								Integer quantityOfRequiredItem=itemList.get(item);
@@ -160,23 +161,28 @@ public class StoreItemSericeImpl implements StoreItemService {
 								itemTemp.put("lowestPiceTotal",itemPrice );
 								itemTemp.put("lowestItemName", tempItem.get("name"));
 								itemTemp.put("lowestItemImgUrl", tempItem.get("imgUrl"));
-								storeTemp.put(item, itemTemp);
+							}else {
+								missingItem=true;
+								itemTemp.put("msg","Item is currently unavailable");
 							}
+							storeTemp.put(item, itemTemp);
 						}
 						storeMap.put(store.getName(), storeTemp);
-						if(lowestAvgStoreName.equals("")) {
-							lowestAvgStoreName=store.getName();
-							lowestAvgTotalPrice=totalStoreAvgPrice;
-						}else if(lowestAvgTotalPrice>totalStoreAvgPrice) {
-							lowestAvgStoreName=store.getName();
-							lowestAvgTotalPrice=totalStoreAvgPrice;
-						}
-						if(lowestTotalPriceStoreName.equals("")) {
-							lowestTotalPriceStoreName=store.getName();
-							lowestTotalPriceStorePrice=totalStorePrice;
-						}else if(lowestTotalPriceStorePrice>totalStorePrice) {
-							lowestTotalPriceStoreName=store.getName();
-							lowestTotalPriceStorePrice=totalStorePrice;
+						if(!missingItem) {
+							if(lowestAvgTotalPrice.equals(0.0)) {
+								lowestAvgStoreName=store.getName();
+								lowestAvgTotalPrice=totalStoreAvgPrice;
+							}else if(lowestAvgTotalPrice>totalStoreAvgPrice) {
+								lowestAvgStoreName=store.getName();
+								lowestAvgTotalPrice=totalStoreAvgPrice;
+							}
+							if(lowestTotalPriceStorePrice.equals(0.0)) {
+								lowestTotalPriceStoreName=store.getName();
+								lowestTotalPriceStorePrice=totalStorePrice;
+							}else if(lowestTotalPriceStorePrice>totalStorePrice) {
+								lowestTotalPriceStoreName=store.getName();
+								lowestTotalPriceStorePrice=totalStorePrice;
+							}
 						}
 						map1.put("storeValue", storeMap);
 					}
