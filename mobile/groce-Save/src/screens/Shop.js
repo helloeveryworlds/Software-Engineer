@@ -18,8 +18,6 @@ import {
 import SearchIcon from "../../assets/svgs/search";
 import  Loader  from '../components/Loader';
 import { FontAwesome5 } from "@expo/vector-icons";
-import { useDispatch, useSelector } from "react-redux";
-import { addToshop, removeFromShop, incrementItems, decrementItems } from "../components/CartReducer";  
 
 const { width, height } = Dimensions.get("window");
 
@@ -38,6 +36,8 @@ const initialState = {
   newCartList: [],
   selectedItemsList: [],
   filteredData: [],
+  newlyList: [],
+  latestList: []
 };
 
 class Shop extends Component {
@@ -59,9 +59,6 @@ class Shop extends Component {
       .get('/itemList')
       .then(data => {
         if(data){
-          // accountcode.split(',')[1].trim();
-          // console.log(result);
-          // console.log("itemList itemList itemList itemList", data.data[input].split(',')[1].trim())
           this.setState({ isLoading: false });
         if(input != ""){
         const info = data.data[input];
@@ -98,6 +95,41 @@ class Shop extends Component {
       });
 
       this.setState({ newCartList: [...this.state.selectedItemsList] });
+      console.log("itemitemitem",this.checkRight(item.split(',')[0].trim()))
+
+      let input = this.state.input
+
+      //Testing list..
+      const array1 = this.state.selectedItemsList;
+      const array2 = [];
+
+      this.state.list.forEach((data)=>{
+      // Find the object with id = 2 in array1
+      const foundObject = array1.find(item => item.name === data.split(',')[0].trim());
+
+      // Add the found object to array2
+      array2.push(foundObject);
+      }
+      )
+      var filtered = array2.filter(function(x) {
+        return x !== undefined;
+      });
+
+      if(this.state.newlyList.includes(input)){ 
+      }else{
+        filtered.forEach((data)=>{
+      let obj = {
+        [input + ""]: data
+      }
+
+      this.state.newlyList.push(
+        JSON.parse(JSON.stringify(obj))
+      )
+
+      this.setState({ latestList: [...this.state.newlyList] });
+      console.log("chino xssssssssssss",this.state.newlyList);
+      })
+      }
     }
 
     toCart(){
@@ -110,148 +142,18 @@ class Shop extends Component {
       let newList = this.state.selectedItemsList;
       newList.splice(index,1); 
       this.setState({ newCartList: newList })
-     }
-
-    //  removeItemFromList(index){
-    //   let new_place_set = this.state.place_set;
-    //   new_place_set.splice(index,1); 
-    //   this.setState({destinationsList: new_place_set})
-    //   this.setState({location: ''})
-    //   this.setState({purpose: ''})
-    //  }
-
-    // joinData = () => {
-    //   if (this.state.location != "" && this.state.purpose != "") {
-    //     this.handlePurpose.clear()
-    //     this.setState({location: ''})
-    //     this.setState({purpose: ''})
-  
-    //     this.state.place_set.push({
-    //       location: this.state.location,
-    //       purpose: this.state.purpose,
-    //     });
-    //     this.setState({ destinationsList: [...this.state.place_set] });
-    //   } else {
-    //     Alert.alert("Info: ", "Please enter Destination/Purpose", [
-    //       { text: "Ok" },
-    //     ]);
-    //   }
-    //   this.setState({ editVisible: false });
-    // };
-
-    pushingUpdated(key){
-      if(this.state.input != "" && key && this.state.click != ""){
-      console.log("Check it out",this.state.input, key, this.state.click)
-      let arr = [];
-      let keyArr = []
-      let obj = {}
-
-      if(this.state.updatedList.includes(this.state.input)){
-      }else{
-      // keyArr.push(key)
-      // arr.push(this.state.input) 
-      // arr = keyArr
-        
-      obj[this.state.input] = [key]
-      console.log("hereer obj",this.state.updatedList)
-      // this.state.updatedList.push(obj)
-      // console.log("hereer",this.state.updatedList)
-      }
-      }
+      // arrayOfLetters.filter(function (letter) {
+      // return letter !== 'd';
+      // });
     }
 
-    renderElement(item, key){
-      this.pushingUpdated(key);
+    componentWillMount() {
+      this.setState({ newCartList: [...this.state.selectedItemsList] });
+      console.log("newCartList", this.state.selectedItemsList);
+    }
 
-      const { mainData, list, click } = this.state;
-      const selectedItems = []
-      console.log("itemitemitem",item.substring(item.indexOf(",") + 1))
-
-      selectedItems.push({ key })
-      console.log("selectedItems selectedItems selectedItems",selectedItems)
-      return(
-        <View style={styles.itemContainer} key={key}>
-        
-        <View style={styles.details}>
-        <View style={{ backgroundColor: "#FFF"}}>
-        {click ? 
-          <Image 
-            source={{ uri: item.substring(item.indexOf(",") + 1) }}
-            style={{ width: 100, height: 100, borderRadius: 8, alignSelf: "center" }}
-            key={key}
-            /> 
-            : 
-          <Image 
-            source={{url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsUhUsM8JuZ4MKDjlPNox4QuV81hnoccTW_A&usqp=CAU"}}//require("../../assets/grocery.png")}
-            style={{ width: 100, height: 100, alignSelf: "center" }}
-            />}
-        </View>
-        <View style={{ backgroundColor: "#F6F6F6", padding: 12, borderBottomLeftRadius: 10, borderBottomRightRadius: 10 }}>
-        {!list ? <Text key={key} style={styles.mainTextDetails} > { item.split(',')[0].trim() } </Text> : 
-        <Text key={key} style={styles.textDetails} > { item.split(',')[0].trim() } </Text>}
-        {!list ? <View style={styles.viewSpace}/> :
-        <View>
-        <Text style={styles.numDetails}>$0.71/LB</Text>
-        <Text style={styles.soldDetails}>Sold by <Text style={styles.locDetails}>Target</Text></Text>
-        </View>
-        }
-
-        {!list ? 
-        <TouchableOpacity
-            key={key}
-            style={{ 
-            backgroundColor: this.state.indexes.includes(key) ? "#808080" : "green",
-            width: width * 0.30,
-            height: 35,
-            borderRadius: 50,
-            alignSelf: "center",
-            marginTop: Platform.OS === "ios" ? -10: -10,}}
-            onPress={()=> { 
-            this.sendIndex(key)
-            this.scrollView.scrollTo({x: 0, y: 0, animated: true}) 
-            this.setState({ list: mainData[item], click: "clicked", input: item })}}>
-            <Text style={styles.viewBtnDetails}>View Category</Text>
-        </TouchableOpacity> : 
-        !this.state.indexesSub.includes(key) ?
-        <TouchableOpacity
-          key={key}
-          style={{
-            backgroundColor: this.state.indexesSub.includes(key) ? "#1B6EBB60" : "#1B6EBB" ,
-            width: width * 0.30, 
-            height: 35,
-            borderRadius: 50,
-            alignSelf: "center",
-            marginTop: Platform.OS === "ios" ? -10: -10,
-          }}
-          onPress={()=> { 
-            
-            this.sendIndexSub(key)
-            this.addToCart(item, key)
-
-            // if(this.state.List(""))
-            // addToshop(item, key)
-          }}>
-        <Text style={styles.itemBtnDetails}>Add to cart</Text>
-        </TouchableOpacity> : 
-        <TouchableOpacity
-        key={key}
-        style={{
-          backgroundColor: this.state.indexesSub.includes(key) ? "#1B6EBB60" : "#1B6EBB" ,
-          width: width * 0.30, 
-          height: 35,
-          borderRadius: 50,
-          alignSelf: "center",
-          marginTop: Platform.OS === "ios" ? -10: -10,
-        }}
-        onPress={()=> { 
-          this.removeFromCart(key)
-        }}>
-      <Text style={styles.itemBtnDetails}>Remove</Text>
-      </TouchableOpacity>}
-        </View>
-        </View>
-        </View>
-      );
+    checkRight(name){
+      return this.state.selectedItemsList.some(el => el.name === name)
     }
 
     sendIndex(index){
@@ -339,7 +241,6 @@ class Shop extends Component {
 
   getItem = (item, index) => {
     this.setState({ input: item, filteredData: [], click: "clicked" })
-    // this.sendIndex(index)
     if(this.state.mainList.includes(item)){
     this.itemList(item)
     }else{
@@ -347,9 +248,94 @@ class Shop extends Component {
     }
   };
 
+  renderElement(item, key){
+    const { mainData, list, click } = this.state;
+    const selectedItems = []
+
+    selectedItems.push({ key })
+    console.log("selectedItems selectedItems selectedItems",this.state.selectedItemsList )
+    return(
+      <View style={styles.itemContainer} key={key}>
+      
+      <View style={styles.details}>
+      <View style={{ backgroundColor: "#FFF" }}>
+      {click ? 
+        <Image 
+          source={{ uri: item.substring(item.indexOf(",") + 1) }}
+          style={{ width: width * 0.35, height: 100, borderRadius: 6, marginBottom: 3, alignSelf: "center" }}
+          key={key}
+          /> 
+          : 
+        <Image 
+          source={{url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsUhUsM8JuZ4MKDjlPNox4QuV81hnoccTW_A&usqp=CAU"}}//require("../../assets/grocery.png")}
+          style={{ width: 100, height: 100, alignSelf: "center" }}
+          />}
+      </View>
+      <View style={{ backgroundColor: "#F6F6F6", padding: 12, borderBottomLeftRadius: 10, borderBottomRightRadius: 10 }}>
+      {!list ? <Text key={key} style={styles.mainTextDetails}>{item.split(',')[0].trim()}</Text> : 
+      <Text key={key} style={styles.textDetails}>{item.split(',')[0].trim()} </Text>}
+      {!list ? <View style={styles.viewSpace}/> :
+      <View>
+      <Text style={styles.numDetails}>$0.71/LB</Text>
+      <Text style={styles.soldDetails}>Sold by <Text style={styles.locDetails}>Target</Text></Text>
+      </View>
+      }
+
+      {!list ? 
+      <TouchableOpacity
+          key={key}
+          style={{ 
+          backgroundColor: this.state.indexes.includes(key) ? "#808080" : "green",
+          width: width * 0.30,
+          height: 35,
+          borderRadius: 50,
+          alignSelf: "center",
+          marginTop: Platform.OS === "ios" ? -10: -10,}}
+          onPress={()=> { 
+          this.sendIndex(key)
+          this.scrollView.scrollTo({x: 0, y: 0, animated: true}) 
+          this.setState({ list: mainData[item], click: "clicked", input: item })}}>
+          <Text style={styles.viewBtnDetails}>View Category</Text>
+      </TouchableOpacity> : 
+      !this.checkRight(item.split(',')[0].trim(),key) ?
+      <TouchableOpacity
+        key={key}
+        style={{
+          backgroundColor: this.checkRight(item.split(',')[0].trim(),key) ? "#1B6EBB60" : "#1B6EBB" ,
+          width: width * 0.30, 
+          height: 35,
+          borderRadius: 50,
+          alignSelf: "center",
+          marginTop: Platform.OS === "ios" ? -10: -10,
+        }}
+        onPress={()=> { 
+          // this.sendIndexSub(key)
+          this.addToCart(item, key)
+        }}>
+      <Text style={styles.itemBtnDetails}>Add to cart</Text>
+      </TouchableOpacity> : 
+      <TouchableOpacity
+      key={key}
+      style={{
+        backgroundColor: this.checkRight(item.split(',')[0].trim(),key)  ? "#1B6EBB60" : "#1B6EBB" ,
+        width: width * 0.30, 
+        height: 35,
+        borderRadius: 50,
+        alignSelf: "center",
+        marginTop: Platform.OS === "ios" ? -10: -10,
+      }}
+      onPress={()=> this.removeFromCart(key)}>
+    <Text style={styles.itemBtnDetails}>Remove</Text>
+    </TouchableOpacity>}
+      </View>
+      </View>
+      </View>
+    );
+  }
+
   render() {
     LogBox.ignoreAllLogs(true);
-    const { click, list, mainList, input, newCartList, indexesCountSub } = this.state;
+    const { click, list, mainList, input, newCartList, indexesCountSub,  } = this.state;
     console.log(list)
 
       return (
@@ -496,7 +482,6 @@ const styles = StyleSheet.create({
     flex: 1,
     borderRadius: 30,
     width: width * 0.6,
-    // height: height * 0.35,
     marginTop: 20,
     padding: 0,
     alignSelf: "center",

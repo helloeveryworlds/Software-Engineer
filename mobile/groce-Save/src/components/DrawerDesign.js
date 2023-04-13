@@ -21,7 +21,6 @@ const DrawerDesign = (props) => {
     AsyncStorage.getItem("userDetails").then((res) => {
       const response = JSON.parse(res);
       if (res !== null) {
-        console.log("Response...", response.data);
         setData(response.data.name) 
       } else {
         console.log("No response...", response);

@@ -37,7 +37,6 @@ class UserInfo extends Component {
     AsyncStorage.getItem("userDetails").then((res) => {
       const response = JSON.parse(res);
       if (res !== null) {
-        console.log("Response...", response.data);
         this.setState({
           name: response.data.name,
           email: response.data.email,

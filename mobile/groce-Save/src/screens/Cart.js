@@ -32,7 +32,6 @@ import {
       AsyncStorage.getItem("userDetails").then((res) => {
         const response = JSON.parse(res);
         if (res !== null) {
-          console.log("Response...", response.data);
           setUserData(response.data) 
         } else {
           console.log("No response...", response);

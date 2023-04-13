@@ -7,7 +7,7 @@ export const shopSlice = createSlice({
     },
     reducers:{
         addToShoppingList : (state,action) => {
-            const itemInShop = state.shop.find((item) => item.id == action.payload.id);
+            const itemInShop = state.shop.find((item) => item == action.payload.id);
             if(itemInShop){
                 itemInShop.quantity++;
             }else{
@@ -15,17 +15,17 @@ export const shopSlice = createSlice({
             }
         },
         removeFromShop : (state,action) => {
-            const removeFromShop = state.shop.filter((item) => item.id !== action.payload.id);
+            const removeFromShop = state.shop.filter((item) => item !== action.payload.id);
             state.shop = removeFromShop;
         },
         incrementItems : (state,action) => {
-            const itemInShop = state.shop.find((item) => item.id == action.payload.id);
+            const itemInShop = state.shop.find((item) => item == action.payload.id);
             itemInShop.quantity++;
         },
         decrementItems : (state,action) => {
-            const itemInShop = state.shop.find((item) => item.id == action.payload.id);
+            const itemInShop = state.shop.find((item) => item == action.payload.id);
             if(itemInShop.quantity == 1){
-                const removeFromShop = state.shop.filter((item) => item.id !== action.payload.id);
+                const removeFromShop = state.shop.filter((item) => item !== action.payload.id);
                 state.shop = removeFromShop;
             }else{
                 itemInShop.quantity--;
