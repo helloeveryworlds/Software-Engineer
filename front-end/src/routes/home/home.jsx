@@ -7,6 +7,7 @@ import "./home.css";
 const Home = () => {
   return (
     <div className="home-container">
+      <div className="background-image"></div>
       <div className="home-right">
         <SearchBar />
         <p className="home-slogan" data-testid="slogan">

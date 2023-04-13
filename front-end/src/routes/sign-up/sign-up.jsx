@@ -2,19 +2,19 @@ import React from "react";
 import { Fragment } from "react";
 // import axios from "axios";
 import "./sign-up.css";
-import { useLocation,useNavigate,useParams, Navigate } from 'react-router-dom';
+import {
+  useLocation,
+  useNavigate,
+  useParams,
+  Navigate,
+} from "react-router-dom";
 
 function withRouter(Component) {
   function ComponentWithRouterProp(props) {
     let location = useLocation();
     let navigate = useNavigate();
     let params = useParams();
-    return (
-      <Component
-        {...props}
-        router={{ location, navigate, params }}
-      />
-    );
+    return <Component {...props} router={{ location, navigate, params }} />;
   }
 
   return ComponentWithRouterProp;
@@ -97,13 +97,13 @@ class SignUp extends React.Component {
     e.preventDefault();
     const signupUrl = `/signup`;
     const data = {
-      name : this.state.name,
+      name: this.state.name,
       email: this.state.email,
       password: this.state.password,
       address: this.state.address,
-      zipCode: this.state.zipcode
-    }
-    
+      zipCode: this.state.zipcode,
+    };
+
     fetch(signupUrl, {
       method: "POST",
       headers: {
@@ -112,21 +112,19 @@ class SignUp extends React.Component {
       credentials: "include",
       body: JSON.stringify(data),
     }).then((response) => {
-      alert("sign up success")
+      alert("sign up success");
       if (response.status < 200 || response.status >= 300) {
         throw Error("Fail to sign up");
       } else {
-        this.setState({success:true})
+        this.setState({ success: true });
       }
     });
   }
 
   render() {
     return (
-      <Fragment>
-        {this.state.success && (
-          <Navigate to='/signin' replace='true' />
-        )}
+      <div className="signup-container">
+        {this.state.success && <Navigate to="/signin" replace="true" />}
         <div className="signupbox">
           <h1>Create Account</h1>
           <form onSubmit={this.handleSubmit}>
@@ -172,7 +170,7 @@ class SignUp extends React.Component {
             </p>
           </form>
         </div>
-      </Fragment>
+      </div>
     );
   }
 }

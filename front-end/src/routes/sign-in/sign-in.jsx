@@ -1,8 +1,13 @@
-import React, {Component}  from "react";
+import React, { Component } from "react";
 import { Fragment } from "react";
 // import axios from "axios";
 import "./sign-in.css";
-import { useLocation,useNavigate,useParams, Navigate } from 'react-router-dom';
+import {
+  useLocation,
+  useNavigate,
+  useParams,
+  Navigate,
+} from "react-router-dom";
 // import { Button, Form, Input, message } from "antd";
 
 function withRouter(Component) {
@@ -10,17 +15,11 @@ function withRouter(Component) {
     let location = useLocation();
     let navigate = useNavigate();
     let params = useParams();
-    return (
-      <Component
-        {...props}
-        router={{ location, navigate, params }}
-      />
-    );
+    return <Component {...props} router={{ location, navigate, params }} />;
   }
 
   return ComponentWithRouterProp;
 }
-
 
 class SignIn extends React.Component {
   constructor(props) {
@@ -41,7 +40,7 @@ class SignIn extends React.Component {
     });
   }
 
-  handleChangePwd(e) {  
+  handleChangePwd(e) {
     this.setState({
       password: e.target.value,
     });
@@ -57,30 +56,27 @@ class SignIn extends React.Component {
         "Content-Type": "application/json",
       },
       credentials: "include",
-    }).then((response) =>{
-      if (response.status < 200 || response.status >= 300) {
-        throw Error("Fail to log in");
-      }
-      return response.json(); 
     })
-    .then((data) => {
-        console.log(data)
-        localStorage.setItem("name", data.name)
-        localStorage.setItem("email", data.email)
-        localStorage.setItem("address", data.address)
-        localStorage.setItem("zipCode", data.zipCode)
-        this.setState({success:true})
-    });
+      .then((response) => {
+        if (response.status < 200 || response.status >= 300) {
+          throw Error("Fail to log in");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log(data);
+        localStorage.setItem("name", data.name);
+        localStorage.setItem("email", data.email);
+        localStorage.setItem("address", data.address);
+        localStorage.setItem("zipCode", data.zipCode);
+        this.setState({ success: true });
+      });
   }
 
   render() {
     return (
-      <Fragment>
-        {this.state.success && (
-
-          <Navigate to='/' replace='true' />
-
-        )}
+      <div className="signin-container">
+        {this.state.success && <Navigate to="/" replace="true" />}
         <div className="loginbox">
           <h1>Sign in</h1>
           <form onSubmit={this.handleSubmit}>
@@ -107,7 +103,7 @@ class SignIn extends React.Component {
             </p>
           </form>
         </div>{" "}
-      </Fragment>
+      </div>
     );
   }
 }
