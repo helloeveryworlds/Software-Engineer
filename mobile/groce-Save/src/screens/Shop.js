@@ -76,6 +76,7 @@ class Shop extends Component {
       })
       .catch((err) => {
         console.log(err)
+        Alert.alert(null, err.substring(item.indexOf(":") + 1).trim())
         this.setState({ isLoading: false, isAuthorized: true });
 
       });
@@ -140,11 +141,17 @@ class Shop extends Component {
 
     removeFromCart(index){
       let newList = this.state.selectedItemsList;
-      newList.splice(index,1); 
+
+      var removeIndex = newList.map(function(item) { return item.id; }).indexOf(index);
+      newList.splice(removeIndex,1); 
+      newList.splice()
+
+      // newList = newList.filter(function(item) {
+      //   return item.id !== index
+      // })
+
       this.setState({ newCartList: newList })
-      // arrayOfLetters.filter(function (letter) {
-      // return letter !== 'd';
-      // });
+      console.log("Hiiiiiiiiiii", newList)
     }
 
     componentWillMount() {
@@ -383,7 +390,7 @@ class Shop extends Component {
                 {newCartList.length != 0 && 
                 <View>
                   <View style={styles.best}>
-                  <Text style={{  }}>{newCartList.length}</Text>
+                  <Text style={{ fontSize: newCartList.length > 9 ? 9.5 : 12, paddingTop: newCartList.length > 9 ? 2 : 0, paddingHorizontal: newCartList.length > 9 ? 7 : 9,  }}>{newCartList.length}</Text>
                   </View>
                 <TouchableOpacity onPress={()=> this.toCart()}>
                   <FontAwesome5 
@@ -467,7 +474,6 @@ const styles = StyleSheet.create({
   best: {
     backgroundColor: "#EFDB6F",
     paddingVertical: 4,
-    paddingHorizontal: 9,
     fontSize: 11,
     width: 25,
     height: 25,
