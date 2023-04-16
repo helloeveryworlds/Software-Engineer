@@ -382,7 +382,7 @@ class Shop extends Component {
                 />
 
               {list && click != "" ? 
-                <TouchableOpacity style={{ marginStart: 18 }} onPress={()=> this.setState({ click: "", input: "", list: null  })}>
+                <TouchableOpacity style={{ marginStart: 18, marginEnd: 0 }} onPress={()=> this.setState({ click: "", input: "", list: null  })}>
                 <Text style={styles.backText}>{"<< "}Back to Categories</Text>
                 </TouchableOpacity>
                 : null}

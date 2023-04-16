@@ -5,7 +5,8 @@ import {
     Image,
     Text,
     StatusBar,
-    TouchableOpacity
+    TouchableOpacity,
+    Alert
   } from 'react-native';
 import UserIcon from '../../assets/svgs/user';
 import {
@@ -14,6 +15,7 @@ import {
     DrawerItem,
   } from '@react-navigation/drawer';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Ionicons } from "@expo/vector-icons";
 
 const DrawerDesign = (props) => {
   const [data, setData] = useState("");
@@ -28,6 +30,32 @@ const DrawerDesign = (props) => {
     });
   }
 
+  const removeItemValue = async (key) => {
+    try {
+      await AsyncStorage.removeItem(key);
+      return true;
+    } catch (exception) {
+      return false;
+    }
+  }
+
+  const logOut = async () => {
+    Alert.alert(
+      'Logout? ',
+      'Are you sure you want to logout?',
+      [
+        {
+          text: 'Yes', onPress: () => {
+             removeItemValue("userDetails");
+              _retrieveData()
+          }
+        },
+          { text: 'No', onPress: () => console.log('NO Pressed') }
+        ],
+        { cancelable: false },
+        );
+  }
+
   useEffect(() => {
     _retrieveData()
   });
@@ -35,6 +63,12 @@ const DrawerDesign = (props) => {
     return (
       <SafeAreaView style={{ flex: 1 }}>
         <StatusBar backgroundColor="#F4EFEF" barStyle="dark-content"/>
+        <TouchableOpacity style={{ alignSelf: "flex-end", marginEnd: 10, marginBottom: -10 }} onPress={()=> logOut()}>
+          <Ionicons
+            name={"log-out-outline"}
+            color={"orange"}
+            size={30}/>
+        </TouchableOpacity>
         <Image
           source={require('../.././assets/logo_.png')} 
           resizeMode={'cover'}
