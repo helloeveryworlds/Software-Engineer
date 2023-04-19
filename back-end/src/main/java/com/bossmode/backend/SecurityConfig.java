@@ -55,7 +55,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 .antMatchers("/signup").permitAll() // Add this line to allow access to /signup
-                .antMatchers("/*").hasAuthority("ROLE_USER")
+                .antMatchers("/order/*", "/cart", "/checkout").hasAuthority("ROLE_USER")
                 .anyRequest().permitAll();
     }
 

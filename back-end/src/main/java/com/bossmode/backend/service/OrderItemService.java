@@ -32,11 +32,11 @@ public class OrderItemService {
                 .orElse(null);
 
         if (existingOrderItem != null) {
-            existingOrderItem.setQuantity(existingOrderItem.getQuantity() + 1);
+            existingOrderItem.setQuantity(existingOrderItem.getQuantity() + finalOrderItem.getQuantity());
             orderItem = existingOrderItem;
         } else {
             orderItem.setCart(cart);
-            orderItem.setQuantity(1);
+            orderItem.setQuantity(finalOrderItem.getQuantity());
             cart.getOrderItemList().add(orderItem);
         }
 

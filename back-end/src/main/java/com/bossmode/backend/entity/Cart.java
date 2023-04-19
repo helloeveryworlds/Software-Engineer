@@ -23,10 +23,6 @@ public class Cart implements Serializable {
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
     private List<OrderItem> orderItemList;
 
-    @ManyToOne
-    @JsonIgnore
-    private Cart cart;
-
     public int getId() {
         return id;
     }
@@ -41,15 +37,6 @@ public class Cart implements Serializable {
 
     public void setOrderItemList(List<OrderItem> orderItemList) {
         this.orderItemList = orderItemList;
-    }
-
-
-    public Cart getCart() {
-        return cart;
-    }
-
-    public void setCart(Cart cart) {
-        this.cart = cart;
     }
 
 }
