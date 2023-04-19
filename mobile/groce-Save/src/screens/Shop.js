@@ -17,7 +17,7 @@ import {
  import groceSaveItemService from "../service/GroceSaveItemService";
 import SearchIcon from "../../assets/svgs/search";
 import  Loader  from '../components/Loader';
-import { FontAwesome5 } from "@expo/vector-icons"
+import { FontAwesome5 } from "@expo/vector-icons";
 
 const { width, height } = Dimensions.get("window");
 
@@ -25,6 +25,7 @@ const initialState = {
   isLoading: false, 
   click: "",
   input: "",
+  inputSub: "",
   updatedList: [],
   list: [],
   mainList: [],
@@ -35,7 +36,10 @@ const initialState = {
   indexesSub: [],
   newCartList: [],
   selectedItemsList: [],
+  selectedMainItemsList: [],
   filteredData: [],
+  newlyList: [],
+  latestList: []
 };
 
 class Shop extends Component {
@@ -50,6 +54,15 @@ class Shop extends Component {
     } 
   };
 
+  handleSubInput = (inputSub) => {  
+    if(inputSub != ""){
+      this.searchSubCat(inputSub)
+      this.setState({ inputSub: inputSub, in: "" });
+    }else {
+      this.setState({ inputSub: inputSub, in: "empty" });
+    } 
+  };
+
   itemList(input) {
     this.setState({ isLoading: true });
 
@@ -60,13 +73,14 @@ class Shop extends Component {
           this.setState({ isLoading: false });
         if(input != ""){
         const info = data.data[input];
-        this.setState({ list: info })
+        this.setState({ list: info, filteredData: info })
         
         const mainList = Object.keys(data.data);
         console.log("Yaaaaay!!!",data.data[input])
         console.log("Mainlist Yaaaaay!!!",mainList)
         this.setState({ mainList: mainList })
-        this.setState({ mainData: data.data })        
+        this.setState({ mainData: data.data })   
+             
         }
         } else {
           this.setState({ isLoading: true });
@@ -74,6 +88,7 @@ class Shop extends Component {
       })
       .catch((err) => {
         console.log(err)
+        Alert.alert(null, err.substring(item.indexOf(":") + 1).trim())
         this.setState({ isLoading: false, isAuthorized: true });
 
       });
@@ -84,14 +99,60 @@ class Shop extends Component {
       this.itemList();
     }
 
+    addSelectedMainCat(item, key){
+      this.state.selectedMainItemsList.push({
+        id: key+"",
+        name: item
+      });
+
+      this.setState({ selectedMainItemsList: [...this.state.selectedMainItemsList] });
+      
+    }
+
     addToCart(item, key){
+      this.scrollView.scrollTo({x: 0, y: 0, animated: true}) 
       this.state.selectedItemsList.push({
         id: key+"",
-        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRqg_OBzcVDnKHv1d3hyVk_WlCo43pzit4CJQ&usqp=CAU",
-        name: item,
+        image: item.substring(item.indexOf(",") + 1),
+        name: item.split(',')[0].trim(),
       });
 
       this.setState({ newCartList: [...this.state.selectedItemsList] });
+      console.log("itemitemitem",this.checkRight(item.split(',')[0].trim()))
+
+      let input = this.state.input
+
+      //Testing list..
+      const array1 = this.state.selectedItemsList;
+      const array2 = [];
+
+      this.state.list.forEach((data)=>{
+      // Find the object with id = 2 in array1
+      const foundObject = array1.find(item => item.name === data.split(',')[0].trim());
+
+      // Add the found object to array2
+      array2.push(foundObject);
+      }
+      )
+      var filtered = array2.filter(function(x) {
+        return x !== undefined;
+      });
+
+      if(this.state.newlyList.includes(input)){ 
+      }else{
+        filtered.forEach((data)=>{
+      let obj = {
+        [input + ""]: data
+      }
+
+      this.state.newlyList.push(
+        JSON.parse(JSON.stringify(obj))
+      )
+
+      this.setState({ latestList: [...this.state.newlyList] });
+      console.log("chino xssssssssssss",this.state.newlyList);
+      })
+      }
     }
 
     toCart(){
@@ -100,97 +161,32 @@ class Shop extends Component {
       })
     }
 
-    pushingUpdated(){
-      this.state.updatedList.push({
-        
-      })
+    removeFromCart(index){
+      let newList = this.state.selectedItemsList;
+
+      var removeIndex = newList.map(function(item) { return item.id; }).indexOf(index);
+      newList.splice(removeIndex,1); 
+      newList.splice()
+
+      // newList = newList.filter(function(item) {
+      //   return item.id !== index
+      // })
+
+      this.setState({ newCartList: newList })
+      console.log("Hiiiiiiiiiii", newList)
     }
 
-    renderElement(item, key){
-      const { mainData, list } = this.state;
-      const selectedItems = []
+    componentWillMount() {
+      this.setState({ newCartList: [...this.state.selectedItemsList] });
+      console.log("newCartList", this.state.selectedItemsList);
+    }
 
-      selectedItems.push({ key })
-      console.log("selectedItems selectedItems selectedItems",selectedItems)
-      return(
-        <View style={styles.itemContainer} key={key}>
-        
-        <View style={styles.details}>
-        <View style={{ backgroundColor: "#FFF"}}>
-        <Image 
-            source={require("../../assets/fru.png")}
-            style={{
-                resizeMode: 'center',
-                marginTop: 0,
-                alignSelf: "center",
-                paddingVertical: 0,
-            }}
-            />
-        </View>
-        <View style={{ backgroundColor: "#F6F6F6", padding: 12, borderBottomLeftRadius: 10, borderBottomRightRadius: 10 }}>
-        {!list ? <Text key={key} style={styles.mainTextDetails} > { item } </Text> : 
-        <Text key={key} style={styles.textDetails} > { item } </Text>}
-        {!list ? <View style={styles.viewSpace}/> :
-        <View>
-        <Text style={styles.numDetails}>$0.71/LB</Text>
-        <Text style={styles.soldDetails}>Sold by <Text style={styles.locDetails}>Target</Text></Text>
-        </View>
-        }
+    checkRight(name){
+      return this.state.selectedItemsList.some(el => el.name === name)
+    }
 
-        {!list ? 
-        <TouchableOpacity
-            key={key}
-            style={{ 
-            backgroundColor: this.state.indexes.includes(key) ? "#808080" : "green",
-            width: width * 0.30,
-            height: 35,
-            borderRadius: 50,
-            alignSelf: "center",
-            marginTop: Platform.OS === "ios" ? -10: -10,}}
-            onPress={()=> { 
-            // this.changeColorState(key) 
-            this.sendIndex(key)
-            // this.state.indexes
-            this.scrollView.scrollTo({x: 0, y: 0, animated: true}) 
-            this.setState({ list: mainData[item], click: "clicked", input: item })}}>
-            <Text style={styles.viewBtnDetails}>View Category</Text>
-        </TouchableOpacity> : 
-        !this.state.indexesSub.includes(key) ?
-        <TouchableOpacity
-          key={key}
-          style={{
-            backgroundColor: this.state.indexesSub.includes(key) ? "#1B6EBB60" : "#1B6EBB" ,
-            width: width * 0.30, 
-            height: 35,
-            borderRadius: 50,
-            alignSelf: "center",
-            marginTop: Platform.OS === "ios" ? -10: -10,
-          }}
-          onPress={()=> { 
-            this.sendIndexSub(key)
-            this.addToCart(item, key)
-          }}>
-        <Text style={styles.itemBtnDetails}>Add to cart</Text>
-        </TouchableOpacity> : 
-        <TouchableOpacity
-        key={key}
-        style={{
-          backgroundColor: this.state.indexesSub.includes(key) ? "#1B6EBB60" : "#1B6EBB" ,
-          width: width * 0.30, 
-          height: 35,
-          borderRadius: 50,
-          alignSelf: "center",
-          marginTop: Platform.OS === "ios" ? -10: -10,
-        }}
-        onPress={()=> { 
-          this.removeItemFromList(key)
-        }}>
-      <Text style={styles.itemBtnDetails}>Remove</Text>
-      </TouchableOpacity>}
-        </View>
-        </View>
-        </View>
-      );
+    checkRightMain(name){
+      return this.state.selectedMainItemsList.some(el => el.name === name)
     }
 
     sendIndex(index){
@@ -209,12 +205,6 @@ class Shop extends Component {
       this.setState({ indexesSub: [...this.state.indexesCountSub] });
     }
 
-    removeItemFromList(index){
-      let newList = this.state.indexesCountSub;
-      newList.splice(index,1); 
-      this.setState({indexesSub: [...newList]})
-     }
-
     changeColorState(index) {
       let indexes = this.state.indexes.slice(0);
       if(indexes.indexOf(index) == -1)
@@ -224,7 +214,7 @@ class Shop extends Component {
           indexes.splice(id, 1)
       }
       this.setState({indexes});
-  }
+    }
 
   changeColorStateSub(index) {
     let indexesSub = this.state.indexesSub.slice(0);
@@ -260,13 +250,44 @@ class Shop extends Component {
     }
   };
 
+  searchSubCat = (text) => {
+    if (text) {
+      const newData = this.state.list.filter(
+        function (item) {
+          const itemData = item
+            ? item.toUpperCase()
+            : ''.toUpperCase();
+          const textData = text.toUpperCase();
+          return itemData.indexOf(textData) > -1;
+      });
+      
+      this.setState({ filteredData: newData, text: text })
+      if(text != ""){
+        this.setState({ inputSub: text, in: "" });
+      }else {
+        this.setState({ inputSub: text, in: "empty" });
+      } 
+
+    } else {
+      this.setState({ filteredData: this.state.list })
+    }
+  };
+
   itemView = ({item, index}) => {
     return (
+      <View>
+      {this.state.list && this.state.click != "" ? 
+      <Text
+        style={styles.itemStyle}
+        onPress={() => this.getSubItem(item, index)}>
+        {item.split(',')[0].trim()}
+      </Text> :
       <Text
         style={styles.itemStyle}
         onPress={() => this.getItem(item, index)}>
         {item}
-      </Text>
+      </Text>}
+      </View>
     );
   };
 
@@ -283,18 +304,115 @@ class Shop extends Component {
   };
 
   getItem = (item, index) => {
-    this.setState({ input: item, filteredData: [], click: "clicked" })
-    // this.sendIndex(index)
     if(this.state.mainList.includes(item)){
     this.itemList(item)
+    this.addSelectedMainCat(item, index)
+
+    this.setState({ input: item, filteredData: [], click: "clicked" })
     }else{
       Alert.alert(null,"Catergory not here")
     }
   };
 
+  getSubItem = (item, index) => {
+    if(this.state.list.includes(item)){
+    if(this.state.list && this.state.click != ""){
+      this.setState({ inputSub: item.split(',')[0].trim(), filteredData: [], click: "clicked" })
+    }
+    } else {
+      Alert.alert(null,"Item not here")
+    }
+  }
+
+  renderElement(item, key){
+    const { mainData, list, click } = this.state;
+    const selectedItems = []
+
+    selectedItems.push({ key })
+    console.log("selectedItems selectedItems selectedItems",this.state.selectedItemsList )
+    return(
+      <View style={styles.itemContainer} key={key}>
+      
+      <View style={styles.details}>
+      <View style={{ backgroundColor: "#FFF" }}>
+      {click ? 
+        <Image 
+          source={{ uri: item.substring(item.indexOf(",") + 1) }}
+          style={{ width: width * 0.35, height: 100, borderRadius: 6, marginBottom: 3, alignSelf: "center" }}
+          key={key}
+          /> 
+          : 
+        <Image 
+          source={{url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsUhUsM8JuZ4MKDjlPNox4QuV81hnoccTW_A&usqp=CAU"}}//require("../../assets/grocery.png")}
+          style={{ width: 100, height: 100, alignSelf: "center" }}
+          />}
+      </View>
+      <View style={{ backgroundColor: "#F6F6F6", padding: 12, borderBottomLeftRadius: 10, borderBottomRightRadius: 10 }}>
+      {!list ? <Text key={key} style={styles.mainTextDetails}>{item.split(',')[0].trim()}</Text> : 
+      <Text key={key} style={styles.textDetails}>{item.split(',')[0].trim()} </Text>}
+      {!list ? <View style={styles.viewSpace}/> :
+      <View>
+      <Text style={styles.numDetails}>$0.71/LB</Text>
+      <Text style={styles.soldDetails}>Sold by <Text style={styles.locDetails}>Target</Text></Text>
+      </View>
+      }
+
+      {!list ? 
+      <TouchableOpacity
+          key={key}
+          style={{ 
+          backgroundColor: this.checkRightMain(item,key) ? "#808080" : "green",
+          width: width * 0.30,
+          height: 35,
+          borderRadius: 50,
+          alignSelf: "center",
+          marginTop: Platform.OS === "ios" ? -10: -10,}}
+          onPress={()=> { 
+          this.sendIndex(key)
+          this.addSelectedMainCat(item,key)
+          this.scrollView.scrollTo({x: 0, y: 0, animated: true}) 
+          this.setState({ list: mainData[item], filteredData: mainData[item], click: "clicked", input: item })}}>
+          <Text style={styles.viewBtnDetails}>View Category</Text>
+      </TouchableOpacity> : 
+      !this.checkRight(item.split(',')[0].trim(),key) ?
+      <TouchableOpacity
+        key={key}
+        style={{
+          backgroundColor: this.checkRight(item.split(',')[0].trim(),key) ? "#1B6EBB60" : "#1B6EBB" ,
+          width: width * 0.30, 
+          height: 35,
+          borderRadius: 50,
+          alignSelf: "center",
+          marginTop: Platform.OS === "ios" ? -10: -10,
+        }}
+        onPress={()=> { 
+          // this.sendIndexSub(key)
+          this.addToCart(item, key)
+        }}>
+      <Text style={styles.itemBtnDetails}>Add to cart</Text>
+      </TouchableOpacity> : 
+      <TouchableOpacity
+      key={key}
+      style={{
+        backgroundColor: this.checkRight(item.split(',')[0].trim(),key)  ? "#1B6EBB60" : "#1B6EBB" ,
+        width: width * 0.30, 
+        height: 35,
+        borderRadius: 50,
+        alignSelf: "center",
+        marginTop: Platform.OS === "ios" ? -10: -10,
+      }}
+      onPress={()=> this.removeFromCart(key)}>
+    <Text style={styles.itemBtnDetails}>Remove</Text>
+    </TouchableOpacity>}
+      </View>
+      </View>
+      </View>
+    );
+  }
+
   render() {
     LogBox.ignoreAllLogs(true);
-    const { click, list, mainList, input, newCartList, indexesCountSub } = this.state;
+    const { click, list, mainList, input, newCartList, filteredData, inputSub } = this.state;
     console.log(list)
 
       return (
@@ -305,22 +423,31 @@ class Shop extends Component {
           <Loader loading={this.state.isLoading} />
 
               <View style={{ marginVertical: 5 }}>
+              {list && click != "" ? 
               <TextInput 
-              style={styles.optionContainer}
-              value={this.state.input}
-              onChangeText={(text)=> this.search(text)}
-              />
+                style={styles.optionContainer}
+                value={inputSub}
+                onChangeText={(text)=> this.handleSubInput(text)}
+                />
+               : 
+               <TextInput 
+                style={styles.optionContainer}
+                value={input}
+                onChangeText={(text)=> this.handleInput(text)}
+                />
+                  }
               <View style={{ bottom: 35, paddingStart: width * 0.16 }}>
               <SearchIcon/>
               </View>
 
-              <FlatList
+              {!list ?
+               <FlatList
                 data={this.state.filteredData}
                 style={{ backgroundColor: "#FFF" }}
                 keyExtractor={(item, index) => index.toString()}
                 ItemSeparatorComponent={this.itemSeparatorView}
                 renderItem={this.itemView}
-              />
+              /> : null}
 
               {!list ? 
               <Text style={styles.infoTextStyle}>Categories</Text> : <Text style={styles.infoTextStyle}>{input}</Text>}
@@ -334,7 +461,7 @@ class Shop extends Component {
                 />
 
               {list && click != "" ? 
-                <TouchableOpacity style={{ marginStart: 18 }} onPress={()=> this.setState({ click: "", input: "", list: null  })}>
+                <TouchableOpacity style={{ marginStart: 18, marginEnd: 0 }} onPress={()=> this.setState({ click: "", input: "", inputSub: "", list: null, filteredData: []  })}>
                 <Text style={styles.backText}>{"<< "}Back to Categories</Text>
                 </TouchableOpacity>
                 : null}
@@ -342,12 +469,12 @@ class Shop extends Component {
                 {newCartList.length != 0 && 
                 <View>
                   <View style={styles.best}>
-                  <Text style={{  }}>{indexesCountSub.length}</Text>
+                  <Text style={{ fontSize: newCartList.length > 9 ? 9.5 : 12, paddingTop: newCartList.length > 9 ? 2 : 0, paddingHorizontal: newCartList.length > 9 ? 7 : 9,  }}>{newCartList.length}</Text>
                   </View>
                 <TouchableOpacity onPress={()=> this.toCart()}>
                   <FontAwesome5 
                   name={"shopping-cart"} 
-                  style={{ color: "#FF0080", alignSelf: "flex-end", marginEnd : 30 }}
+                  style={{ color: "#FF0080", alignSelf: "flex-end", marginEnd : 30, marginBottom: 10 }}
                   size={25}/>
                   </TouchableOpacity>
                   </View>}
@@ -362,7 +489,7 @@ class Shop extends Component {
                   />
                    :
                   <FlatList
-                   data={list}
+                   data={click != "" ? filteredData : list}
                    renderItem={({ item, index }) => (
                      this.renderElement(item, index)
                    )}
@@ -426,7 +553,6 @@ const styles = StyleSheet.create({
   best: {
     backgroundColor: "#EFDB6F",
     paddingVertical: 4,
-    paddingHorizontal: 9,
     fontSize: 11,
     width: 25,
     height: 25,
@@ -441,7 +567,6 @@ const styles = StyleSheet.create({
     flex: 1,
     borderRadius: 30,
     width: width * 0.6,
-    // height: height * 0.35,
     marginTop: 20,
     padding: 0,
     alignSelf: "center",
@@ -485,7 +610,8 @@ const styles = StyleSheet.create({
   backText: {
     textDecorationLine: "underline",
     fontWeight: "500",
-    color: "blue"
+    color: "blue",
+    marginBottom: 10
   },
   mainTextDetails: {
     fontSize: 17,

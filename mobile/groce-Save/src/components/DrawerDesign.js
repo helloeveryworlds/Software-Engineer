@@ -1,11 +1,12 @@
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     SafeAreaView,
     StyleSheet,
     Image,
     Text,
     StatusBar,
-    TouchableOpacity
+    TouchableOpacity,
+    Alert
   } from 'react-native';
 import UserIcon from '../../assets/svgs/user';
 import {
@@ -13,21 +14,70 @@ import {
     DrawerItemList,
     DrawerItem,
   } from '@react-navigation/drawer';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Ionicons } from "@expo/vector-icons";
 
 const DrawerDesign = (props) => {
-  console.log("Dataaaaaaaaaa",props.data)
+  const [data, setData] = useState("");
+  const _retrieveData = () => {
+    AsyncStorage.getItem("userDetails").then((res) => {
+      const response = JSON.parse(res);
+      if (res !== null) {
+        setData(response.data.name) 
+      } else {
+        console.log("No response...", response);
+      }
+    });
+  }
+
+  const removeItemValue = async (key) => {
+    try {
+      await AsyncStorage.removeItem(key);
+      return true;
+    } catch (exception) {
+      return false;
+    }
+  }
+
+  const logOut = async () => {
+    Alert.alert(
+      'Logout? ',
+      'Are you sure you want to logout?',
+      [
+        {
+          text: 'Yes', onPress: () => {
+             removeItemValue("userDetails");
+              _retrieveData()
+          }
+        },
+          { text: 'No', onPress: () => console.log('NO Pressed') }
+        ],
+        { cancelable: false },
+        );
+  }
+
+  useEffect(() => {
+    _retrieveData()
+  });
+
     return (
       <SafeAreaView style={{ flex: 1 }}>
         <StatusBar backgroundColor="#F4EFEF" barStyle="dark-content"/>
+        {/* <TouchableOpacity style={{ alignSelf: "flex-end", marginEnd: 10, marginBottom: -10 }} onPress={()=> logOut()}>
+          <Ionicons
+            name={"log-out-outline"}
+            color={"orange"}
+            size={30}/>
+        </TouchableOpacity> */}
         <Image
           source={require('../.././assets/logo_.png')} 
           resizeMode={'cover'}
           style={styles.sideMenuProfileIcon}
         />
 
-          {props.data.name ? 
+          {data ? 
           <Text style={{ fontSize: 16, textAlign: 'center',  backgroundColor: 'grey', color: "#FFF", padding: 5,  }}>
-          {props.data.name}
+          {data}
         </Text> : <Text style={{ fontSize: 16, textAlign: 'center', color: 'grey' }}>
           User
         </Text>}

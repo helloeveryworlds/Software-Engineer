@@ -19,11 +19,6 @@ import Cart from './src/screens/Cart';
 import store from './store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const dataSend = (response) => {
-  const data = response;
-  return data;
-}
-
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
 
@@ -41,7 +36,7 @@ const NavigationDrawerStructure = (props) => {
   );
 };
 
-function firstScreenStack({ navigation }) {
+function FirstScreenStack({ navigation }) {
   return (
     <Stack.Navigator initialRouteName="Welcome">
       <Stack.Screen
@@ -68,7 +63,7 @@ function firstScreenStack({ navigation }) {
   );
 }
 
-function secondScreenStack({ navigation }) {
+function SecondScreenStack({ navigation }) {
   return (
     <Stack.Navigator
       initialRouteName="SignIn"
@@ -105,7 +100,7 @@ function secondScreenStack({ navigation }) {
   );
 }
 
-function userInfoScreenStack({ navigation }) {
+function UserInfoScreenStack({ navigation }) {
   return (
     <Stack.Navigator initialRouteName="UserInfo">
       <Stack.Screen
@@ -133,7 +128,7 @@ function userInfoScreenStack({ navigation }) {
 }
 
 
-function shopScreenStack({ navigation }) {
+function ShopScreenStack({ navigation }) {
   return (
     <Stack.Navigator initialRouteName="Shop">
       <Stack.Screen
@@ -221,27 +216,6 @@ function shopScreenStack({ navigation }) {
 }
 
 function App() {
-  const [data, setData] = useState({});
-  const _retrieveData = () => {
-    AsyncStorage.getItem("userDetails").then((res) => {
-      const response = JSON.parse(res);
-      if (res !== null) {
-        console.log("Response...", response.data);
-        // return response;
-        setData(response.data)
-        // window.myGlobalVar = response.data; 
-        
-  
-      } else {
-        console.log("No response...", response);
-      }
-    });
-  }
-  
-  useEffect(() => {
-      _retrieveData()
-    });
-
   return (
     <Provider store={store}>
     <NavigationContainer>
@@ -260,28 +234,28 @@ function App() {
           },
           headerShown: false,
         }}
-        drawerContent={(props) => <DrawerDesign data={data} {...props} />}>
+        drawerContent={(props) => <DrawerDesign {...props} />}>
         <Drawer.Screen
           name="Welcome"
           options={{ drawerLabel: 'Home', color: "#52A860" }}
-          component={firstScreenStack}
+          component={FirstScreenStack}
         />
         <Drawer.Screen
           name="Shop"
           options={{ drawerLabel: 'Shop' }}
-          component={shopScreenStack}
+          component={ShopScreenStack}
         />
         <Drawer.Screen
           name="SignIn"
           options={{ drawerLabel: 'Signin/SignUp' }}
-          component={secondScreenStack}
+          component={SecondScreenStack}
         />
         <Drawer.Screen
            name={"UserInfo"}
            options={{
             title: '',
            drawerIcon:({focused})=> <UserIcon color={focused ? "#52A860" : "black"}/>}}
-           component={userInfoScreenStack}
+           component={UserInfoScreenStack}
          />
       </Drawer.Navigator>
     </NavigationContainer>

@@ -5,7 +5,7 @@ import { Outlet, Link } from "react-router-dom";
 import HomeLogo from "../../assets/logo.png";
 import Footer from "../../components/footer/footer";
 import { PersonBoundingBox } from "react-bootstrap-icons";
-
+// import {motion} from 'framer-motion';
 import "./navigation.css";
 
 class Navigation extends React.Component {
@@ -21,14 +21,16 @@ class Navigation extends React.Component {
 
           <div className="nav-links-container">
             <Link className="nav-link" to="/shopping">
+              <div />
               Shop
             </Link>
-
             <Link className="nav-link" to="/signin">
-              Sign In/Up
+              <div />
+              Sign In
             </Link>
 
             <Link className="nav-link" to="/userinfo">
+              <div />
               <PersonBoundingBox />
             </Link>
           </div>

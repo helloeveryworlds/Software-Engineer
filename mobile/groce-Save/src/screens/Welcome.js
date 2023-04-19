@@ -15,7 +15,8 @@ import {
   Alert,
   Platform
 } from "react-native";
-// import Toast from 'react-native-tiny-toast';
+import { Ionicons } from "@expo/vector-icons";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import SearchIcon from "../../assets/svgs/search";
 import GitHubIcon from "../../assets/svgs/github"
 import Loader from "../components/Loader";
@@ -80,6 +81,42 @@ class Welcome extends Component {
     Alert.alert(null,"Yes we have "+item.store+" on our list of stores to search!")
   };
 
+  removeItemValue = async (key) => {
+    try {
+      await AsyncStorage.removeItem(key);
+      return true;
+    } catch (exception) {
+      return false;
+    }
+  }
+
+  _retrieveData = () => {
+    AsyncStorage.getItem("userDetails").then((res) => {
+      const response = JSON.parse(res);
+      if (res !== null) {
+        setData(response.data.name) 
+      } else {
+        console.log("No response...", response);
+      }
+    });
+  }
+
+  logOut = async () => {
+    Alert.alert(
+      'Logout? ',
+      'Are you sure you want to logout?',
+      [
+        {
+          text: 'Yes', onPress: () => {
+            this.removeItemValue("userDetails");
+              this._retrieveData()
+          }
+        },
+          { text: 'No', onPress: () => console.log('NO Pressed') }
+        ],
+        { cancelable: false },
+        );
+  }
 
   render() {
     LogBox.ignoreAllLogs(true);
@@ -92,6 +129,13 @@ class Welcome extends Component {
           <Loader loading={this.state.isLoading} />
           
           <StatusBar backgroundColor="#F4EFEF" barStyle="dark-content"/>
+          {/* <TouchableOpacity style={{ alignSelf: "flex-end", marginEnd: 10, marginBottom: -10 }} onPress={()=> this.logOut()}>
+          <Ionicons
+            name={"log-out-outline"}
+            color={"orange"}
+            size={30}/>
+        </TouchableOpacity> */}
+        
             <View style={{ marginVertical: height * 0.2 }}>
               <TextInput 
               style={styles.optionContainer}

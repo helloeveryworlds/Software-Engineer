@@ -10,40 +10,40 @@ import {
     Alert,
     Dimensions
   } from "react-native";
-  import React, { useRef, useState } from "react";
+  import React, { useRef, useState, useEffect } from "react";
   import { useDispatch, useSelector } from "react-redux";
   import { addToCart, decrementQuantity, incrementQuantity, removeFromCart } from "../components/CartReducer";
   import  Loader  from '../components/Loader';
   import groceSaveItemService from "../service/GroceSaveItemService";
-
+  import groceSaveService from ".././service/GroceSaveService";
+  import AsyncStorage from '@react-native-async-storage/async-storage';
+  
   const { width, height } = Dimensions.get("window");
 
   const Cart = ({ route, navigation }) => {
     const { array } = route.params;
     const cart = useSelector((state) => state.cart.cart);
-    console.log(cart);
+    // console.log(cart);
     const dispatch = useDispatch();
+
     const [ isLoading, setIsLoading ] = useState(false);
-    const images = [
-      {
-        id: "0",
-        image:
-          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRqg_OBzcVDnKHv1d3hyVk_WlCo43pzit4CJQ&usqp=CAU",
-        name: "icecream",
-      },
-      {
-        id: "1",
-        image:
-          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT85O96gPiso_j2gaS0cePTBY4mCR3pumV6tw&usqp=CAU",
-        name: "biscuit",
-      },
-      {
-        id: "2",
-        image:
-          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSicQWeRoxxLEr1RLIp8dJtw-NQvSE4xtlhwA&usqp=CAU",
-        name: "chocolate",
-      },
-    ];
+    const [userData, setUserData] = useState({});
+    const [cartResponse, setCartResponse] = useState({});
+
+    const _retrieveData = () => {
+      AsyncStorage.getItem("userDetails").then((res) => {
+        const response = JSON.parse(res);
+        if (res !== null) {
+          setUserData(response.data) 
+        } else {
+          console.log("No response...", response);
+        }
+      });
+    }
+  
+    useEffect(() => {
+      _retrieveData()
+    });
     
     const addItemToCart = (item) => {
       dispatch(addToCart(item));
@@ -63,27 +63,26 @@ import {
     }
     
     const submitCheckOut = () => {
-      const list = []
+      if(Object.keys(userData).length != 0){
+      
       setIsLoading(true);
-      var itemsWithQuantity = {};
+      let name = ""
+      let URL = ""
 
       cart.map((items) =>
         (
-          itemsWithQuantity[items.name] = items.quantity+""
+          name = items.name,
+          URL = items.image
         ))
       
-      const zipCode = "02134"
-      list.push({
-        zipCode,
-        itemsWithQuantity
-      })
-
-  console.log(list);
-
+      const payload = {
+        name,
+        URL
+      }
+      
   const onSuccess = ( data ) => {
     setIsLoading(false);
-    
-    console.log("Dataaa",data);
+    console.log("Donneeee",data)
     if (data.status == 200){
       Alert.alert(null, "Checkout successfully,\nIt's free so no need to pay!", [{
         text: 'Ok', onPress: () => navigation.navigate("Shop")
@@ -113,10 +112,84 @@ import {
     }
   };
 
+  groceSaveService
+    .post("/order", payload)
+    .then(onSuccess)
+    .catch(onFailure);
+    } else {
+      Alert.alert(null, "Please sign in to Checkout successfully!", [{
+        text: 'Ok', onPress: () => navigation.navigate("SignIn")
+      }])
+    }
+    }
+
+    const submitComparePrice = () => {
+      if(Object.keys(userData).length != 0){
+      const list = []
+      setIsLoading(true);
+      var itemsWithQuantity = {};
+
+      cart.map((items) =>
+        (
+          itemsWithQuantity[items.name] = items.quantity+""
+        ))
+      
+      const zipCode = userData.zipCode
+      list.push({
+        zipCode,
+        itemsWithQuantity
+      })
+
+  console.log(list);
+
+  const onSuccess = ( data ) => {
+    // const { bestByCategory } = data;
+    setIsLoading(false);
+    
+    console.log("Dataaa", data.data[0].bestByCategory);
+    if (data.status == 200){
+      if(data.data[0].msg == "The zip code is'nt currently covered under our services"){
+        Alert.alert(null, data.data[0].msg);
+      }else{
+        setCartResponse(data.data[0].bestByCategory)
+      Alert.alert(null, "Price compare option was successful,\nPlease view and checkout!", [{
+        // text: 'Ok', onPress: () => navigation.navigate("Shop")
+      }])
+    }
+    }
+  };
+
+  const onFailure = (error) => {
+    console.log(error && error.response);
+      setIsLoading(false);
+    if(error.response == null){
+      setIsLoading(false);
+      Alert.alert('Info: ','Network Error')
+    }
+    if(error.response.status == 400){
+      setIsLoading(false);
+      Alert.alert('Info: ',error.response.data.non_field_errors[0])
+    } else if(error.response.status == 500){
+      setIsLoading(false);
+      Alert.alert('Info: ','Ensure your Network is Stable')
+    } else if(error.response.status == 401){
+      setIsLoading(false);
+      Alert.alert(null,error.response.data)
+    } else if(error.response.status == 404){
+      setIsLoading(false);
+      Alert.alert('Info: ','User not found')
+    }
+  };
+
    groceSaveItemService
     .post("/comparePrice", list)
     .then(onSuccess)
     .catch(onFailure);
+    } else {
+      Alert.alert(null, "Please sign in to continue!", [{
+        text: 'Ok', onPress: () => navigation.navigate("SignIn")
+      }])
+    }
     }
 
     const scrollRef = useRef();
@@ -131,7 +204,7 @@ import {
       <ScrollView  ref={scrollRef}  onContentSizeChange={() => onPressTouch()} style={{ backgroundColor: "#FFF" }}>
       <SafeAreaView>
         <Loader loading={isLoading} />
-        <Text style={{ textAlign: "center", fontSize: 16 }}>
+        <Text style={{ textAlign: "center", fontSize: 16, marginTop: 7 }}>
           Cart
         </Text>
         {!array ? null : 
@@ -181,15 +254,29 @@ import {
           </Pressable>
         ))
         }
-        {cart.length != 0 && 
+        {cart.length != 0 && cartResponse.lowestAvgStoreName ?
         <Text style={{ textAlign: "center", fontSize: 14, backgroundColor: "#808080", color: "#FFF", width: width, padding: 10 }}>
-          Star Market
-        </Text>}
+          {cartResponse.lowestAvgStoreName.toUpperCase()}
+        </Text> : <View
+                width={width * 0.9} 
+                height={1.5} 
+                backgroundColor={"#DDD"} 
+                alignSelf={"center"} 
+                marginVertical={15}
+                />}
+
         {cart.map((item,index) => (
           <View style={{padding:10}} key={index}>
             <Text>{item.name}</Text>
+            <View style={{ flexDirection: "row" }}>
             <Image style={{ width: 100, height: 100, borderRadius: 8,marginTop:6 }}
                 source={{ uri: item.image }}/>
+               {cartResponse.lowestAvgStoreName &&
+                <View>
+                <Text style={{ fontWeight: "bold", marginTop: 30, marginStart: 10 }}>Lowest Price: ${cartResponse.lowestAvgTotalPrice}</Text>
+                <Text style={{ fontWeight: "bold", marginTop: 10, marginStart: 10 }}>Store: {cartResponse.lowestAvgStoreName}</Text>
+                </View>}
+            </View>
             <Pressable
               style={{
                 flexDirection: "row",
@@ -238,12 +325,18 @@ import {
             </Pressable>
           </View>
         ))}
-        {cart.length != 0 && 
+        {cart.length != 0 ?
+         !cartResponse.lowestAvgStoreName ? 
         <TouchableOpacity 
-          style={styles.itemBtn}
-          onPress={()=> submitCheckOut()}>
-          <Text style={styles.itemBtnDetails}>Checkout</Text>
-        </TouchableOpacity>}
+          style={styles.itemCompareBtn}
+          onPress={()=> submitComparePrice()}>
+          <Text style={styles.itemBtnDetails}>Compare prices</Text>
+        </TouchableOpacity> :
+        <TouchableOpacity 
+        style={styles.itemBtn}
+        onPress={()=> submitCheckOut()}>
+        <Text style={styles.itemBtnDetails}>Checkout</Text>
+      </TouchableOpacity> : null}
       </SafeAreaView>
       </ScrollView>
     );
@@ -254,6 +347,14 @@ import {
   const styles = StyleSheet.create({
     itemBtn: {
       backgroundColor: "#9BC0F1",
+      width: width * 0.40,
+      height: 35,
+      borderRadius: 50,
+      alignSelf: "center",
+      marginVertical: Platform.OS === "ios" ? 20: 20,
+    },
+    itemCompareBtn: {
+      backgroundColor: "#FFA50090",
       width: width * 0.40,
       height: 35,
       borderRadius: 50,
