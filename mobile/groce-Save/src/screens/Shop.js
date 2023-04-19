@@ -25,6 +25,7 @@ const initialState = {
   isLoading: false, 
   click: "",
   input: "",
+  inputSub: "",
   updatedList: [],
   list: [],
   mainList: [],
@@ -35,6 +36,7 @@ const initialState = {
   indexesSub: [],
   newCartList: [],
   selectedItemsList: [],
+  selectedMainItemsList: [],
   filteredData: [],
   newlyList: [],
   latestList: []
@@ -52,6 +54,15 @@ class Shop extends Component {
     } 
   };
 
+  handleSubInput = (inputSub) => {  
+    if(inputSub != ""){
+      this.searchSubCat(inputSub)
+      this.setState({ inputSub: inputSub, in: "" });
+    }else {
+      this.setState({ inputSub: inputSub, in: "empty" });
+    } 
+  };
+
   itemList(input) {
     this.setState({ isLoading: true });
 
@@ -62,13 +73,14 @@ class Shop extends Component {
           this.setState({ isLoading: false });
         if(input != ""){
         const info = data.data[input];
-        this.setState({ list: info })
+        this.setState({ list: info, filteredData: info })
         
         const mainList = Object.keys(data.data);
         console.log("Yaaaaay!!!",data.data[input])
         console.log("Mainlist Yaaaaay!!!",mainList)
         this.setState({ mainList: mainList })
-        this.setState({ mainData: data.data })        
+        this.setState({ mainData: data.data })   
+             
         }
         } else {
           this.setState({ isLoading: true });
@@ -85,6 +97,16 @@ class Shop extends Component {
 
     componentDidMount(){
       this.itemList();
+    }
+
+    addSelectedMainCat(item, key){
+      this.state.selectedMainItemsList.push({
+        id: key+"",
+        name: item
+      });
+
+      this.setState({ selectedMainItemsList: [...this.state.selectedMainItemsList] });
+      
     }
 
     addToCart(item, key){
@@ -163,6 +185,10 @@ class Shop extends Component {
       return this.state.selectedItemsList.some(el => el.name === name)
     }
 
+    checkRightMain(name){
+      return this.state.selectedMainItemsList.some(el => el.name === name)
+    }
+
     sendIndex(index){
       this.state.indexesCount.push(
         index
@@ -188,7 +214,7 @@ class Shop extends Component {
           indexes.splice(id, 1)
       }
       this.setState({indexes});
-  }
+    }
 
   changeColorStateSub(index) {
     let indexesSub = this.state.indexesSub.slice(0);
@@ -224,13 +250,44 @@ class Shop extends Component {
     }
   };
 
+  searchSubCat = (text) => {
+    if (text) {
+      const newData = this.state.list.filter(
+        function (item) {
+          const itemData = item
+            ? item.toUpperCase()
+            : ''.toUpperCase();
+          const textData = text.toUpperCase();
+          return itemData.indexOf(textData) > -1;
+      });
+      
+      this.setState({ filteredData: newData, text: text })
+      if(text != ""){
+        this.setState({ inputSub: text, in: "" });
+      }else {
+        this.setState({ inputSub: text, in: "empty" });
+      } 
+
+    } else {
+      this.setState({ filteredData: this.state.list })
+    }
+  };
+
   itemView = ({item, index}) => {
     return (
+      <View>
+      {this.state.list && this.state.click != "" ? 
+      <Text
+        style={styles.itemStyle}
+        onPress={() => this.getSubItem(item, index)}>
+        {item.split(',')[0].trim()}
+      </Text> :
       <Text
         style={styles.itemStyle}
         onPress={() => this.getItem(item, index)}>
         {item}
-      </Text>
+      </Text>}
+      </View>
     );
   };
 
@@ -247,13 +304,25 @@ class Shop extends Component {
   };
 
   getItem = (item, index) => {
-    this.setState({ input: item, filteredData: [], click: "clicked" })
     if(this.state.mainList.includes(item)){
     this.itemList(item)
+    this.addSelectedMainCat(item, index)
+
+    this.setState({ input: item, filteredData: [], click: "clicked" })
     }else{
       Alert.alert(null,"Catergory not here")
     }
   };
+
+  getSubItem = (item, index) => {
+    if(this.state.list.includes(item)){
+    if(this.state.list && this.state.click != ""){
+      this.setState({ inputSub: item.split(',')[0].trim(), filteredData: [], click: "clicked" })
+    }
+    } else {
+      Alert.alert(null,"Item not here")
+    }
+  }
 
   renderElement(item, key){
     const { mainData, list, click } = this.state;
@@ -292,7 +361,7 @@ class Shop extends Component {
       <TouchableOpacity
           key={key}
           style={{ 
-          backgroundColor: this.state.indexes.includes(key) ? "#808080" : "green",
+          backgroundColor: this.checkRightMain(item,key) ? "#808080" : "green",
           width: width * 0.30,
           height: 35,
           borderRadius: 50,
@@ -300,8 +369,9 @@ class Shop extends Component {
           marginTop: Platform.OS === "ios" ? -10: -10,}}
           onPress={()=> { 
           this.sendIndex(key)
+          this.addSelectedMainCat(item,key)
           this.scrollView.scrollTo({x: 0, y: 0, animated: true}) 
-          this.setState({ list: mainData[item], click: "clicked", input: item })}}>
+          this.setState({ list: mainData[item], filteredData: mainData[item], click: "clicked", input: item })}}>
           <Text style={styles.viewBtnDetails}>View Category</Text>
       </TouchableOpacity> : 
       !this.checkRight(item.split(',')[0].trim(),key) ?
@@ -342,7 +412,7 @@ class Shop extends Component {
 
   render() {
     LogBox.ignoreAllLogs(true);
-    const { click, list, mainList, input, newCartList, indexesCountSub,  } = this.state;
+    const { click, list, mainList, input, newCartList, filteredData, inputSub } = this.state;
     console.log(list)
 
       return (
@@ -353,22 +423,31 @@ class Shop extends Component {
           <Loader loading={this.state.isLoading} />
 
               <View style={{ marginVertical: 5 }}>
+              {list && click != "" ? 
               <TextInput 
-              style={styles.optionContainer}
-              value={this.state.input}
-              onChangeText={(text)=> this.search(text)}
-              />
+                style={styles.optionContainer}
+                value={inputSub}
+                onChangeText={(text)=> this.handleSubInput(text)}
+                />
+               : 
+               <TextInput 
+                style={styles.optionContainer}
+                value={input}
+                onChangeText={(text)=> this.handleInput(text)}
+                />
+                  }
               <View style={{ bottom: 35, paddingStart: width * 0.16 }}>
               <SearchIcon/>
               </View>
 
-              <FlatList
+              {!list ?
+               <FlatList
                 data={this.state.filteredData}
                 style={{ backgroundColor: "#FFF" }}
                 keyExtractor={(item, index) => index.toString()}
                 ItemSeparatorComponent={this.itemSeparatorView}
                 renderItem={this.itemView}
-              />
+              /> : null}
 
               {!list ? 
               <Text style={styles.infoTextStyle}>Categories</Text> : <Text style={styles.infoTextStyle}>{input}</Text>}
@@ -382,7 +461,7 @@ class Shop extends Component {
                 />
 
               {list && click != "" ? 
-                <TouchableOpacity style={{ marginStart: 18, marginEnd: 0 }} onPress={()=> this.setState({ click: "", input: "", list: null  })}>
+                <TouchableOpacity style={{ marginStart: 18, marginEnd: 0 }} onPress={()=> this.setState({ click: "", input: "", inputSub: "", list: null, filteredData: []  })}>
                 <Text style={styles.backText}>{"<< "}Back to Categories</Text>
                 </TouchableOpacity>
                 : null}
@@ -410,7 +489,7 @@ class Shop extends Component {
                   />
                    :
                   <FlatList
-                   data={list}
+                   data={click != "" ? filteredData : list}
                    renderItem={({ item, index }) => (
                      this.renderElement(item, index)
                    )}

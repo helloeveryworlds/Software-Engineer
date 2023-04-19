@@ -63,12 +63,12 @@ const DrawerDesign = (props) => {
     return (
       <SafeAreaView style={{ flex: 1 }}>
         <StatusBar backgroundColor="#F4EFEF" barStyle="dark-content"/>
-        <TouchableOpacity style={{ alignSelf: "flex-end", marginEnd: 10, marginBottom: -10 }} onPress={()=> logOut()}>
+        {/* <TouchableOpacity style={{ alignSelf: "flex-end", marginEnd: 10, marginBottom: -10 }} onPress={()=> logOut()}>
           <Ionicons
             name={"log-out-outline"}
             color={"orange"}
             size={30}/>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         <Image
           source={require('../.././assets/logo_.png')} 
           resizeMode={'cover'}
