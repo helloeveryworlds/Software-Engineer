@@ -68,10 +68,12 @@ import {
       setIsLoading(true);
       let name = ""
       let URL = ""
-
+      let quantity = 0
+      
       cart.map((items) =>
         (
           name = items.name,
+          quantity = items.quantity,
           URL = items.image
         ))
       

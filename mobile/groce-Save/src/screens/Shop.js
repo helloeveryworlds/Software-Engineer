@@ -301,11 +301,11 @@ const Shopp = ({ route, navigation }) => {
           setInput(item)}}>
           <Text style={styles.viewBtnDetails}>View Category</Text>
       </TouchableOpacity> : 
-      !shop.some((value) => value.id == key) ?
+      !shop.some((value) => value.name == item.split(',')[0].trim()) ?
       <TouchableOpacity
         key={key}
         style={{
-          backgroundColor: shop.some((value) => value.id == key) ? "#1B6EBB60" : "#1B6EBB" ,
+          backgroundColor: shop.some((value) => value.name == item.split(',')[0].trim()) ? "#1B6EBB60" : "#1B6EBB" ,
           width: width * 0.30, 
           height: 35,
           borderRadius: 50,
@@ -320,7 +320,7 @@ const Shopp = ({ route, navigation }) => {
       <TouchableOpacity
       key={key}
       style={{
-        backgroundColor: shop.some((value) => value.id == key)  ? "#1B6EBB60" : "#1B6EBB" ,
+        backgroundColor: shop.some((value) => value.name == item.split(',')[0].trim())  ? "#1B6EBB60" : "#1B6EBB" ,
         width: width * 0.30, 
         height: 35,
         borderRadius: 50,
@@ -349,12 +349,14 @@ const Shopp = ({ route, navigation }) => {
               <TextInput 
                 style={styles.optionContainer}
                 value={inputSub}
+                placeholder={"Search SubCategories"}
                 onChangeText={(text)=> handleSubInput(text)}
                 />
                : 
                <TextInput 
                 style={styles.optionContainer}
                 value={input}
+                placeholder={"Search Categories"}
                 onChangeText={(text)=> handleInput(text)}
                 />
                   }
