@@ -18,6 +18,27 @@ public class OrderItemService {
     @Autowired
     private OrderItemDao orderItemDao;
 
+    public void deleteOrderItem(OrderItem orderItem) {
+        Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
+        String username = loggedInUser.getName();
+        User user = userService.getUser(username);
+        Cart cart = user.getCart();
+
+        // Find if an OrderItem with the given URL and name exists in the user's cart
+        OrderItem finalOrderItem = orderItem;
+        OrderItem existingOrderItem = cart.getOrderItemList().stream()
+                .filter(item -> item.getURL().equals(finalOrderItem.getURL()) && item.getName().equals(finalOrderItem.getName()))
+                .findFirst()
+                .orElse(null);
+
+        if (existingOrderItem != null) {
+            // Remove the existingOrderItem from the cart's orderItemList
+            cart.getOrderItemList().remove(existingOrderItem);
+            // Call the delete method in the OrderItemDao
+            orderItemDao.delete(existingOrderItem);
+        }
+    }
+
     public void saveOrderItem(OrderItem orderItem) {
         Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
         String username = loggedInUser.getName();

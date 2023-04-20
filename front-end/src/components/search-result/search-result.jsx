@@ -36,12 +36,7 @@ const SearchResult = () => {
       </div>
       <div className="search-result-body">
         <div className="search-result-heading">
-          <h4>
-            Search Result:{" "}
-            {queryArray.map((query) => {
-              return <span key={query}>{query} </span>;
-            })}
-          </h4>
+          <h4>Search Result:</h4>
           <hr />
         </div>
 
