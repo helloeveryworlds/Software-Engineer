@@ -18,6 +18,7 @@ import { FontAwesome } from "@expo/vector-icons";
 import groceSaveService, {
   setClientOnboardToken,
 } from "../service/GroceSaveService";
+import { BarPasswordStrengthDisplay } from 'react-native-password-strength-meter';
 import  Loader  from '../components/Loader';
 
 const { width, height } = Dimensions.get("window");
@@ -350,7 +351,7 @@ class SignUp extends Component {
               paddingTop = {8}
               paddingBottom = {8}
               paddingStart ={15}
-              paddingEnd= {22}
+              paddingEnd= {35}
               opacity= {1}
               placeholder={"Password"}
               placeholderTextColor={"#979797"}
@@ -385,6 +386,12 @@ class SignUp extends Component {
 
             </View>
           {this.state.pa == "empty" && this.state.password == "" && <Text style={styles.invalidPasswordTextStyle}>Password is empty</Text>}
+          {this.state.password != "" &&
+              <BarPasswordStrengthDisplay
+                  password={this.state.password}
+                  width= {width * 0.81}
+                  alignSelf={"center"}
+                />}
           </View>
 
           <View style={styles.emailTextStyleView}>
@@ -657,6 +664,7 @@ const styles = StyleSheet.create({
   passwordTextStyleView: {
     marginTop: Platform.OS === "ios" ? 15 : 15,
     alignSelf: "center",
+    alignItems: "center"
   },
   userNameTextStyleView: {
     marginTop: 1,

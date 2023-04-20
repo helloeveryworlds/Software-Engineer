@@ -578,6 +578,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     paddingVertical: 10,
     paddingLeft: Platform.OS === "ios" ? width * 0.2 : width * 0.2,
+    // fontFamily: "Nunito_700Bold",
     opacity: 1,
   },
   headerTextStyle_: {
@@ -586,6 +587,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     paddingLeft: 17,
     width: 100,
+    // fontFamily: "Nunito_700Bold",
     opacity: 1,
   },
   infoTextStyle: {
@@ -595,6 +597,7 @@ const styles = StyleSheet.create({
     paddingLeft: 25,
     textAlign: "left",
     fontWeight: "700",
+    // fontFamily: "Nunito_700Bold",
     opacity: 1,
   },
   scrollView: {

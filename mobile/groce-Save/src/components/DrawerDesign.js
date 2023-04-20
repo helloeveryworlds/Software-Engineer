@@ -83,11 +83,7 @@ const DrawerDesign = (props) => {
         </Text>}
         <DrawerContentScrollView {...props}>
           <DrawerItemList {...props} />
-          
-          <TouchableOpacity style={styles.customItem} onPress={()=> {
-            props.navigation.navigate("UserInfo")}}>
-            <UserIcon/>
-          </TouchableOpacity>
+        
         </DrawerContentScrollView>
 
         <Text style={{ fontSize: 16, textAlign: 'center', color: 'grey' }}>

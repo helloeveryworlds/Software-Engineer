@@ -108,7 +108,7 @@ import {
       Alert.alert(null,error.response.data)
     } else if(error.response.status == 404){
       setIsLoading(false);
-      Alert.alert('Info: ','User not found')
+      Alert.alert('Info: ','Not found')
     }
   };
 
