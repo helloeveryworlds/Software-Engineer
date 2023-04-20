@@ -24,13 +24,13 @@ class Navigation extends React.Component {
               <div />
               Shop
             </Link>
-            <Link className="nav-link" to="/signin">
-              <div />
-              Sign In
-            </Link>
             <Link className="nav-link" to="/cart">
               <div />
               Cart
+            </Link>
+            <Link className="nav-link" to="/signin">
+              <div />
+              Sign In
             </Link>
             <Link className="nav-link" to="/userinfo">
               <div />

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 
 import SearchBar from "../../components/search-bar/search-bar";
 
