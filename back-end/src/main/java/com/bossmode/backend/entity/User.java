@@ -1,21 +1,12 @@
 package com.bossmode.backend.entity;
 import javax.persistence.*;
 import java.io.Serializable;
-/*
-CREATE TABLE Persons IF NOT EXISTS(
-    PersonID int,
-    LastName varchar(255),
-    FirstName varchar(255),
-    Address varchar(255),
-    City varchar(255)
-);
-*/
+
 @Entity
 @Table(name = "user")
 
 public class User implements Serializable{
     private static final long serialVersionUID = 2652327633296064143L;
-
 
     @Id
     private String email;
@@ -54,7 +45,6 @@ public class User implements Serializable{
         return name;
     }
 
-
     public void setName(String name) {
         this.name = name;
     }
@@ -74,6 +64,7 @@ public class User implements Serializable{
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
+
     public Cart getCart() {
         return cart;
     }
