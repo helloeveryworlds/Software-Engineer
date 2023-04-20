@@ -24,6 +24,7 @@ const getCategoryItems = (categoryName, itemList) => {
 const ItemPage = () => {
   const [searchQuery, setSearchQuery] = React.useState("");
   const { category } = useParams();
+
   const { itemList } = useContext(ProductsContext);
   const categoryItems = getCategoryItems(category, itemList);
   const { categoryName, items } = categoryItems;
