@@ -12,7 +12,7 @@ import {
   } from "react-native";
   import React, { useRef, useState, useEffect } from "react";
   import { useDispatch, useSelector } from "react-redux";
-  import { addToCart, decrementQuantity, incrementQuantity, removeFromCart } from "../components/CartReducer";
+  import { addToCart, decrementQuantity, incrementQuantity, removeFromCart } from "../reducers/CartReducer";
   import  Loader  from '../components/Loader';
   import groceSaveItemService from "../service/GroceSaveItemService";
   import groceSaveService from ".././service/GroceSaveService";
@@ -145,7 +145,6 @@ import {
   console.log(list);
 
   const onSuccess = ( data ) => {
-    // const { bestByCategory } = data;
     setIsLoading(false);
     
     console.log("Dataaa", data.data[0].bestByCategory);
@@ -155,7 +154,6 @@ import {
       }else{
         setCartResponse(data.data[0].bestByCategory)
       Alert.alert(null, "Price compare option was successful,\nPlease view and checkout!", [{
-        // text: 'Ok', onPress: () => navigation.navigate("Shop")
       }])
     }
     }

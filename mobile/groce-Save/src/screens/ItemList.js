@@ -10,13 +10,10 @@ import {
   LogBox,
   Image,
   TextInput,
-  Linking,
   Alert,
   Platform
 } from "react-native";
-// import Toast from 'react-native-tiny-toast';
 import SearchIcon from "../../assets/svgs/search";
-import UserIcon from "../../assets/svgs/user";
 
 const { width, height } = Dimensions.get("window");
 
@@ -30,7 +27,6 @@ class ItemList extends Component {
 
   render() {
     LogBox.ignoreAllLogs(true);
-    const { name } = this.state;
 
       return (
         <ScrollView
@@ -70,8 +66,7 @@ class ItemList extends Component {
             </View>
             <TouchableOpacity
                 style={styles.itemBtn}
-                onPress={()=> 
-                    // Alert.alert(null,"Details of Banana") 
+                onPress={()=>  
                     this.props.navigation.navigate("PriceCompare")}>
                 <Text style={styles.itemBtnDetails}>Details</Text>
             </TouchableOpacity>
@@ -209,7 +204,6 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     paddingVertical: 10,
     paddingLeft: Platform.OS === "ios" ? width * 0.2 : width * 0.2,
-    // fontFamily: "Nunito_700Bold",
     opacity: 1,
   },
   headerTextStyle_: {
@@ -218,7 +212,6 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     paddingLeft: 17,
     width: 100,
-    // fontFamily: "Nunito_700Bold",
     opacity: 1,
   },
   infoTextStyle: {
@@ -228,7 +221,6 @@ const styles = StyleSheet.create({
     paddingLeft: 25,
     textAlign: "left",
     fontWeight: "700",
-    // fontFamily: "Nunito_700Bold",
     opacity: 1,
   },
   scrollView: {
