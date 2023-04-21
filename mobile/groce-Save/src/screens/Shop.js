@@ -14,16 +14,17 @@ import {
   Platform,
   Alert
 } from "react-native";
- import groceSaveItemService from "../service/GroceSaveItemService";
+import groceSaveService from ".././service/GroceSaveService";
+import groceSaveItemService from "../service/GroceSaveItemService";
 import SearchIcon from "../../assets/svgs/search";
 import  Loader  from '../components/Loader';
 import { FontAwesome5 } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
-import { addToShoppingList, removeFromShop } from "../components/ShopReducer";
+import { addToShoppingList, removeFromShop } from "../reducers/ShopReducer";
 
-const { width, height } = Dimensions.get("window");
+const { width } = Dimensions.get("window");
 
-const Shopp = ({ route, navigation }) => {
+const Shopp = ({ navigation }) => {
   const shop = useSelector((state) => state.shop.shop);
   const dispatch = useDispatch();
 
@@ -33,6 +34,7 @@ const Shopp = ({ route, navigation }) => {
   const [mainList, setMainList] = useState([]);
   const [mainData, setMainData] = useState({});
   const [newCartList, setNewCartList] = useState([]);
+  const [currentCartList, setCurrentCartList] = useState([]);
   const [selectedItemsList, setSelectedItemsList] = useState([]);
   const [selectedMainItemsList, setSelectedMainItemsList] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
@@ -90,13 +92,13 @@ const Shopp = ({ route, navigation }) => {
 
       });
     
-    }
+  }
 
     useEffect(() => {
         itemList()
+        getCurrentCart()
     },[]);
       
-
     const addItemToShop = (item) => {
         dispatch(addToShoppingList(item));
       };
@@ -151,135 +153,133 @@ const Shopp = ({ route, navigation }) => {
       return selectedMainItemsList.some(el => el.name === name)
     }
 
-  const search = (text) => {
-    if (text) {
-      const newData = mainList.filter(
-        function (item) {
-          const itemData = item
-            ? item.toUpperCase()
-            : ''.toUpperCase();
-          const textData = text.toUpperCase();
-          return itemData.indexOf(textData) > -1;
-      });
-      
-      setFilteredData(newData)
-      if(text != ""){
-        setInput(text);
-      }else {
-        setInput(text);
-      } 
+    const search = (text) => {
+      if (text) {
+        const newData = mainList.filter(
+          function (item) {
+            const itemData = item
+              ? item.toUpperCase()
+              : ''.toUpperCase();
+            const textData = text.toUpperCase();
+            return itemData.indexOf(textData) > -1;
+        });
+        
+        setFilteredData(newData)
+        if(text != ""){
+          setInput(text);
+        }else {
+          setInput(text);
+        } 
 
-    } else {
-      setFilteredData(mainList)
+      } else {
+        setFilteredData(mainList)
+      }
+    };
+
+    const searchSubCat = (text) => {
+      if (text) {
+        const newData = list.filter(
+          function (item) {
+            const itemData = item
+              ? item.toUpperCase()
+              : ''.toUpperCase();
+            const textData = text.toUpperCase();
+            return itemData.indexOf(textData) > -1;
+        });
+        
+        setFilteredData(newData)
+        if(text != ""){
+          setInputSub(text);
+        }else {
+          setInputSub(text);
+        } 
+
+      } else {
+          setFilteredData(list)
+      }
+    };
+
+    const itemView = ({item, index}) => {
+      return (
+        <View>
+        {list && click != "" ? 
+        <Text
+          style={styles.itemStyle}
+          onPress={() => getSubItem(item, index)}>
+          {item.split(',')[0].trim()}
+        </Text> :
+        <Text
+          style={styles.itemStyle}
+          onPress={() => getItem(item, index)}>
+          {item}
+        </Text>}
+        </View>
+      );
+    };
+
+    const itemSeparatorView = () => {
+      return (
+        <View
+          style={{
+            height: 0.5,
+            width: '100%',
+            backgroundColor: '#C8C8C8',
+          }}
+        />
+      );
+    };
+
+    const getItem = (item, index) => {
+      if(mainList.includes(item)){
+      itemList(item)
+      addSelectedMainCat(item, index)
+      setInput(item)
+      setFilteredData([])
+      setClick("clicked");
+      }else{
+        Alert.alert(null,"Catergory not here")
+      }
+    };
+
+    const getSubItem = (item, index) => {
+      if(list.includes(item)){
+      if(list && click != ""){
+          setInputSub(item.split(',')[0].trim())
+          setFilteredData([])
+          setClick("clicked");
+      }
+      } else {
+        Alert.alert(null,"Item not here")
+      }
     }
-  };
 
-  const searchSubCat = (text) => {
-    if (text) {
-      const newData = list.filter(
-        function (item) {
-          const itemData = item
-            ? item.toUpperCase()
-            : ''.toUpperCase();
-          const textData = text.toUpperCase();
-          return itemData.indexOf(textData) > -1;
-      });
-      
-      setFilteredData(newData)
-      if(text != ""){
-        setInputSub(text);
-      }else {
-        setInputSub(text);
-      } 
+    const renderElement = (item, key) => {
+      const selectedItems = []
 
-    } else {
-        setFilteredData(list)
-    }
-  };
-
-  const itemView = ({item, index}) => {
-    return (
-      <View>
-      {list && click != "" ? 
-      <Text
-        style={styles.itemStyle}
-        onPress={() => getSubItem(item, index)}>
-        {item.split(',')[0].trim()}
-      </Text> :
-      <Text
-        style={styles.itemStyle}
-        onPress={() => getItem(item, index)}>
-        {item}
-      </Text>}
-      </View>
-    );
-  };
-
-  const itemSeparatorView = () => {
-    return (
-      <View
-        style={{
-          height: 0.5,
-          width: '100%',
-          backgroundColor: '#C8C8C8',
-        }}
-      />
-    );
-  };
-
-  const getItem = (item, index) => {
-    if(mainList.includes(item)){
-    itemList(item)
-    addSelectedMainCat(item, index)
-    setInput(item)
-    setFilteredData([])
-    setClick("clicked");
-    }else{
-      Alert.alert(null,"Catergory not here")
-    }
-  };
-
-  const getSubItem = (item, index) => {
-    if(list.includes(item)){
-    if(list && click != ""){
-        setInputSub(item.split(',')[0].trim())
-        setFilteredData([])
-        setClick("clicked");
-    }
-    } else {
-      Alert.alert(null,"Item not here")
-    }
-  }
-
-  const renderElement = (item, key) => {
-    const selectedItems = []
-
-    selectedItems.push({ key })
-    return(
-      <View style={styles.itemContainer} key={key}>
-      
-      <View style={styles.details}>
-      <View style={{ backgroundColor: "#FFF" }}>
-      {click ? 
-        <Image 
-          source={{ uri: item.substring(item.indexOf(",") + 1) }}
-          style={{ width: width * 0.35, height: 100, borderRadius: 6, marginBottom: 3, alignSelf: "center" }}
-          key={key}
-          /> 
-          : 
-        <Image 
-          source={{url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsUhUsM8JuZ4MKDjlPNox4QuV81hnoccTW_A&usqp=CAU"}}//require("../../assets/grocery.png")}
-          style={{ width: 100, height: 100, alignSelf: "center" }}
-          />}
-      </View>
-      <View style={{ backgroundColor: "#F6F6F6", padding: 12, borderBottomLeftRadius: 10, borderBottomRightRadius: 10 }}>
-      {!list ? <Text key={key} style={styles.mainTextDetails}>{item.split(',')[0].trim()}</Text> : 
-      <Text key={key} style={styles.textDetails}>{item.split(',')[0].trim()} </Text>}
-      {!list ? <View style={styles.viewSpace}/> :
-      <View>
-      <Text style={styles.numDetails}>$0.71/LB</Text>
-      <Text style={styles.soldDetails}>Sold by <Text style={styles.locDetails}>Star Market</Text></Text>
-      </View>
+      selectedItems.push({ key })
+      return(
+        <View style={styles.itemContainer} key={key}>
+        
+        <View style={styles.details}>
+        <View style={{ backgroundColor: "#FFF" }}>
+        {click ? 
+          <Image 
+            source={{ uri: item.substring(item.indexOf(",") + 1) }}
+            style={{ width: width * 0.35, height: 100, borderRadius: 6, marginBottom: 3, alignSelf: "center" }}
+            key={key}
+            /> 
+            : 
+          <Image 
+            source={{url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsUhUsM8JuZ4MKDjlPNox4QuV81hnoccTW_A&usqp=CAU"}}//require("../../assets/grocery.png")}
+            style={{ width: 100, height: 100, alignSelf: "center" }}
+            />}
+        </View>
+        <View style={{ backgroundColor: "#F6F6F6", padding: 12, borderBottomLeftRadius: 10, borderBottomRightRadius: 10 }}>
+        {!list ? <Text key={key} style={styles.mainTextDetails}>{item.split(',')[0].trim()}</Text> : 
+        <Text key={key} style={styles.textDetails}>{item.split(',')[0].trim()} </Text>}
+        {!list ? <View style={styles.viewSpace}/> :
+        <View>
+        </View>
       }
 
       {!list ? 
@@ -310,7 +310,7 @@ const Shopp = ({ route, navigation }) => {
           height: 35,
           borderRadius: 50,
           alignSelf: "center",
-          marginTop: Platform.OS === "ios" ? -10: -10,
+          marginTop: Platform.OS === "ios" ? 15: 10,
         }}
         onPress={()=> { 
           addToCart(item, key)
@@ -325,7 +325,7 @@ const Shopp = ({ route, navigation }) => {
         height: 35,
         borderRadius: 50,
         alignSelf: "center",
-        marginTop: Platform.OS === "ios" ? -10: -10,
+        marginTop: Platform.OS === "ios" ? 15: 10,
       }}
       onPress={()=> removeFromCart(item, key)}>
     <Text style={styles.itemBtnDetails}>Remove</Text>
@@ -335,6 +335,47 @@ const Shopp = ({ route, navigation }) => {
       </View>
     );
   }
+
+  const getCurrentCart = () => {
+    const onSuccess = ( data ) => {
+      setIsLoading(false);
+      console.log("Donneeee",data)
+      if (data.status == 200){
+      console.log("Data data data data donneeee",data.data.orderItemList)
+      setCurrentCartList(data.data.orderItemList)
+        // Alert.alert(null, "Checkout successfully,\nIt's free so no need to pay!", [{
+        //   text: 'Ok', onPress: () => navigation.navigate("Shop")
+        // }])
+      }
+    };
+
+    const onFailure = (error) => {
+      console.log(error && error.response);
+        setIsLoading(false);
+      if(error.response == null){
+        setIsLoading(false);
+        Alert.alert('Info: ','Network Error')
+      }
+      if(error.response.status == 400){
+        setIsLoading(false);
+        Alert.alert('Info: ',"Something went wrong, Please try again")
+      } else if(error.response.status == 500){
+        setIsLoading(false);
+        Alert.alert('Info: ','Ensure your Network is Stable')
+      } else if(error.response.status == 401){
+        setIsLoading(false);
+        Alert.alert(null,error.response.data)
+      } else if(error.response.status == 404){
+        setIsLoading(false);
+        Alert.alert('Info: ','Not found')
+      }
+    };
+
+    groceSaveService
+      .get("/cart")
+      .then(onSuccess)
+      .catch(onFailure);
+    }
 
     LogBox.ignoreAllLogs(true);
       return (
@@ -399,7 +440,10 @@ const Shopp = ({ route, navigation }) => {
                 {shop.length != 0 && 
                 <View>
                   <View style={styles.best}>
-                  <Text style={{ fontSize: shop.length > 9 ? 9.5 : 12, paddingTop: shop.length > 9 ? 2 : 0, paddingHorizontal: shop.length > 9 ? 7 : 9,  }}>{shop.length}</Text>
+                  {currentCartList ? 
+                  <Text style={{ fontSize: currentCartList.length > 9 ? 9.5 : 12, paddingTop: currentCartList.length > 9 ? 2 : 1, paddingHorizontal: currentCartList.length > 9 ? 7.5 : 9,  }}>{currentCartList.length}</Text>
+                   : 
+                  <Text style={{ fontSize: shop.length > 9 ? 9.5 : 12, paddingTop: shop.length > 9 ? 2 : 1, paddingHorizontal: shop.length > 9 ? 7.5 : 9,  }}>{shop.length}</Text>}
                   </View>
                 <TouchableOpacity onPress={()=> toCart()}>
                   <FontAwesome5 

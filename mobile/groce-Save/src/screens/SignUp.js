@@ -6,7 +6,6 @@ import {
   TextInput,
   StyleSheet,
   ScrollView,
-  Image,
   StatusBar,
   Alert,
   Dimensions,
@@ -15,9 +14,7 @@ import {
   Platform
 } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
-import groceSaveService, {
-  setClientOnboardToken,
-} from "../service/GroceSaveService";
+import groceSaveService from "../service/GroceSaveService";
 import { BarPasswordStrengthDisplay } from 'react-native-password-strength-meter';
 import  Loader  from '../components/Loader';
 
@@ -35,7 +32,8 @@ const initialState = {
   zc: "",
   address: "",
   zipCode: "",
-  correct: "",
+  correct: false,
+  correctPassword: false,
   isLoading: false, 
   secureTextEntry: true,
 };
@@ -55,6 +53,7 @@ class SignUp extends Component {
   handlePassword = (password) => {  
     if(password != ""){
       this.setState({ password: password, pa: "" });
+      this.validatePassword(password);
     }else {
       this.setState({ password: password, pa: "empty" });
     } 
@@ -84,6 +83,19 @@ class SignUp extends Component {
     } 
   };
 
+  validatePassword = (password) => {
+    var regularExpression = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/;
+    if(regularExpression.test(password) === false){
+      this.setState({ password: password, correctPassword: false, pa: "empty" });
+      console.log("Password is Not Correct");
+      return false;
+    } else {
+      this.setState({ password: password, correctPassword: true, pa: "" });
+      console.log("Password is Correct");
+      return true;
+    }
+  }
+
   validate = (text) => {
     console.log(text);
     let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
@@ -98,59 +110,25 @@ class SignUp extends Component {
     }
   }
 
-  zipcodesList() {
-    this.setState({ isLoading: true });
-
-    const questList = [];
-    questList.push({
-      value: "Select zipcode",
-      label: "Select zipcode",
-    });
-    // groceSaveService
-    //     .get("/user/allzipcode")
-    //     .then(data => {
-    //       console.log("list: questList", data.data);
-    //       this.setState({ isLoading: false });
-    //       data.data.data.forEach(element => {
-    //         questList.push({
-    //           value: `${element.zipcodeName}`,
-    //           label: `${element.zipcodeName}`,
-    //         }); 
-    //     })
-        
-    //       this.setState({questList: questList});
-    //     })
-    //     .catch((err) => {
-    //       console.log(err)
-    //       this.setState({ isLoading: false, isAuthorized: true });
-  
-    //     });
-    }
-
-  componentDidMount() {
-    // this.zipcodesList()
-  }
-
   onPressSubmit() {
     this.setState({ isLoading: true });
 
-    const { email, password, userType, name, code, backendCode, zipCode, address} = this.state;
+    const { email, password, em, name, pa, zipCode, address, correctPassword, correct} = this.state;
     
     if(name == ""){
       this.setState({ isLoading: false, us: "empty" });
-      // Alert.alert(null,'Password field is empty')
     }else if(email == ""){
       this.setState({ isLoading: false, em: "empty" });
-      // Alert.alert(null,'Password field is empty')
+    }else if(email != "" && em == "empty" && !correct){
+        this.setState({ isLoading: false, em: "empty" });
     }else if(password == ""){
       this.setState({ isLoading: false, pa: "empty" });
-      // Alert.alert(null,'Password field is empty')
+    }else if(password != "" && pa == "empty" && !correctPassword){
+      this.setState({ isLoading: false, pa: "empty" });
     }else if(address == ""){
       this.setState({ isLoading: false, ad: "empty" });
-      // Alert.alert(null,'Password field is empty')
     }else if(zipCode == "Select zipcode"){
       this.setState({ isLoading: false, zc: "empty" });
-      // Alert.alert(null,'Password field is empty')
     }else{
       const payload = { email, password, address, name, zipCode };
       this.signUp(payload)
@@ -158,24 +136,19 @@ class SignUp extends Component {
   } 
 
   signUp(payload){
-  this.setState({ isLoading: false, isAuthorized: true });
+  this.setState({ isLoading: false });
 
   console.log(payload);
 
   const onSuccess = ( data ) => {
-    // insert into db...
-    // this._storeData(data);
-    ``
-    this.setState({ isLoading: false, isAuthorized: true });
+    this.setState({ isLoading: false });
     console.log("Dataaa",data);
     if (data.status == 201){
       Alert.alert(null, "Register successfully", [{
         text: 'Ok', onPress: () => this.props.navigation.navigate("SignIn")
-      }])
+      }]);
     }else{
-      // Alert.alert(null, "Register successfully", [{
-      //   text: 'Ok', onPress: () => this.props.navigation.navigate("SignIn")
-      // }])
+      Alert.alert(null, "Try Again");
     }
   };
 
@@ -197,7 +170,7 @@ class SignUp extends Component {
       Alert.alert(null,"Unauthorized")
     } else if(error.response.status == 404){
       this.setState({ isLoading: false });
-      Alert.alert('Info: ','User not found')
+      Alert.alert('Info: ','Not found')
     }
     this.setState({ errors: error.response.data, isLoading: false });
   };
@@ -209,39 +182,9 @@ class SignUp extends Component {
     .catch(onFailure);
   }
 
-  async removeItemValue(key) {
-    try {
-      await AsyncStorage.removeItem(key);
-      return true;
-    } catch (exception) {
-      return false;
-    }
-  }
-
-  _storeData = async (value) => {
-    await this.removeItemValue("userDetails");
-    try {
-      await AsyncStorage.setItem("userDetails", JSON.stringify(value));
-      // await AsyncStorage.setItem("checkedBoxBoolean", JSON.stringify(payload));
-
-    } catch (error) {
-    }
-    console.log("This is for storing data...", value);
-    // console.log("This is for storing data...", payload);
-
-  };
-
-  _retrieveData() {
-  }
-
-  componentWillMount = ()=> {
-    console.log("I don mount o");
-    // this._retrieveData();
-  }
-
-    updateSecureTextEntry(){
-      this.setState({ secureTextEntry: !this.state.secureTextEntry})
-    } 
+  updateSecureTextEntry(){
+    this.setState({ secureTextEntry: !this.state.secureTextEntry})
+  } 
 
   render() {
     LogBox.ignoreAllLogs(true);
@@ -292,7 +235,7 @@ class SignUp extends Component {
               onChangeText={this.handleName}
             />
             </View>
-            {this.state.us == "empty" && this.state.name == "" && <Text style={styles.invalidPasswordTextStyle}>Name is empty</Text>}
+            {this.state.us == "empty" && this.state.name == "" && <Text style={styles.invalidEmailTextStyle}>Name is empty</Text>}
           </View>
           
           <View style={styles.emailTextStyleView}>
@@ -329,8 +272,8 @@ class SignUp extends Component {
               onChangeText={this.handleEmail}
             />
             </View>
-            {!this.state.correct && this.state.email != "" && <Text style={styles.invalidPasswordTextStyle}>E-mail is not correct</Text>}
-            {this.state.em == "empty" && this.state.email == "" && <Text style={styles.invalidPasswordTextStyle}>E-mail is empty</Text>}
+            {!this.state.correct && this.state.email != "" && <Text style={styles.invalidEmailTextStyle}>E-mail is not correct</Text>}
+            {this.state.em == "empty" && this.state.email == "" && <Text style={styles.invalidEmailTextStyle}>E-mail is empty</Text>}
           </View>
 
           <View style={styles.passwordTextStyleView}>
@@ -385,16 +328,27 @@ class SignUp extends Component {
             </View>
 
             </View>
-          {this.state.pa == "empty" && this.state.password == "" && <Text style={styles.invalidPasswordTextStyle}>Password is empty</Text>}
-          {this.state.password != "" &&
-              <BarPasswordStrengthDisplay
-                  password={this.state.password}
-                  width= {width * 0.81}
-                  alignSelf={"center"}
-                />}
-          </View>
+            {!this.state.correctPassword && this.state.pa == "empty" && this.state.password != "" && <Text style={styles.invalidPasswordTextStyle}>Password is not strong</Text>}
+            {this.state.pa == "empty" && this.state.password == "" && <Text style={styles.invalidEmailTextStyle}>Password is empty</Text>}
 
-          <View style={styles.emailTextStyleView}>
+            {!this.state.correctPassword && this.state.pa == "empty" && this.state.password != "" &&
+                <BarPasswordStrengthDisplay
+                    password={this.state.password}
+                    width= {width * 0.81}
+                    alignSelf={"center"}
+                    marginTop={5}
+                  />}
+            {!this.state.correctPassword && this.state.pa == "empty" &&
+              <View style={{ backgroundColor: "#FFFFFF97", marginTop: 16, width: width * 0.81 }}>
+                <Text style={styles.invalidPasswordInfoStyle}>Password must contain a capital letter from A-Z</Text>
+                <Text style={styles.invalidPasswordInfoStyle}>Password must contain small letters from a-z</Text>
+                <Text style={styles.invalidPasswordInfoStyle}>Password must contain a number from 0-9</Text>
+                <Text style={styles.invalidPasswordInfoStyle}>Password must be greater than 5 characters</Text>
+                <Text style={styles.invalidPasswordInfoStyle}>Password must contain a symbol from !, @, #, $, %, ^, &, *</Text>
+              </View>}
+            </View>
+
+          <View style={styles.passwordTextStyleView}>
             <View style={{
               width: width * 0.81,
               height: 54,
@@ -444,7 +398,6 @@ class SignUp extends Component {
               borderColor={this.state.zc == "empty" ? 'red' : "transparent"}
               width = {width * 0.81}
               height= {56}
-              // borderRadius = {10}
               textAlign = "left"
               paddingTop = {8}
               paddingBottom ={8}
@@ -463,7 +416,7 @@ class SignUp extends Component {
               onChangeText={this.handleZipcode}
             />
             </View>
-            {this.state.zc == "empty" && this.state.zipCode == "" && <Text style={styles.invalidPasswordTextStyle}>Zip code is empty</Text>}
+            {this.state.zc == "empty" && this.state.zipCode == "" && <Text style={styles.invalidEmailTextStyle}>Zip code is empty</Text>}
           </View>
 
           <TouchableOpacity
@@ -501,7 +454,6 @@ const styles = StyleSheet.create({
   },
   image: {
     flex: 1,
-    // width: width,
     height: Platform.OS === "ios" ? height : height
   },
   headerContainer: {
@@ -519,7 +471,6 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     paddingVertical: 10,
     paddingLeft: Platform.OS === "ios" ? width * 0.2 : width * 0.2,
-    // fontFamily: "Nunito_700Bold",
     opacity: 1,
   },
   headerTextStyle_: {
@@ -527,9 +478,7 @@ const styles = StyleSheet.create({
     color: "black",
     alignSelf: "center",
     paddingEnd: 10,
-    // width: 100,
     paddingVertical: 10,
-    // fontFamily: "Nunito_700Bold",
     opacity: 1,
   },
   displayTextStyle: {
@@ -541,7 +490,6 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     marginTop: 30,
     marginBottom: 30,
-    // fontFamily: "Nunito_700Bold",
     opacity: 1,
   },
   emailInput: {
@@ -603,7 +551,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     alignSelf: "center",
     width: width * 0.92,
-    // height: height * 0.718,
     padding: 15,
     color: "#ffffff",
     borderRadius: 6,
@@ -645,7 +592,6 @@ const styles = StyleSheet.create({
     paddingLeft: 5,
     opacity: 1,
     fontWeight: "400",
-    // this.state.us == "empty" ? 'pink' : 
   },
   welcomeTextStyle: {
     fontSize: 20,
@@ -659,7 +605,6 @@ const styles = StyleSheet.create({
   emailTextStyleView: {
     marginTop: Platform.OS === "ios" ? 15 : 15,
     alignSelf: "center",
-    marginBottom: 15,
   },
   passwordTextStyleView: {
     marginTop: Platform.OS === "ios" ? 15 : 15,
@@ -697,16 +642,36 @@ const styles = StyleSheet.create({
     opacity: 1,
     fontWeight: "400",
   },
-  invalidPasswordTextStyle: {
+  invalidEmailTextStyle: {
     fontSize: 12,
     color: "#FF0000",
-    fontFamily: "Nunito_400Regular",
+    backgroundColor: "pink",
     alignSelf: "flex-start",
     paddingLeft: 5,
     textAlign: "left",
     opacity: 1,
     top: 5,
-    // marginBottom: 10
+  },
+  invalidPasswordTextStyle: {
+    fontSize: 12,
+    color: "#FF0000",
+    backgroundColor: "pink",
+    alignSelf: "flex-start",
+    paddingLeft: 5,
+    marginLeft: 10,
+    textAlign: "left",
+    opacity: 1,
+    top: 5,
+  },
+  invalidPasswordInfoStyle: {
+    fontSize: 12,
+    color: "#FF0000",
+    backgroundColor: "pink",
+    alignSelf: "flex-start",
+    paddingLeft: 5,
+    marginBottom: 5,
+    textAlign: "left",
+    opacity: 1,
   },
   invalidDropdownTextStyle: {
     fontSize: 12,

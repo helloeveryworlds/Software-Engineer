@@ -46,7 +46,14 @@ export const CartContext = createContext({
 });
 
 export const CartProvider = ({ children }) => {
-  const [cartItems, setCartItems] = useState([]);
+  const [cartItems, setCartItems] = useState([
+    {
+      name: "Carrot",
+      quantity: 1,
+      imageUrl:
+        "https://images.albertsons-media.com/is/image/ABS/Meat-Seafood-Large-Tile-Combo2-552x276",
+    },
+  ]);
   const [cartCount, setCartCount] = useState(0);
 
   useEffect(() => {

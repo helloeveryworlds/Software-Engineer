@@ -12,7 +12,7 @@ import {
   } from "react-native";
   import React, { useRef, useState, useEffect } from "react";
   import { useDispatch, useSelector } from "react-redux";
-  import { addToCart, decrementQuantity, incrementQuantity, removeFromCart } from "../components/CartReducer";
+  import { addToCart, decrementQuantity, incrementQuantity, removeFromCart } from "../reducers/CartReducer";
   import  Loader  from '../components/Loader';
   import groceSaveItemService from "../service/GroceSaveItemService";
   import groceSaveService from ".././service/GroceSaveService";
@@ -46,18 +46,21 @@ import {
     });
     
     const addItemToCart = (item) => {
+      submitOrderItems(item);
       dispatch(addToCart(item));
     };
     const removeItemFromCart = (item) => {
       dispatch(removeFromCart(item));
     };
     const increaseQuantity = (item) => {
+      submitOrderItems(item);
       dispatch(incrementQuantity(item));
     }
     const decreaseQuantity = (item) => {
       if(item.quantity == 1){
         dispatch(removeFromCart(item));
       }else{
+        // submitOrderItems(item);
         dispatch(decrementQuantity(item));
       }
     }
@@ -67,62 +70,62 @@ import {
       
       setIsLoading(true);
       let name = ""
-      let URL = ""
+      let url = ""
       let quantity = 0
       
       cart.map((items) =>
         (
           name = items.name,
           quantity = items.quantity,
-          URL = items.image
+          url = items.image
         ))
       
       const payload = {
         name,
-        URL
+        url
       }
       
-  const onSuccess = ( data ) => {
-    setIsLoading(false);
-    console.log("Donneeee",data)
-    if (data.status == 200){
-      Alert.alert(null, "Checkout successfully,\nIt's free so no need to pay!", [{
-        text: 'Ok', onPress: () => navigation.navigate("Shop")
-      }])
-    }
-  };
+    const onSuccess = ( data ) => {
+      setIsLoading(false);
+      console.log("Donneeee",data)
+      if (data.status == 200){
+        Alert.alert(null, "Checkout successfully,\nIt's free so no need to pay!", [{
+          text: 'Ok', onPress: () => navigation.navigate("Shop")
+        }])
+      }
+    };
 
-  const onFailure = (error) => {
-    console.log(error && error.response);
-      setIsLoading(false);
-    if(error.response == null){
-      setIsLoading(false);
-      Alert.alert('Info: ','Network Error')
-    }
-    if(error.response.status == 400){
-      setIsLoading(false);
-      Alert.alert('Info: ',error.response.data.non_field_errors[0])
-    } else if(error.response.status == 500){
-      setIsLoading(false);
-      Alert.alert('Info: ','Ensure your Network is Stable')
-    } else if(error.response.status == 401){
-      setIsLoading(false);
-      Alert.alert(null,error.response.data)
-    } else if(error.response.status == 404){
-      setIsLoading(false);
-      Alert.alert('Info: ','Not found')
-    }
-  };
+    const onFailure = (error) => {
+      console.log(error && error.response);
+        setIsLoading(false);
+      if(error.response == null){
+        setIsLoading(false);
+        Alert.alert('Info: ','Network Error')
+      }
+      if(error.response.status == 400){
+        setIsLoading(false);
+        Alert.alert('Info: ',"Something went wrong, Please try again")
+      } else if(error.response.status == 500){
+        setIsLoading(false);
+        Alert.alert('Info: ','Ensure your Network is Stable')
+      } else if(error.response.status == 401){
+        setIsLoading(false);
+        Alert.alert(null,error.response.data)
+      } else if(error.response.status == 404){
+        setIsLoading(false);
+        Alert.alert('Info: ','Not found')
+      }
+    };
 
-  groceSaveService
-    .post("/order", payload)
-    .then(onSuccess)
-    .catch(onFailure);
-    } else {
-      Alert.alert(null, "Please sign in to Checkout successfully!", [{
-        text: 'Ok', onPress: () => navigation.navigate("SignIn")
-      }])
-    }
+    groceSaveService
+      .get("/checkout")
+      .then(onSuccess)
+      .catch(onFailure);
+      } else {
+        Alert.alert(null, "Please sign in to Checkout successfully!", [{
+          text: 'Ok', onPress: () => navigation.navigate("SignIn")
+        }])
+      }
     }
 
     const submitComparePrice = () => {
@@ -145,7 +148,6 @@ import {
   console.log(list);
 
   const onSuccess = ( data ) => {
-    // const { bestByCategory } = data;
     setIsLoading(false);
     
     console.log("Dataaa", data.data[0].bestByCategory);
@@ -155,7 +157,6 @@ import {
       }else{
         setCartResponse(data.data[0].bestByCategory)
       Alert.alert(null, "Price compare option was successful,\nPlease view and checkout!", [{
-        // text: 'Ok', onPress: () => navigation.navigate("Shop")
       }])
     }
     }
@@ -170,7 +171,7 @@ import {
     }
     if(error.response.status == 400){
       setIsLoading(false);
-      Alert.alert('Info: ',error.response.data.non_field_errors[0])
+      Alert.alert('Info: ',"Something went wrong, Please try again")
     } else if(error.response.status == 500){
       setIsLoading(false);
       Alert.alert('Info: ','Ensure your Network is Stable')
@@ -189,6 +190,62 @@ import {
     .catch(onFailure);
     } else {
       Alert.alert(null, "Please sign in to continue!", [{
+        text: 'Ok', onPress: () => navigation.navigate("SignIn")
+      }])
+    }
+    }
+
+    const submitOrderItems = (items) => {
+      if(Object.keys(userData).length != 0){
+      setIsLoading(true);
+      let name = items.name
+      let quantity = +items.quantity
+      let url = items.image
+      
+      const payload = {
+        name,
+        quantity,
+        url
+      }
+      
+  const onSuccess = ( data ) => {
+    setIsLoading(false);
+    console.log("Donneeee order........",data)
+    if (data.status == 201){
+      // Alert.alert(null, "Order successfully,\nNext to Checkout!", [{
+      //   text: 'Ok', onPress: () => {}
+      // }])
+    }
+  };
+
+  const onFailure = (error) => {
+    console.log(error && error.response);
+      setIsLoading(false);
+    if(error.response == null){
+      setIsLoading(false);
+      Alert.alert('Info: ','Network Error')
+    }
+    if(error.response.status == 400){
+      setIsLoading(false);
+      Alert.alert('Info: ',"Something went wrong, Please try again")
+    } else if(error.response.status == 500){
+      setIsLoading(false);
+      Alert.alert('Info: ','Ensure your Network is Stable')
+    } else if(error.response.status == 401){
+      setIsLoading(false);
+      Alert.alert(null,error.response.data)
+    } else if(error.response.status == 404){
+      setIsLoading(false);
+      Alert.alert('Info: ','Not found')
+    }
+  };
+
+  groceSaveService
+    .post("/order", payload)
+    .then(onSuccess)
+    .catch(onFailure);
+    } else {
+      Alert.alert(null, "Please sign in to Checkout successfully!", [{
         text: 'Ok', onPress: () => navigation.navigate("SignIn")
       }])
     }

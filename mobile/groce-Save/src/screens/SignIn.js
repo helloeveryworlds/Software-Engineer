@@ -28,7 +28,8 @@ const initialState = {
   pa: "",
   token: "",
   embu: "",
-  correct: "",
+  correct: false,
+  correctPassword: false,
   checked: false,
   checkedDB: false,
   isAuthorized: false, 
@@ -55,10 +56,24 @@ class SignIn extends React.Component {
   handlePassword = (password) => {  
     if(password != ""){
       this.setState({ password: password, pa: "" });
+      this.validatePassword(password);
     }else {
       this.setState({ password: password, pa: "empty" });
     } 
   };
+
+  validatePassword = (password) => {
+    var regularExpression = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/;
+    if(regularExpression.test(password) === false){
+      this.setState({ password: password, correctPassword: false, pa: "empty" });
+      console.log("Password is Not Correct");
+      return false;
+    } else {
+      this.setState({ password: password, correctPassword: true, pa: "" });
+      console.log("Password is Correct");
+      return true;
+    }
+  }
 
   validate = (text) => {
     console.log(text);
@@ -77,13 +92,15 @@ class SignIn extends React.Component {
   onPressLogin() {
     this.setState({ isLoading: true });
 
-    const { username, password, embu, correct } = this.state;
+    const { username, password, embu, pa, correct, correctPassword } = this.state;
     
     if(username == ""){
       this.setState({ isLoading: false, us: "empty" });
-    }else if(username != "" && embu == "empty"){
+    }else if(username != "" && embu == "empty" && !correct){
       this.setState({ isLoading: false, embu: "empty" });
     }else if(password == ""){
+      this.setState({ isLoading: false, pa: "empty" });
+    }else if(password != "" && pa == "empty" && !correctPassword){
       this.setState({ isLoading: false, pa: "empty" });
     }else{
     const payload = { username, password };
@@ -127,7 +144,7 @@ class SignIn extends React.Component {
           Alert.alert(null,"Unauthorized")
         } else if(error.response.status == 404){
           this.setState({ isLoading: false });
-          Alert.alert('Info: ','User not found')
+          Alert.alert('Info: ','Not found')
         }
         this.setState({ errors: error.response.data, isLoading: false });
       };
@@ -171,8 +188,7 @@ class SignIn extends React.Component {
     return (
       <ImageBackground
         source={require("./../../assets/splashh.png")}
-        style={styles.image}
-      >
+        style={styles.image}>
         <ScrollView
           style={styles.scrollView}
           keyboardShouldPersistTaps="always">
@@ -214,8 +230,8 @@ class SignIn extends React.Component {
                 onChangeText={this.handleUsername}
               />
               </View>
-              {this.state.us == "empty" && this.state.username == "" && <Text style={styles.invalidPasswordTextStyle}>E-mail is empty</Text>}
-              {!this.state.correct && this.state.username != "" && <Text style={styles.invalidPasswordTextStyle}>E-mail is not correct</Text>}
+              {this.state.us == "empty" && this.state.username == "" && <Text style={styles.invalidEmailTextStyle}>E-mail is empty</Text>}
+              {!this.state.correct && this.state.username != "" && <Text style={styles.invalidEmailTextStyle}>E-mail is not correct</Text>}
             </View>
             
             <View style={styles.passwordTextStyleView}>
@@ -247,37 +263,49 @@ class SignIn extends React.Component {
                 secureTextEntry={this.state.secureTextEntry?true:false}
                 onChangeText={this.handlePassword}
               />
+
               {this.state.password ? 
               <TouchableOpacity 
               onPress={this.updateSecureTextEntry.bind(this)}>
                 {this.state.secureTextEntry ?
                 <View
                 style={{alignSelf: "flex-end", right: 33, marginTop: 20, }}>
-                <FontAwesome
-                 name="eye"/>
+                  <FontAwesome
+                    name="eye"
+                    size={16}/>
                 </View>
                  :
                  <View
                  style={{alignSelf: "flex-end", right: 33, marginTop: 20, }}>
                   <FontAwesome
-                 name="eye-slash"/>
+                    name="eye-slash"
+                    size={16}/>
                  </View>
                 }
                 
               </TouchableOpacity> : null} 
               </View>
               </View>
-              {this.state.password == "12345" && this.state.pa == "empty" && <Text style={styles.invalidPasswordTextStyle}>Invalid Password</Text>}
-              {this.state.pa == "empty" && this.state.password == "" && <Text style={styles.invalidPasswordTextStyle}>Password is empty</Text>}
-              {this.state.password != "" &&
+              {!this.state.correctPassword && this.state.pa == "empty" && this.state.password != "" && <Text style={styles.invalidPasswordTextStyle}>Password is not strong</Text>}
+              {this.state.pa == "empty" && this.state.password == "" && <Text style={styles.invalidEmailTextStyle}>Password is empty</Text>}
+              {!this.state.correctPassword && this.state.pa == "empty" && this.state.password != "" &&
               <BarPasswordStrengthDisplay
                   password={this.state.password}
                   width= {width * 0.81}
                   alignSelf={"center"}
+                  marginTop={5}
                 />}
+
+              {!this.state.correctPassword && this.state.pa == "empty" &&
+              <View style={{ backgroundColor: "#FFFFFF97", marginTop: 16, width: width * 0.81 }}>
+                <Text style={styles.invalidPasswordInfoStyle}>Password must contain a capital letter from A-Z</Text>
+                <Text style={styles.invalidPasswordInfoStyle}>Password must contain small letters from a-z</Text>
+                <Text style={styles.invalidPasswordInfoStyle}>Password must contain a number from 0-9</Text>
+                <Text style={styles.invalidPasswordInfoStyle}>Password must be greater than 5 characters</Text>
+                <Text style={styles.invalidPasswordInfoStyle}>Password must contain a symbol from !, @, #, $, %, ^, &, *</Text>
+              </View>}
               </View>
             
-
             <TouchableOpacity
                 onPress={()=> this.onPressLogin()}
                 style={{ alignSelf: "center", width: width * 0.81, height: 40, backgroundColor: "#52A860", marginBottom: 5, opacity: 1, marginTop: 60,  }}>
@@ -290,7 +318,6 @@ class SignIn extends React.Component {
               <Text style={styles.forgetTextStyle}>Forgot your Password? </Text>
               </TouchableOpacity>
 
-            
             <View flexDirection="row" alignSelf="center" marginTop={10} marginBottom={10}>
             <Text style={styles.dontHaveAccountTextStyle}>Other issues{" "}</Text>
             <TouchableOpacity
@@ -300,7 +327,6 @@ class SignIn extends React.Component {
             <Text style={styles.dontHaveAccountMintTextStyle}>with Sign up</Text>
             </TouchableOpacity>
             </View>
-
             </View>
         </ScrollView>
      </ImageBackground>
@@ -386,14 +412,36 @@ const styles = StyleSheet.create({
     opacity: 1,
     fontWeight: "400",
   },
-  invalidPasswordTextStyle: {
+  invalidEmailTextStyle: {
     fontSize: 12,
     color: "#FF0000",
+    backgroundColor: "pink",
     alignSelf: "flex-start",
     paddingLeft: 5,
     textAlign: "left",
     opacity: 1,
     top: 5,
+  },
+  invalidPasswordTextStyle: {
+    fontSize: 12,
+    color: "#FF0000",
+    backgroundColor: "pink",
+    alignSelf: "flex-start",
+    paddingLeft: 5,
+    marginLeft: 10,
+    textAlign: "left",
+    opacity: 1,
+    top: 5,
+  },
+  invalidPasswordInfoStyle: {
+    fontSize: 12,
+    color: "#FF0000",
+    backgroundColor: "pink",
+    alignSelf: "flex-start",
+    paddingLeft: 5,
+    marginBottom: 5,
+    textAlign: "left",
+    opacity: 1,
   },
   linearGradient: {
     flex: 1,
