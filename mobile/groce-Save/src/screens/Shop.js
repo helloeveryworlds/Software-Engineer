@@ -14,7 +14,8 @@ import {
   Platform,
   Alert
 } from "react-native";
- import groceSaveItemService from "../service/GroceSaveItemService";
+import groceSaveService from ".././service/GroceSaveService";
+import groceSaveItemService from "../service/GroceSaveItemService";
 import SearchIcon from "../../assets/svgs/search";
 import  Loader  from '../components/Loader';
 import { FontAwesome5 } from "@expo/vector-icons";
@@ -33,6 +34,7 @@ const Shopp = ({ navigation }) => {
   const [mainList, setMainList] = useState([]);
   const [mainData, setMainData] = useState({});
   const [newCartList, setNewCartList] = useState([]);
+  const [currentCartList, setCurrentCartList] = useState([]);
   const [selectedItemsList, setSelectedItemsList] = useState([]);
   const [selectedMainItemsList, setSelectedMainItemsList] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
@@ -94,6 +96,7 @@ const Shopp = ({ navigation }) => {
 
     useEffect(() => {
         itemList()
+        getCurrentCart()
     },[]);
       
     const addItemToShop = (item) => {
@@ -333,6 +336,47 @@ const Shopp = ({ navigation }) => {
     );
   }
 
+  const getCurrentCart = () => {
+    const onSuccess = ( data ) => {
+      setIsLoading(false);
+      console.log("Donneeee",data)
+      if (data.status == 200){
+      console.log("Data data data data donneeee",data.data.orderItemList)
+      setCurrentCartList(data.data.orderItemList)
+        // Alert.alert(null, "Checkout successfully,\nIt's free so no need to pay!", [{
+        //   text: 'Ok', onPress: () => navigation.navigate("Shop")
+        // }])
+      }
+    };
+
+    const onFailure = (error) => {
+      console.log(error && error.response);
+        setIsLoading(false);
+      if(error.response == null){
+        setIsLoading(false);
+        Alert.alert('Info: ','Network Error')
+      }
+      if(error.response.status == 400){
+        setIsLoading(false);
+        Alert.alert('Info: ',"Something went wrong, Please try again")
+      } else if(error.response.status == 500){
+        setIsLoading(false);
+        Alert.alert('Info: ','Ensure your Network is Stable')
+      } else if(error.response.status == 401){
+        setIsLoading(false);
+        Alert.alert(null,error.response.data)
+      } else if(error.response.status == 404){
+        setIsLoading(false);
+        Alert.alert('Info: ','Not found')
+      }
+    };
+
+    groceSaveService
+      .get("/cart")
+      .then(onSuccess)
+      .catch(onFailure);
+    }
+
     LogBox.ignoreAllLogs(true);
       return (
         <ScrollView
@@ -396,7 +440,10 @@ const Shopp = ({ navigation }) => {
                 {shop.length != 0 && 
                 <View>
                   <View style={styles.best}>
-                  <Text style={{ fontSize: shop.length > 9 ? 9.5 : 12, paddingTop: shop.length > 9 ? 2 : 0, paddingHorizontal: shop.length > 9 ? 7 : 9,  }}>{shop.length}</Text>
+                  {currentCartList ? 
+                  <Text style={{ fontSize: currentCartList.length > 9 ? 9.5 : 12, paddingTop: currentCartList.length > 9 ? 2 : 1, paddingHorizontal: currentCartList.length > 9 ? 7.5 : 9,  }}>{currentCartList.length}</Text>
+                   : 
+                  <Text style={{ fontSize: shop.length > 9 ? 9.5 : 12, paddingTop: shop.length > 9 ? 2 : 1, paddingHorizontal: shop.length > 9 ? 7.5 : 9,  }}>{shop.length}</Text>}
                   </View>
                 <TouchableOpacity onPress={()=> toCart()}>
                   <FontAwesome5 

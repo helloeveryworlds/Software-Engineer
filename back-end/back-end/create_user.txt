@@ -1,0 +1,8 @@
+CREATE TABLE users(
+   email VARCHAR(50) PRIMARY KEY,
+   name VARCHAR(20),
+   password VARCHAR(50),
+   address VARCHAR(60),
+   zipcode INT,
+   enable BOOLEAN
+);

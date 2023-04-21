@@ -144,7 +144,7 @@ class SignIn extends React.Component {
           Alert.alert(null,"Unauthorized")
         } else if(error.response.status == 404){
           this.setState({ isLoading: false });
-          Alert.alert('Info: ','User not found')
+          Alert.alert('Info: ','Not found')
         }
         this.setState({ errors: error.response.data, isLoading: false });
       };
