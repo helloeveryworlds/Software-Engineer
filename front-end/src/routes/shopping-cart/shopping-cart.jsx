@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
 import axios from "axios";
 import { CartContext } from "../../contexts/cart.context";
+import { CartXFill } from "react-bootstrap-icons";
 
 import "./shopping-cart.css";
 
@@ -74,7 +75,8 @@ const ShoppingCart = () => {
                 <div className="btn" onClick={() => removeItemFromCart(item)}>
                   -
                 </div>
-                <div onClick={() => clearItemFromCart(item)}>Remove
+                <div onClick={() => clearItemFromCart(item)}>
+                  <CartXFill className="remove-item"></CartXFill>
 
                 </div>
               </div>
