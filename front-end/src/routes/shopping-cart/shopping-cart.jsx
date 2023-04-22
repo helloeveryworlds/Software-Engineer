@@ -1,6 +1,5 @@
 import React, { useContext, useState } from "react";
 import axios from "axios";
-
 import { CartContext } from "../../contexts/cart.context";
 
 import "./shopping-cart.css";
@@ -56,33 +55,44 @@ const ShoppingCart = () => {
   // ]
 
   return (
-    <div className="cart-container">
-      {cartItems.map((item) => {
-        return (
-          <div key={item.name}>
-            <p>{item.name}</p>
-            <p>{item.imageUrl}</p>
-            <div className="counter">
-              <p className="btn" onClick={() => addItemToCart(item)}>
-                +
-              </p>
+    <div className="shopping-cart-container">
+      <div className="shopping-cart-heading">
+        <h4>Shopping Cart</h4>
+        <hr />
+      </div>
+      <div className="shopping-cart-body">
+        {cartItems.map((item) => {
+          return (
+            <div className="shopping-cart-item" key={item.name}>
+              <img className="shopping-image-box" src={item.imageUrl} alt={item.name} />
+              <div className="shopping-cart-item-name">{item.name}</div>
+              <div className="shopping-cart-counter">
+                <div className="btn" onClick={() => addItemToCart(item)}>
+                  +
+                </div>
+                <div>{item.quantity}</div>
+                <div className="btn" onClick={() => removeItemFromCart(item)}>
+                  -
+                </div>
+                <div onClick={() => clearItemFromCart(item)}>Remove
 
-              <p>{item.quantity}</p>
-              <p className="btn" onClick={() => removeItemFromCart(item)}>
-                -
-              </p>
-              <p onClick={() => clearItemFromCart(item)}>Remove</p>
+                </div>
+              </div>
             </div>
-          </div>
-        );
-      })}
-      <div
-        className="cart-checkout"
-        onClick={() => collectComparePriceData(cartItems, "02134")}
-      >
-        Compare Price
+          );
+        })}
+        <div
+          className="shopping-cart-checkout"
+          onClick={() => collectComparePriceData(cartItems, "02134")}
+        >
+          Compare Price
+        </div>
+
       </div>
     </div>
+
+
+
   );
 };
 
