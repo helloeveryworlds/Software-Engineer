@@ -10,8 +10,6 @@ const ShoppingCart = () => {
     useContext(CartContext);
   const [comparePrice, setComparePrice] = useState([]);
 
-  console.log(cartItems);
-
   const collectComparePriceData = (cartItems, zipCode) => {
     let data = [];
 
@@ -38,7 +36,7 @@ const ShoppingCart = () => {
           },
         }
       );
-      console.log(response.data);
+      // console.log(response.data);
     } catch (error) {
       console.log(error);
     }
@@ -59,13 +57,19 @@ const ShoppingCart = () => {
     <div className="shopping-cart-container">
       <div className="shopping-cart-heading">
         <h4>Shopping Cart</h4>
+        <p>Remove all</p>
+      </div>
+      <div className="shopping-cart-line">
         <hr />
       </div>
       <div className="shopping-cart-body">
         {cartItems.map((item) => {
           return (
             <div className="shopping-cart-item" key={item.name}>
-              <img className="shopping-image-box" src={item.imageUrl} alt={item.name} />
+              <div className="shopping-cart-image">
+                <img src={item.imageUrl} alt={item.name} />
+              </div>
+
               <div className="shopping-cart-item-name">{item.name}</div>
               <div className="shopping-cart-counter">
                 <div className="btn" onClick={() => addItemToCart(item)}>
@@ -75,10 +79,12 @@ const ShoppingCart = () => {
                 <div className="btn" onClick={() => removeItemFromCart(item)}>
                   -
                 </div>
-                <div onClick={() => clearItemFromCart(item)}>
-                  <CartXFill className="remove-item"></CartXFill>
-
-                </div>
+              </div>
+              <div
+                className="remove-item"
+                onClick={() => clearItemFromCart(item)}
+              >
+                <CartXFill size={30} />
               </div>
             </div>
           );
@@ -89,12 +95,8 @@ const ShoppingCart = () => {
         >
           Compare Price
         </div>
-
       </div>
     </div>
-
-
-
   );
 };
 
