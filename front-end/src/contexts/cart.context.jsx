@@ -1,87 +1,91 @@
 import React, { createContext, useState, useEffect } from "react";
-
-const addCartItem = (cartItems, itemToAdd) => {
-  const existingCartItem = cartItems.find(
-    (cartItem) => cartItem.name === itemToAdd.name
-  );
-
-  if (existingCartItem) {
-    return cartItems.map((cartItem) =>
-      cartItem.name === itemToAdd.name
-        ? { ...cartItem, quantity: cartItem.quantity + 1 }
-        : cartItem
-    );
-  }
-
-  return [...cartItems, { ...itemToAdd, quantity: 1 }];
-};
-
-const removeCartItem = (cartItems, cartItemToRemove) => {
-  const existingCartItem = cartItems.find(
-    (cartItem) => cartItem.name === cartItemToRemove.name
-  );
-
-  if (existingCartItem.quantity === 1) {
-    return cartItems.filter(
-      (cartItem) => cartItem.name !== cartItemToRemove.name
-    );
-  }
-
-  return cartItems.map((cartItem) =>
-    cartItem.name === cartItemToRemove.name
-      ? { ...cartItem, quantity: cartItem.quantity - 1 }
-      : cartItem
-  );
-};
-
-const clearCartItem = (cartItems, cartItemToClear) =>
-  cartItems.filter((cartItem) => cartItem.name !== cartItemToClear.name);
+import axios from "axios";
 
 export const CartContext = createContext({
   cartItems: [],
   cartCount: 0,
+  isLoading: true,
+  setIsLoading: () => true,
+  fetchCartData: () => {},
   addItemToCart: () => {},
   removeItemFromCart: () => {},
   clearItemFromCart: () => {},
+  checkoutFromCart: () => {},
 });
 
 export const CartProvider = ({ children }) => {
-  const [cartItems, setCartItems] = useState([
-    {
-      name: "Carrot",
-      quantity: 1,
-      imageUrl:
-        "https://images.albertsons-media.com/is/image/ABS/Meat-Seafood-Large-Tile-Combo2-552x276",
-    },
-  ]);
+  const [cartItems, setCartItems] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [cartCount, setCartCount] = useState(0);
 
-  useEffect(() => {
-    const newCartCount = cartItems.reduce(
-      (total, cartItem) => total + cartItem.quantity,
-      0
+  const fetchCartData = async () => {
+    const response = await axios.get("/cart");
+    setCartItems(response.data["orderItemList"]);
+    setIsLoading(false);
+  };
+
+  // useEffect(() => {
+  //   const newCartCount = cartItems.reduce(
+  //     (total, cartItem) => total + cartItem.quantity,
+  //     0
+  //   );
+  //   setCartCount(newCartCount);
+  // }, [cartItems]);
+
+  const addItemToCart = async (itemToAdd) => {
+    await axios.post(
+      "/order",
+      {
+        name: itemToAdd.name,
+        quantity: 1,
+        url: itemToAdd.url,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      }
     );
-    setCartCount(newCartCount);
-  }, [cartItems]);
-
-  const addItemToCart = (itemToAdd) => {
-    setCartItems(addCartItem(cartItems, itemToAdd));
   };
 
-  const removeItemFromCart = (cartItemToRemove) => {
-    setCartItems(removeCartItem(cartItems, cartItemToRemove));
+  const removeItemFromCart = async (cartItemToRemove) => {
+    await axios.post(
+      "/order",
+      {
+        name: cartItemToRemove.name,
+        quantity: -1,
+        url: cartItemToRemove.url,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      }
+    );
   };
 
-  const clearItemFromCart = (cartItemToClear) => {
-    setCartItems(clearCartItem(cartItems, cartItemToClear));
+  const clearItemFromCart = async (cartItemToClear) => {
+    await axios.post("/delete", {
+      name: cartItemToClear.name,
+      url: cartItemToClear.url,
+    });
+  };
+
+  const checkoutFromCart = async () => {
+    await axios.get("/checkout");
   };
 
   const value = {
     cartItems,
     cartCount,
+    isLoading,
+    fetchCartData,
     addItemToCart,
     removeItemFromCart,
     clearItemFromCart,
+    checkoutFromCart,
   };
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
