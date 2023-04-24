@@ -3,6 +3,8 @@ import axios from "axios";
 import { CartContext } from "../../contexts/cart.context";
 import { CartXFill } from "react-bootstrap-icons";
 import Loader from "../../components/loader/loader";
+import { UserContext } from "../../contexts/user.context";
+import NoAuth from "../../components/no-auth/no-auth";
 
 import "./shopping-cart.css";
 
@@ -17,6 +19,7 @@ const ShoppingCart = () => {
     checkoutFromCart,
   } = useContext(CartContext);
   const [comparePrice, setComparePrice] = useState([]);
+  const { isLogIn } = useContext(UserContext);
 
   useEffect(() => {
     fetchCartData();
@@ -75,7 +78,9 @@ const ShoppingCart = () => {
         <hr />
       </div>
       <div className="shopping-cart-body">
-        {cartItems.length === 0 ? (
+        {!isLogIn ? (
+          <NoAuth />
+        ) : cartItems.length === 0 ? (
           <div>
             Your Cart is Empty. Go <a href="/shopping">Shopping</a>{" "}
           </div>
@@ -84,8 +89,8 @@ const ShoppingCart = () => {
         ) : (
           cartItems.map((item) => {
             return (
-              <div className="shopping-cart-body">
-                <div className="shopping-cart-item" key={item.id}>
+              <div className="shopping-cart-body" key={item.id}>
+                <div className="shopping-cart-item">
                   <div className="shopping-cart-image">
                     <img src={item.url} alt={item.name} />
                   </div>
