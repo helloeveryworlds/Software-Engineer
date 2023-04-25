@@ -39,11 +39,11 @@
 }
 
 .nav-links-container div:hover {
-  color: #313bac;
+  color: #242427;
 }
 
 .nav-link {
-  color: #6b7688;
+  color: #6b6d74;
   cursor: pointer;
   text-decoration: none;
   flex-direction: column;
@@ -56,7 +56,7 @@
 }
 
 .nav-link:hover {
-  color: #313bac;
+  color: #000000;
 }
 
 .nav-link:last-child {
