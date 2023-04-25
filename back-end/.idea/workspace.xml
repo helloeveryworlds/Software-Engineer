@@ -9,12 +9,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a836269e-5ad6-43da-8c08-705f1fe95b5d" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../mobile/groce-Save/src/components/DrawerDesign.js" beforeDir="false" afterPath="$PROJECT_DIR$/../mobile/groce-Save/src/components/DrawerDesign.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../mobile/groce-Save/src/screens/Cart.js" beforeDir="false" afterPath="$PROJECT_DIR$/../mobile/groce-Save/src/screens/Cart.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../mobile/groce-Save/src/screens/Shop.js" beforeDir="false" afterPath="$PROJECT_DIR$/../mobile/groce-Save/src/screens/Shop.js" afterDir="false" />
-    </list>
+    <list default="true" id="a836269e-5ad6-43da-8c08-705f1fe95b5d" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -244,7 +239,7 @@
       <workItem from="1682045562171" duration="617000" />
       <workItem from="1682047372368" duration="258000" />
       <workItem from="1682279217856" duration="921000" />
-      <workItem from="1682448653776" duration="905000" />
+      <workItem from="1682448653776" duration="3747000" />
     </task>
     <servers />
   </component>
