@@ -24,6 +24,8 @@
   font-weight: 700;
   margin-top: 50px;
   margin-bottom: 1%;
+  color: #ff0000;
+  text-decoration: underline;
 }
 
 .shopping-cart-line {
@@ -35,6 +37,7 @@
   width: 100%;
   align-items: center;
   flex-direction: column;
+  min-height: 50vh;
 }
 
 .shopping-cart-item {

@@ -332,7 +332,8 @@ import {
                 source={{ uri: item.image }}/>
                {cartResponse.lowestAvgStoreName &&
                 <View>
-                <Text style={{ fontWeight: "bold", marginTop: 30, marginStart: 10 }}>Lowest Price: ${cartResponse.lowestAvgTotalPrice}</Text>
+                <Text style={{ fontWeight: "600", marginTop: 30, marginStart: 10 }}>Lowest Price: ${cartResponse.lowestAvgTotalPrice}</Text>
+                <Text style={{ fontWeight: "600", marginTop: 10, marginStart: 10 }}>Total Price: ${cartResponse.lowestTotalPriceStorePrice}</Text>
                 <Text style={{ fontWeight: "bold", marginTop: 10, marginStart: 10 }}>Store: {cartResponse.lowestAvgStoreName}</Text>
                 </View>}
             </View>

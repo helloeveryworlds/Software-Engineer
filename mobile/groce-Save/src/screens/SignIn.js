@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useRef, useState } from "react";
 import {
   View,
   Text,
@@ -18,145 +18,157 @@ import { FontAwesome } from "@expo/vector-icons";
 import  Loader  from '../components/Loader';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { BarPasswordStrengthDisplay } from 'react-native-password-strength-meter';
+import { useDispatch, useSelector } from "react-redux";
+import { login,logout } from "../reducers/LoginReducer";
 
 const { width, height } = Dimensions.get("window");
 
-const initialState = {
-  username: "",
-  us: "",
-  password: "", 
-  pa: "",
-  token: "",
-  embu: "",
-  correct: false,
-  correctPassword: false,
-  checked: false,
-  checkedDB: false,
-  isAuthorized: false, 
-  isLoading: false, 
-  secureTextEntry: true,
-};
+const SignIn = ({ route, navigation }) => {
+  const loginInfo = useSelector((state) => state.login.login);
+  console.log("loginInfo loginInfo loginInfo",loginInfo)
+  const dispatch = useDispatch();
 
-class SignIn extends React.Component {
-  state = initialState;
+  const [isLoading, setIsLoading] = useState(false);
+  const [username, setUsername] = useState("");
+  const [us, setUs] = useState("");
+  const [password, setPassword] = useState("");
+  const [pa, setPa] = useState("");
+  const [token, setToken] = useState("");
+  const [embu, setEmbu] = useState("");
+  const [correct, setCorrect] = useState(false);
+  const [correctPassword, setcorrectPassword] = useState(false);
+  const [secureTextEntry, setSecureTextEntry] = useState(true);
 
-  constructor(props) {
-    super(props);
-  }
-
-  handleUsername = (username) => {
+  const usernameInput = useRef();
+  
+  const handleUsername = (username) => {
     if(username != ""){
-        this.setState({ username: username, embu: "", us: "" });
-        this.validate(username);
+        setUsername(username);
+        setEmbu("");
+        setUs("");
+        validate(username);
       }else{
-       this.setState({ username: username, embu: "empty", us: "empty" });
+        setUsername(username);
+        setEmbu("empty");
+        setUs("empty");
       }
   };
 
-  handlePassword = (password) => {  
+  const handlePassword = (password) => {  
     if(password != ""){
-      this.setState({ password: password, pa: "" });
-      this.validatePassword(password);
+        setPassword(password);
+        setPa("");
+        validatePassword(password);
     }else {
-      this.setState({ password: password, pa: "empty" });
+        setPassword(password);
+        setPa("empty");
     } 
   };
 
-  validatePassword = (password) => {
+  const validatePassword = (password) => {
     var regularExpression = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/;
     if(regularExpression.test(password) === false){
-      this.setState({ password: password, correctPassword: false, pa: "empty" });
+        setPassword(password);
+        setPa("empty");
+        setcorrectPassword(false);
       console.log("Password is Not Correct");
       return false;
     } else {
-      this.setState({ password: password, correctPassword: true, pa: "" });
+        setPassword(password);
+        setPa("");
+        setcorrectPassword(true);
       console.log("Password is Correct");
       return true;
     }
   }
 
-  validate = (text) => {
+  const validate = (text) => {
     console.log(text);
     let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
     if (reg.test(text) === false) {
       console.log("Email is Not Correct");
-      this.setState({ username: text, correct: false })
+      setUsername(text);
+      setCorrect(false);
       return false;
     }
     else {
-      this.setState({ username: text, correct: true })
+      setUsername(text);
+      setCorrect(true);
       console.log("Email is Correct");
     }
   }
 
-  onPressLogin() {
-    this.setState({ isLoading: true });
-
-    const { username, password, embu, pa, correct, correctPassword } = this.state;
+  const onPressLogin = () => {
+    setIsLoading(true);
     
     if(username == ""){
-      this.setState({ isLoading: false, us: "empty" });
+      setIsLoading(false);
+      setUs("empty");
     }else if(username != "" && embu == "empty" && !correct){
-      this.setState({ isLoading: false, embu: "empty" });
+      setIsLoading(false);
+      setEmbu("empty");
     }else if(password == ""){
-      this.setState({ isLoading: false, pa: "empty" });
+        setIsLoading(false);
+        setPa("empty");
     }else if(password != "" && pa == "empty" && !correctPassword){
-      this.setState({ isLoading: false, pa: "empty" });
+        setIsLoading(false);
+        setPa("empty");
     }else{
     const payload = { username, password };
-    this.submitSignIn(payload);
-  }
+    submitSignIn(payload);
+    }
   } 
 
-  submitSignIn(payload){
-      this.setState({ isLoading: false, isAuthorized: true });
+  const submitSignIn = (payload) => {
+    setIsLoading(false);
     
       console.log(payload);
     
       const onSuccess = ( data ) => {
         // insert into db...
-        this._storeData(data);
-        
-        this.setState({ isLoading: false, isAuthorized: true });
-        console.log("Dataaa",data);
+        _storeData(data.data);
+        dispatch(login(data.data));
+
+        setIsLoading(false);
+        console.log("Dataaa",data.data);
         if (data.status == 200){
           Alert.alert(null, "Login successfully", [{
-            text: 'Ok', onPress: () => this.props.navigation.navigate("Welcome")
+            text: 'Ok', onPress: () => navigation.navigate("Welcome")
           }])
         }
       };
     
       const onFailure = (error) => {
         console.log(error && error.response);
-        this.setState({ isLoading: false });
+        setIsLoading(false);
         if(error.response == null){
-          this.setState({ isLoading: false });
+            setIsLoading(false);
           Alert.alert('Info: ','Network Error')
         }
         if(error.response.status == 400){
-          this.setState({ isLoading: false });
+          setIsLoading(false);
           Alert.alert('Info: ','Invalid Credentials')
         } else if(error.response.status == 500){
-          this.setState({ isLoading: false });
+          setIsLoading(false);
           Alert.alert('Info: ','Ensure your Network is Stable')
         } else if(error.response.status == 401){
-          this.setState({ isLoading: false });
+          setIsLoading(false);
           Alert.alert(null,"Unauthorized")
         } else if(error.response.status == 404){
-          this.setState({ isLoading: false });
+          setIsLoading(false);
           Alert.alert('Info: ','Not found')
         }
-        this.setState({ errors: error.response.data, isLoading: false });
+        setIsLoading(false);
       };
     
-      this.setState({ isLoading: true });
+      setIsLoading(true);
        groceSaveService
         .post(`/login?username=${payload.username}&password=${payload.password}`)
         .then(onSuccess)
         .catch(onFailure);
-  }
+    }
 
-  async removeItemValue(key) {
+  const removeItemValue = async (key) => {
     try {
       await AsyncStorage.removeItem(key);
       return true;
@@ -165,8 +177,8 @@ class SignIn extends React.Component {
     }
   }
 
-  _storeData = async (value) => {
-    await this.removeItemValue("userDetails");
+  const _storeData = async (value) => {
+    await removeItemValue("userDetails");
     try {
       await AsyncStorage.setItem("userDetails", JSON.stringify(value));
 
@@ -175,15 +187,10 @@ class SignIn extends React.Component {
     console.log("This is for storing data...", value);
   };
 
-  componentWillMount = ()=> {
-    console.log("I don mount o");
-  }
-
-    updateSecureTextEntry(){
-      this.setState({ secureTextEntry: !this.state.secureTextEntry})
+    const updateSecureTextEntry = () => {
+        setSecureTextEntry(!secureTextEntry)
     } 
 
-  render() {
     LogBox.ignoreAllLogs(true);
     return (
       <ImageBackground
@@ -194,7 +201,7 @@ class SignIn extends React.Component {
           keyboardShouldPersistTaps="always">
           
           <StatusBar backgroundColor="#F4EFEF" barStyle="dark-content"/>
-          <Loader loading={this.state.isLoading} />
+          <Loader loading={isLoading} />
             <View>
             <Text style={styles.displayTextStyle}>Signin</Text>
             <View style={styles.usernameTextStyleView}>
@@ -208,7 +215,7 @@ class SignIn extends React.Component {
               <TextInput
                 backgroundColor={"#F4EFEF"}
                 borderWidth = {1}
-                borderColor={this.state.us == "empty" || !this.state.correct && this.state.username != "" ? 'red' : "transparent"}
+                borderColor={us == "empty" || !correct && username != "" ? 'red' : "transparent"}
                 width = {width * 0.81}
                 height= {56}
                 textAlign = "left"
@@ -221,17 +228,18 @@ class SignIn extends React.Component {
                 underlineColorAndroid="transparent"
                 autoCapitalize="none"
                 keyboardType="email-address"
-                returnKeyType="next"
                 placeholder={"Email"}
                 placeholderTextColor={"#979797"}
-                onSubmitEditing={() => { this.secondTextInput.focus(); }}
+                autoFocus={true}
+                returnKeyType="next"
+                onSubmitEditing={() => usernameInput.current.focus()}
                 blurOnSubmit={false}
-                value={this.state.username}
-                onChangeText={this.handleUsername}
+                value={username}
+                onChangeText={handleUsername}
               />
               </View>
-              {this.state.us == "empty" && this.state.username == "" && <Text style={styles.invalidEmailTextStyle}>E-mail is empty</Text>}
-              {!this.state.correct && this.state.username != "" && <Text style={styles.invalidEmailTextStyle}>E-mail is not correct</Text>}
+              {us == "empty" && username == "" && <Text style={styles.invalidEmailTextStyle}>E-mail is empty</Text>}
+              {!correct && username != "" && <Text style={styles.invalidEmailTextStyle}>E-mail is not correct</Text>}
             </View>
             
             <View style={styles.passwordTextStyleView}>
@@ -246,7 +254,7 @@ class SignIn extends React.Component {
                 backgroundColor={"#F4EFEF"}
                 borderWidth = {1}
                 fontSize={16}
-                borderColor={this.state.pa == "empty" ? 'red' : "transparent"}
+                borderColor={pa == "empty" ? 'red' : "transparent"}
                 width= {width * 0.81}
                 height= {56}
                 paddingTop = {8}
@@ -258,16 +266,16 @@ class SignIn extends React.Component {
                 placeholderTextColor={"#979797"}
                 underlineColorAndroid="transparent"
                 autoCapitalize="none"
-                ref={(input) => { this.secondTextInput = input; }}
-                value={this.state.password}
-                secureTextEntry={this.state.secureTextEntry?true:false}
-                onChangeText={this.handlePassword}
+                ref={usernameInput}
+                value={password}
+                secureTextEntry={secureTextEntry?true:false}
+                onChangeText={handlePassword}
               />
 
-              {this.state.password ? 
+              {password ? 
               <TouchableOpacity 
-              onPress={this.updateSecureTextEntry.bind(this)}>
-                {this.state.secureTextEntry ?
+              onPress={updateSecureTextEntry.bind(this)}>
+                {secureTextEntry ?
                 <View
                 style={{alignSelf: "flex-end", right: 33, marginTop: 20, }}>
                   <FontAwesome
@@ -286,17 +294,17 @@ class SignIn extends React.Component {
               </TouchableOpacity> : null} 
               </View>
               </View>
-              {!this.state.correctPassword && this.state.pa == "empty" && this.state.password != "" && <Text style={styles.invalidPasswordTextStyle}>Password is not strong</Text>}
-              {this.state.pa == "empty" && this.state.password == "" && <Text style={styles.invalidEmailTextStyle}>Password is empty</Text>}
-              {!this.state.correctPassword && this.state.pa == "empty" && this.state.password != "" &&
+              {!correctPassword && pa == "empty" && password != "" && <Text style={styles.invalidPasswordTextStyle}>Password is not strong</Text>}
+              {pa == "empty" && password == "" && <Text style={styles.invalidEmailTextStyle}>Password is empty</Text>}
+              {!correctPassword && pa == "empty" && password != "" &&
               <BarPasswordStrengthDisplay
-                  password={this.state.password}
+                  password={password}
                   width= {width * 0.81}
                   alignSelf={"center"}
                   marginTop={5}
                 />}
 
-              {!this.state.correctPassword && this.state.pa == "empty" &&
+              {!correctPassword && pa == "empty" &&
               <View style={{ backgroundColor: "#FFFFFF97", marginTop: 16, width: width * 0.81 }}>
                 <Text style={styles.invalidPasswordInfoStyle}>Password must contain a capital letter from A-Z</Text>
                 <Text style={styles.invalidPasswordInfoStyle}>Password must contain small letters from a-z</Text>
@@ -307,13 +315,13 @@ class SignIn extends React.Component {
               </View>
             
             <TouchableOpacity
-                onPress={()=> this.onPressLogin()}
+                onPress={()=> onPressLogin()}
                 style={{ alignSelf: "center", width: width * 0.81, height: 40, backgroundColor: "#52A860", marginBottom: 5, opacity: 1, marginTop: 60,  }}>
                 <Text style={styles.loginButtonText}>Submit</Text>
             </TouchableOpacity>
             <TouchableOpacity
                 onPress={() =>
-                  this.props.navigation.navigate("ForgotPassword")
+                  navigation.navigate("ForgotPassword")
                 }>             
               <Text style={styles.forgetTextStyle}>Forgot your Password? </Text>
               </TouchableOpacity>
@@ -322,7 +330,7 @@ class SignIn extends React.Component {
             <Text style={styles.dontHaveAccountTextStyle}>Other issues{" "}</Text>
             <TouchableOpacity
                 onPress={() =>
-                  this.props.navigation.navigate("SignUp")
+                  navigation.navigate("SignUp")
                 }>
             <Text style={styles.dontHaveAccountMintTextStyle}>with Sign up</Text>
             </TouchableOpacity>
@@ -331,7 +339,6 @@ class SignIn extends React.Component {
         </ScrollView>
      </ImageBackground>
   );
-  }
 }
 
 export default SignIn ;

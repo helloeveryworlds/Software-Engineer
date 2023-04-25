@@ -14,51 +14,14 @@ import {
 import DetailsIcon from "../../assets/svgs/details";
 import LocationIcon from "../../assets/svgs/location";
 import TimedIcon from "../../assets/svgs/timed";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useSelector } from "react-redux";
 
 const { width, height } = Dimensions.get("window");
 
-const initialState = { 
-  isLoading: false, 
-  name: "",
-  email: "",
-  zipcode: "",
-  address: ""
-};
-
-class UserInfo extends Component {
-  state = initialState;
-
-  _retrieveData = () => {
-    AsyncStorage.getItem("userDetails").then((res) => {
-      const response = JSON.parse(res);
-      if (res !== null) {
-        this.setState({
-          name: response.data.name,
-          email: response.data.email,
-          zipcode: response.data.zipCode,
-          address: response.data.address
-        });
-
+const UserInfo = ({ navigation }) => { 
+const loginInfo = useSelector((state) => state.login.login);
   
-      } else {
-        console.log("No response...", response);
-      }
-    });
-  }
-
-  componentDidMount(){
-    this._retrieveData();
-  }
-  
-  render() {
     LogBox.ignoreAllLogs(true);
-    const { name,
-            email,
-            zipcode,
-            address 
-          } = this.state;
-
       return (
         <ScrollView
           keyboardShouldPersistTaps="always" backgroundColor="#FFF">
@@ -92,17 +55,17 @@ class UserInfo extends Component {
                 <View style={{ marginHorizontal: 10, marginTop: 30, width: width * 0.5 }}>
                 <View style={{ flexDirection: "row", justifyContent: "space-between", marginStart: 10, }}>
                 <Text style={styles.userDetails}>Zip code:</Text>
-                {zipcode ? <Text style={styles.userDetails_}>{zipcode}</Text> : <Text style={styles.userDetails_}>nil</Text>}
+                {loginInfo.length != 0 ? <Text style={styles.userDetails_}>{loginInfo[0].zipCode}</Text> : <Text style={styles.userDetails_}>nil</Text>}
                 </View>
 
                 <View style={{ flexDirection: "row", justifyContent: "space-between", marginStart: 10, marginTop: 20, }}>
                 <Text style={styles.userDetails}>Address:</Text>
-                {address ? <Text style={styles.userDetails_}>{address}</Text> : <Text style={styles.userDetails_}>nil</Text>}
+                {loginInfo.length != 0 ? <Text style={styles.userDetails_}>{loginInfo[0].address}</Text> : <Text style={styles.userDetails_}>nil</Text>}
                 </View>
 
                 <View style={{ flexDirection: "row", justifyContent: "space-between", marginStart: 10, marginTop: 20, }}>
                 <Text style={styles.userDetails}>Email:</Text>
-                {email ? <Text style={styles.userDetails_}>{email}</Text> : <Text style={styles.userDetails_}>nil</Text>}
+                {loginInfo.length != 0 ? <Text style={styles.userDetails_}>{loginInfo[0].email}</Text> : <Text style={styles.userDetails_}>nil</Text>}
                 </View>
                 </View>
 
@@ -124,7 +87,6 @@ class UserInfo extends Component {
         </ScrollView>
       );
     }
-}
 
 
 export default UserInfo;
