@@ -1,5 +1,7 @@
 package com.bossmode.backend.controller;
 
+import com.bossmode.backend.EmailAlreadyExistsException;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 
 import com.bossmode.backend.entity.User;
@@ -21,10 +23,13 @@ public class SignUpController {
     }
 
     @RequestMapping(value = "/signup", method = RequestMethod.POST)
-    @ResponseStatus(value = HttpStatus.CREATED)
-    public void signUp(@RequestBody User user) {
-        // add user server
-        userService.signUp(user);
+    public ResponseEntity<?> signUp(@RequestBody User user) {
+        try {
+            userService.signUp(user);
+            return ResponseEntity.status(HttpStatus.CREATED).build();
+        } catch (EmailAlreadyExistsException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("The email is already in use.");
+        }
     }
 }
 

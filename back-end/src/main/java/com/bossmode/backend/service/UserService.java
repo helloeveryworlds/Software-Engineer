@@ -1,8 +1,10 @@
 package com.bossmode.backend.service;
 
+import com.bossmode.backend.EmailAlreadyExistsException;
 import com.bossmode.backend.dao.UserDao;
 import com.bossmode.backend.entity.Cart;
 import com.bossmode.backend.entity.User;
+import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,7 +20,10 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public void signUp(User user) {
+    public void signUp(User user) throws EmailAlreadyExistsException {
+        if (userDao.emailExists(user.getEmail())) {
+            throw new EmailAlreadyExistsException("The email is already in use.");
+        }
         // create cart when the user signup successfully.
         Cart cart = new Cart();
         user.setCart(cart);

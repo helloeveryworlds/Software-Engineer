@@ -1,4 +1,5 @@
 package com.bossmode.backend.dao;
+import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 import com.bossmode.backend.entity.User;
 
@@ -11,12 +12,22 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public class UserDao {
 
     @Autowired
     private SessionFactory sessionFactory;
-
+    public boolean emailExists(String email) {
+        Session session = sessionFactory.openSession();
+        String q = "FROM User WHERE email = :email";
+        Query<User> query = session.createQuery(q, User.class);
+        query.setParameter("email", email);
+        List<User> users = query.getResultList();
+        session.close();
+        return !users.isEmpty();
+    }
     public void signUp(User user) {
         Authorities authorities = new Authorities();
         authorities.setAuthorities("ROLE_USER");
