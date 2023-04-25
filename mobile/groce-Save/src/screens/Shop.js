@@ -30,6 +30,7 @@ const Shopp = ({ navigation }) => {
 
   const [ isLoading, setIsLoading ] = useState(false);
   const [click, setClick] = useState("");
+  const [hide, setHide] = useState(false);
   const [list, setList] = useState([]);
   const [mainList, setMainList] = useState([]);
   const [mainData, setMainData] = useState({});
@@ -97,6 +98,11 @@ const Shopp = ({ navigation }) => {
     useEffect(() => {
         itemList()
         getCurrentCart()
+        if(currentCartList.length == 0){
+          setHide(true);
+        }else{
+          setHide(false);
+        }
     },[]);
       
     const addItemToShop = (item) => {
@@ -137,6 +143,7 @@ const Shopp = ({ navigation }) => {
       navigation.navigate("Cart", {
         array: shop
       })
+      setHide(false);
     }
 
     const removeFromCart = (item, index) => {
@@ -397,6 +404,7 @@ const Shopp = ({ navigation }) => {
                <TextInput 
                 style={styles.optionContainer}
                 value={input}
+                editable={!mainList ? false : true}
                 placeholder={"Search Categories"}
                 onChangeText={(text)=> handleInput(text)}
                 />
@@ -439,8 +447,10 @@ const Shopp = ({ navigation }) => {
 
                 {shop.length != 0 && 
                 <View>
-                  <View style={styles.best}>
-                  {currentCartList ? 
+                {/* {hide &&<View> */}
+                  
+                   <View style={styles.best}>
+                  {currentCartList.length != 0 ? 
                   <Text style={{ fontSize: currentCartList.length > 9 ? 9.5 : 12, paddingTop: currentCartList.length > 9 ? 2 : 1, paddingHorizontal: currentCartList.length > 9 ? 7.5 : 9,  }}>{currentCartList.length}</Text>
                    : 
                   <Text style={{ fontSize: shop.length > 9 ? 9.5 : 12, paddingTop: shop.length > 9 ? 2 : 1, paddingHorizontal: shop.length > 9 ? 7.5 : 9,  }}>{shop.length}</Text>}
@@ -451,7 +461,10 @@ const Shopp = ({ navigation }) => {
                   style={{ color: "#FF0080", alignSelf: "flex-end", marginEnd : 30, marginBottom: 10 }}
                   size={25}/>
                   </TouchableOpacity>
+                  {/* </View>} */}
                   </View>}
+
+                {!mainList && <Text style={styles.invalidTextStyle}>No available Categories. Please check your network...</Text>}
                 {!list ? 
                   <FlatList
                     data={mainList}
@@ -550,6 +563,15 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     alignSelf: "center",
     marginTop: Platform.OS === "ios" ? -10: -10,
+  },
+  invalidTextStyle: {
+    fontSize: 12,
+    color: "#FF0000",
+    backgroundColor: "pink",
+    alignSelf: "center",
+    margin: 50,
+    opacity: 1,
+    padding: 20
   },
   viewBtn: {
     backgroundColor: "green",

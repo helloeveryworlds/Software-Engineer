@@ -93,7 +93,6 @@ class Welcome extends Component {
     AsyncStorage.getItem("userDetails").then((res) => {
       const response = JSON.parse(res);
       if (res !== null) {
-        setData(response.data.name) 
       } else {
         console.log("No response...", response);
       }

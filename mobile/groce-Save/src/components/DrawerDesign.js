@@ -15,16 +15,27 @@ import {
     DrawerItem,
   } from '@react-navigation/drawer';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useDispatch, useSelector } from "react-redux";
 import { Ionicons } from "@expo/vector-icons";
+import { login,logout } from "../reducers/LoginReducer";
+
 
 const DrawerDesign = (props) => {
   const [data, setData] = useState("");
+  const loginInfo = useSelector((state) => state.login.login);
+  const dispatch = useDispatch();
+
+  console.log("login info::", loginInfo)
   const _retrieveData = () => {
     AsyncStorage.getItem("userDetails").then((res) => {
       const response = JSON.parse(res);
       if (res !== null) {
-        setData(response.data.name) 
+        console.log("userdetails info::", response)
+        if(loginInfo.length == 0){
+          dispatch(login(response));
+        }
       } else {
+        dispatch(logout([]));
         console.log("No response...", response);
       }
     });
@@ -39,7 +50,7 @@ const DrawerDesign = (props) => {
     }
   }
 
-  const logOut = async () => {
+  const logOutt = async () => {
     Alert.alert(
       'Logout? ',
       'Are you sure you want to logout?',
@@ -47,6 +58,7 @@ const DrawerDesign = (props) => {
         {
           text: 'Yes', onPress: () => {
              removeItemValue("userDetails");
+             dispatch(logout([]));
               _retrieveData()
           }
         },
@@ -58,26 +70,26 @@ const DrawerDesign = (props) => {
 
   useEffect(() => {
     _retrieveData()
-  });
+  },[]);
 
     return (
       <SafeAreaView style={{ flex: 1 }}>
         <StatusBar backgroundColor="#F4EFEF" barStyle="dark-content"/>
-        {/* <TouchableOpacity style={{ alignSelf: "flex-end", marginEnd: 10, marginBottom: -10 }} onPress={()=> logOut()}>
+        <TouchableOpacity style={{ alignSelf: "flex-end", marginEnd: 10, marginBottom: -10 }} onPress={()=> logOutt()}>
           <Ionicons
             name={"log-out-outline"}
             color={"orange"}
             size={30}/>
-        </TouchableOpacity> */}
+        </TouchableOpacity>
         <Image
           source={require('../.././assets/logo_.png')} 
           resizeMode={'cover'}
           style={styles.sideMenuProfileIcon}
         />
 
-          {data ? 
+        {loginInfo.length != 0 ? 
           <Text style={{ fontSize: 16, textAlign: 'center',  backgroundColor: 'grey', color: "#FFF", padding: 5,  }}>
-          {data}
+          {loginInfo[0].name}
         </Text> : <Text style={{ fontSize: 16, textAlign: 'center', color: 'grey' }}>
           User
         </Text>}
@@ -95,10 +107,6 @@ const DrawerDesign = (props) => {
   
   const styles = StyleSheet.create({
     sideMenuProfileIcon: {
-      // resizeMode: 'center',
-      // width: 100,
-      // height: 100,
-      // borderRadius: 100 / 2,
       marginTop: 35,
       marginHorizontal: 15,
       alignSelf: 'center',
