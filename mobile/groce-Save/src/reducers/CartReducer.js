@@ -31,11 +31,15 @@ export const cartSlice = createSlice({
                 itemInCart.quantity--;
             }
 
+        },
+        clearCart: (state,action) => {
+            const empty = [];
+            state.cart = empty;
         }
     }
 });
 
 
-export const {addToCart,removeFromCart,incrementQuantity,decrementQuantity} = cartSlice.actions;
+export const {addToCart,removeFromCart,incrementQuantity,decrementQuantity, clearCart} = cartSlice.actions;
 
 export default cartSlice.reducer;

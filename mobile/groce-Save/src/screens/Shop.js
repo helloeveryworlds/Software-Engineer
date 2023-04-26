@@ -24,7 +24,7 @@ import { addToShoppingList, removeFromShop } from "../reducers/ShopReducer";
 
 const { width } = Dimensions.get("window");
 
-const Shopp = ({ navigation }) => {
+const Shop = ({ navigation }) => {
   const shop = useSelector((state) => state.shop.shop);
   const dispatch = useDispatch();
 
@@ -98,11 +98,11 @@ const Shopp = ({ navigation }) => {
     useEffect(() => {
         itemList()
         getCurrentCart()
-        if(currentCartList.length == 0){
-          setHide(true);
-        }else{
-          setHide(false);
-        }
+        // if(currentCartList.length == 0){
+        //   setHide(true);
+        // }else{
+        //   setHide(false);
+        // }
     },[]);
       
     const addItemToShop = (item) => {
@@ -140,10 +140,16 @@ const Shopp = ({ navigation }) => {
     }
 
     const toCart = () => {
+      // if(currentCartList.length != 0){
+      //   navigation.navigate("Cart", {
+      //     array: currentCartList
+      //   })
+      // }else{
       navigation.navigate("Cart", {
         array: shop
       })
       setHide(false);
+    // }
     }
 
     const removeFromCart = (item, index) => {
@@ -349,7 +355,11 @@ const Shopp = ({ navigation }) => {
       console.log("Donneeee",data)
       if (data.status == 200){
       console.log("Data data data data donneeee",data.data.orderItemList)
-      setCurrentCartList(data.data.orderItemList)
+      if(data){
+        setCurrentCartList(data.data.orderItemList)
+      }else{
+        setCurrentCartList([])
+      }
         // Alert.alert(null, "Checkout successfully,\nIt's free so no need to pay!", [{
         //   text: 'Ok', onPress: () => navigation.navigate("Shop")
         // }])
@@ -445,11 +455,10 @@ const Shopp = ({ navigation }) => {
                 </TouchableOpacity>
                 : null}
 
-                {shop.length != 0 && 
+                {/* {shop.length != 0 &&
                 <View>
-                {/* {hide &&<View> */}
                   
-                   <View style={styles.best}>
+                  <View style={styles.best}>
                   {currentCartList.length != 0 ? 
                   <Text style={{ fontSize: currentCartList.length > 9 ? 9.5 : 12, paddingTop: currentCartList.length > 9 ? 2 : 1, paddingHorizontal: currentCartList.length > 9 ? 7.5 : 9,  }}>{currentCartList.length}</Text>
                    : 
@@ -461,7 +470,23 @@ const Shopp = ({ navigation }) => {
                   style={{ color: "#FF0080", alignSelf: "flex-end", marginEnd : 30, marginBottom: 10 }}
                   size={25}/>
                   </TouchableOpacity>
-                  {/* </View>} */}
+                  </View>} */}
+
+                  {shop.length != 0 &&
+                  <View>
+                  
+                  <View style={styles.best}>
+                  {shop.length != 0 ? 
+                  <Text style={{ fontSize: shop.length > 9 ? 9.5 : 12, paddingTop:  shop.length > 9 ? 2 : 1, paddingHorizontal: shop.length > 9 ? 7.5 : 9,  }}>{shop.length}</Text>
+                   : 
+                  <Text style={{ fontSize: shop.length > 9 ? 9.5 : 12, paddingTop: shop.length > 9 ? 2 : 1, paddingHorizontal: shop.length > 9 ? 7.5 : 9,  }}>{shop.length}</Text>}
+                  </View>
+                <TouchableOpacity onPress={()=> toCart()}>
+                  <FontAwesome5 
+                  name={"shopping-cart"} 
+                  style={{ color: "#FF0080", alignSelf: "flex-end", marginEnd : 30, marginBottom: 10 }}
+                  size={25}/>
+                  </TouchableOpacity>
                   </View>}
 
                 {!mainList && <Text style={styles.invalidTextStyle}>No available Categories. Please check your network...</Text>}
@@ -488,7 +513,7 @@ const Shopp = ({ navigation }) => {
       );
     }
 
-export default Shopp;
+export default Shop;
 
 const styles = StyleSheet.create({
   spinnerTextStyle: {
@@ -547,7 +572,6 @@ const styles = StyleSheet.create({
     marginRight: 10,
     borderRadius: 100,
   },
-  
   itemContainer: {
     flex: 1,
     borderRadius: 30,

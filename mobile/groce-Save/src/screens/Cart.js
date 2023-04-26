@@ -12,7 +12,8 @@ import {
   } from "react-native";
   import React, { useRef, useState, useEffect } from "react";
   import { useDispatch, useSelector } from "react-redux";
-  import { addToCart, decrementQuantity, incrementQuantity, removeFromCart } from "../reducers/CartReducer";
+  import { addToCart, decrementQuantity, incrementQuantity, removeFromCart, clearCart } from "../reducers/CartReducer";
+  import { clearShop } from "../reducers/ShopReducer";
   import  Loader  from '../components/Loader';
   import groceSaveItemService from "../service/GroceSaveItemService";
   import groceSaveService from ".././service/GroceSaveService";
@@ -23,7 +24,8 @@ import {
   const Cart = ({ route, navigation }) => {
     const { array } = route.params;
     const cart = useSelector((state) => state.cart.cart);
-    // console.log(cart);
+    const loginInfo = useSelector((state) => state.login.login);
+    console.log(array);
     const dispatch = useDispatch();
 
     const [ isLoading, setIsLoading ] = useState(false);
@@ -66,31 +68,20 @@ import {
     }
     
     const submitCheckOut = () => {
-      if(Object.keys(userData).length != 0){
+      if(loginInfo.length != 0){
       
       setIsLoading(true);
-      let name = ""
-      let url = ""
-      let quantity = 0
-      
-      cart.map((items) =>
-        (
-          name = items.name,
-          quantity = items.quantity,
-          url = items.image
-        ))
-      
-      const payload = {
-        name,
-        url
-      }
-      
+    
     const onSuccess = ( data ) => {
       setIsLoading(false);
       console.log("Donneeee",data)
       if (data.status == 200){
         Alert.alert(null, "Checkout successfully,\nIt's free so no need to pay!", [{
-          text: 'Ok', onPress: () => navigation.navigate("Shop")
+          text: 'Ok', onPress: () => {
+            navigation.navigate("Shop")
+            dispatch(clearShop([]));
+            dispatch(clearCart([]));
+          }
         }])
       }
     };
@@ -129,7 +120,7 @@ import {
     }
 
     const submitComparePrice = () => {
-      if(Object.keys(userData).length != 0){
+      if(loginInfo.length != 0){
       const list = []
       setIsLoading(true);
       var itemsWithQuantity = {};
@@ -139,7 +130,7 @@ import {
           itemsWithQuantity[items.name] = items.quantity+""
         ))
       
-      const zipCode = userData.zipCode
+      const zipCode = loginInfo[0].zipCode
       list.push({
         zipCode,
         itemsWithQuantity
@@ -196,11 +187,11 @@ import {
     }
 
     const submitOrderItems = (items) => {
-      if(Object.keys(userData).length != 0){
+    if(loginInfo.length != 0){
       setIsLoading(true);
       let name = items.name
       let quantity = +items.quantity
-      let url = items.image
+      let url = items.image ? items.image : items.url
       
       const payload = {
         name,
@@ -259,6 +250,12 @@ import {
       });
     }
 
+    const info = () => {
+      Alert.alert(null, "Please sign in to Checkout successfully!", [{
+        text: 'Ok', onPress: () => navigation.navigate("SignIn")
+      }])
+    }
+    
     return (
       <ScrollView  ref={scrollRef}  onContentSizeChange={() => onPressTouch()} style={{ backgroundColor: "#FFF" }}>
       <SafeAreaView>
@@ -266,7 +263,7 @@ import {
         <Text style={{ textAlign: "center", fontSize: 16, marginTop: 7 }}>
           Cart
         </Text>
-        {!array ? null : 
+        {array.length == 0 ? <Text style={styles.invalidTextStyle}>No available Cart Items. Please go to shop to add Items...</Text> : 
         array.map((item) => (
           <Pressable
             key={item.id}
@@ -275,7 +272,7 @@ import {
             <View style={{ margin: 10 }}>
               <Image
                 style={{ width: 100, height: 100, borderRadius: 8 }}
-                source={{ uri: item.image }}
+                source={{ uri: item.image ? item.image: item.url }}
               />
             </View>
             <View>
@@ -296,7 +293,7 @@ import {
               ) : (
                 <Pressable onPress={() => { 
                 onPressTouch()
-                addItemToCart(item)}}>
+                loginInfo.length != 0 ? addItemToCart(item) : info()}}>
                   <Text
                     style={{
                       borderColor: "gray",
@@ -329,12 +326,12 @@ import {
             <Text>{item.name}</Text>
             <View style={{ flexDirection: "row" }}>
             <Image style={{ width: 100, height: 100, borderRadius: 8,marginTop:6 }}
-                source={{ uri: item.image }}/>
+                source={{ uri: item.image ? item.image: item.url }}/>
                {cartResponse.lowestAvgStoreName &&
                 <View>
-                <Text style={{ fontWeight: "600", marginTop: 30, marginStart: 10 }}>Lowest Price: ${cartResponse.lowestAvgTotalPrice}</Text>
-                <Text style={{ fontWeight: "600", marginTop: 10, marginStart: 10 }}>Total Price: ${cartResponse.lowestTotalPriceStorePrice}</Text>
-                <Text style={{ fontWeight: "bold", marginTop: 10, marginStart: 10 }}>Store: {cartResponse.lowestAvgStoreName}</Text>
+                <Text style={{ fontWeight: "600", marginTop: 30, marginStart: 10, width: width * 0.7 }}>Lowest Price: ${cartResponse.lowestAvgTotalPrice}</Text>
+                <Text style={{ fontWeight: "600", marginTop: 10, marginStart: 10, width: width * 0.7 }}>Total Price: ${cartResponse.lowestTotalPriceStorePrice}</Text>
+                <Text style={{ fontWeight: "bold", marginTop: 10, marginStart: 10, width: width * 0.7 }}>Store: {cartResponse.lowestAvgStoreName}</Text>
                 </View>}
             </View>
             <Pressable
@@ -426,5 +423,13 @@ import {
       padding: 5,
       textAlign: "center",
     },
-    
+    invalidTextStyle: {
+      fontSize: 12,
+      color: "#FF0000",
+      backgroundColor: "pink",
+      alignSelf: "center",
+      margin: 50,
+      opacity: 1,
+      padding: 20
+    }
   });
