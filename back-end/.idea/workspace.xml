@@ -10,10 +10,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a836269e-5ad6-43da-8c08-705f1fe95b5d" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../mobile/groce-Save/src/components/DrawerDesign.js" beforeDir="false" afterPath="$PROJECT_DIR$/../mobile/groce-Save/src/components/DrawerDesign.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../mobile/groce-Save/src/screens/Cart.js" beforeDir="false" afterPath="$PROJECT_DIR$/../mobile/groce-Save/src/screens/Cart.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../mobile/groce-Save/src/screens/Shop.js" beforeDir="false" afterPath="$PROJECT_DIR$/../mobile/groce-Save/src/screens/Shop.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../mobile/groce-Save/src/screens/Welcome.js" beforeDir="false" afterPath="$PROJECT_DIR$/../mobile/groce-Save/src/screens/Welcome.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
