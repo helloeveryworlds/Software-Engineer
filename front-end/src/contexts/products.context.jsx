@@ -15,7 +15,12 @@ const processing_data = (original_data) => {
     temp["items"] = [];
 
     original_data[ele].forEach((ele) => {
-      let item = ele.split(",");
+      let firstCommaIndex = ele.indexOf(",");
+      const item = [
+        ele.substring(0, firstCommaIndex),
+        ele.substring(firstCommaIndex + 1),
+      ];
+      // let item = ele.split(",");
       temp["items"].push({ name: item[0], url: item[1] });
     });
     data.push(temp);

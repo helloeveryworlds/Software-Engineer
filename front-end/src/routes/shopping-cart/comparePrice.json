@@ -1,0 +1,59 @@
+[
+  {
+    "zipCode": "02134",
+    "bestByCategory": {
+      "lowestAvgStoreName": "target",
+      "lowestUnitPriceStoreName": "target",
+      "lowestTotalPriceStorePrice": 34,
+      "lowestAvgTotalPrice": 56,
+      "lowestUnitPriceStorePrice": 28,
+      "lowestTotalPriceStoreName": "target"
+    },
+    "storeValue": {
+      "starmarket": {
+        "Cakes": {
+          "lowestUnitItemImgUrl": "//images.albertsons-media.com/is/image/ABS/195050731?$ecom-product-card-desktop-jpg$&defaultImage:Not_Available",
+          "lowestItemName": "Slice Artisan Chocolate Colossal Cake - Each (880 Cal)",
+          "lowestUnit": "kg",
+          "lowestItemImgUrl": "//images.albertsons-media.com/is/image/ABS/195050731?$ecom-product-card-desktop-jpg$&defaultImage:Not_Available",
+          "avgTotalPrice": 33.98,
+          "lowestUnitPriceTotal": 6.99,
+          "lowestPriceTotal": 13.98,
+          "lowestUnitItemName": "Slice Artisan Chocolate Colossal Cake - Each (880 Cal)"
+        },
+        "Beverages": {
+          "lowestUnitItemImgUrl": "//images.albertsons-media.com/is/image/ABS/970093297?$ecom-product-card-desktop-jpg$&defaultImage:Not_Available",
+          "lowestItemName": "Red Bull Dragon Fruit Energy Drink - 4-8.4 Fl. Oz.",
+          "lowestUnit": "kg",
+          "lowestItemImgUrl": "//images.albertsons-media.com/is/image/ABS/970093297?$ecom-product-card-desktop-jpg$&defaultImage:Not_Available",
+          "avgTotalPrice": 43.47,
+          "lowestUnitPriceTotal": 26.63,
+          "lowestPriceTotal": 20.97,
+          "lowestUnitItemName": "Red Bull Dragon Fruit Energy Drink - 4-8.4 Fl. Oz."
+        }
+      },
+      "target": {
+        "Cakes": {
+          "lowestUnitItemImgUrl": "//images.albertsons-media.com/is/image/ABS/195050731?$ecom-product-card-desktop-jpg$&defaultImage:Not_Available",
+          "lowestItemName": "Artisan Chocolate  Cake - Each (880 Cal)",
+          "lowestUnit": "kg",
+          "lowestItemImgUrl": "//images.albertsons-media.com/is/image/ABS/195050731?$ecom-product-card-desktop-jpg$&defaultImage:Not_Available",
+          "avgTotalPrice": 17,
+          "lowestUnitPriceTotal": 8,
+          "lowestPriceTotal": 16,
+          "lowestUnitItemName": "Artisan Chocolate  Cake - Each (880 Cal)"
+        },
+        "Beverages": {
+          "lowestUnitItemImgUrl": "//images.albertsons-media.com/is/image/ABS/108100166?$ecom-product-card-desktop-jpg$&defaultImage:Not_Available",
+          "lowestItemName": " Fruit Energy Drink - 4-8.4 Fl. Oz.",
+          "lowestUnit": "kg",
+          "lowestItemImgUrl": "//images.albertsons-media.com/is/image/ABS/970093297?$ecom-product-card-desktop-jpg$&defaultImage:Not_Available",
+          "avgTotalPrice": 39,
+          "lowestUnitPriceTotal": 20,
+          "lowestPriceTotal": 18,
+          "lowestUnitItemName": "Energy Drink - 12-8.4 Fl. Oz."
+        }
+      }
+    }
+  }
+]

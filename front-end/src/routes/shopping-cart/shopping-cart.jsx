@@ -3,10 +3,12 @@ import axios from "axios";
 import { CartContext } from "../../contexts/cart.context";
 import { CartXFill } from "react-bootstrap-icons";
 import Loader from "../../components/loader/loader";
+import ComparePrice from "../../components/compare-price/compare-price";
 import { UserContext } from "../../contexts/user.context";
-import NoAuth from "../../components/no-auth/no-auth";
 
 import "./shopping-cart.css";
+
+import response from "./comparePrice.json";
 
 const ShoppingCart = () => {
   const {
@@ -18,7 +20,7 @@ const ShoppingCart = () => {
     clearItemFromCart,
     checkoutFromCart,
   } = useContext(CartContext);
-  const [comparePrice, setComparePrice] = useState([]);
+  const [comparePriceData, setComparePriceData] = useState(null);
   const { isLogIn } = useContext(UserContext);
 
   useEffect(() => {
@@ -41,17 +43,17 @@ const ShoppingCart = () => {
 
   const postComparePriceData = async (data) => {
     try {
-      const response = await axios.post(
-        "http://localhost:8800/comparePrice",
-        data,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "*/*",
-          },
-        }
-      );
-      // console.log(response.data);
+      // const response = await axios.post(
+      //   "http://localhost:8800/comparePrice",
+      //   data,
+      //   {
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //       Accept: "*/*",
+      //     },
+      //   }
+      // );
+      setComparePriceData(response);
     } catch (error) {
       console.log(error);
     }
@@ -129,7 +131,18 @@ const ShoppingCart = () => {
             );
           })
         )}
+        {comparePriceData && (
+          <ComparePrice comparePriceData={comparePriceData[0]} />
+        )}
       </div>
+    </div>
+  );
+};
+
+const NoAuth = () => {
+  return (
+    <div>
+      You haven't logged in. Please <a href="/signin">LogIn</a> first.
     </div>
   );
 };
