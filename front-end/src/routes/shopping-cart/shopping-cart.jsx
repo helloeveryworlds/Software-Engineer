@@ -3,10 +3,12 @@ import axios from "axios";
 import { CartContext } from "../../contexts/cart.context";
 import { CartXFill } from "react-bootstrap-icons";
 import Loader from "../../components/loader/loader";
+import ComparePrice from "../../components/compare-price/compare-price";
 import { UserContext } from "../../contexts/user.context";
-import NoAuth from "../../components/no-auth/no-auth";
 
 import "./shopping-cart.css";
+
+import response from "./comparePrice.json";
 
 const ShoppingCart = () => {
   const {
@@ -18,13 +20,12 @@ const ShoppingCart = () => {
     clearItemFromCart,
     checkoutFromCart,
   } = useContext(CartContext);
-  const [comparePrice, setComparePrice] = useState([]);
+  const [comparePriceData, setComparePriceData] = useState(null);
   const { isLogIn } = useContext(UserContext);
 
   useEffect(() => {
     fetchCartData();
   }, [cartItems]);
-
   const collectComparePriceData = (cartItems, zipCode) => {
     let data = [];
 
@@ -41,17 +42,17 @@ const ShoppingCart = () => {
 
   const postComparePriceData = async (data) => {
     try {
-      const response = await axios.post(
-        "http://localhost:8800/comparePrice",
-        data,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "*/*",
-          },
-        }
-      );
-      // console.log(response.data);
+      // const response = await axios.post(
+      //   "http://localhost:8800/comparePrice",
+      //   data,
+      //   {
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //       Accept: "*/*",
+      //     },
+      //   }
+      // );
+      setComparePriceData(response);
     } catch (error) {
       console.log(error);
     }
@@ -119,17 +120,28 @@ const ShoppingCart = () => {
                     <CartXFill size={30} />
                   </div>
                 </div>
-                <div
-                  className="shopping-cart-checkout"
-                  onClick={() => collectComparePriceData(cartItems, "02134")}
-                >
-                  Compare Price
-                </div>
               </div>
             );
           })
         )}
+        <div
+          className="shopping-cart-compare"
+          onClick={() => collectComparePriceData(cartItems, "02134")}
+        >
+          Compare Price
+        </div>
+        {comparePriceData && (
+          <ComparePrice comparePriceData={comparePriceData[0]} />
+        )}
       </div>
+    </div>
+  );
+};
+
+const NoAuth = () => {
+  return (
+    <div>
+      You haven't logged in. Please <a href="/signin">LogIn</a> first.
     </div>
   );
 };

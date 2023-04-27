@@ -6,6 +6,8 @@ import com.bossmode.backend.entity.Cart;
 import com.bossmode.backend.entity.User;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +33,17 @@ public class UserService {
         user.setEnabled(true);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userDao.signUp(user);
+    }
+
+    public void updateUserInformation(String address, String zipcode) {
+        Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
+        String username = loggedInUser.getName();
+        User user = userDao.getUser(username);
+
+        user.setAddress(address);
+        user.setZipCode(zipcode);
+
+        userDao.updateUser(user);
     }
 
     public User getUser(String email) {
