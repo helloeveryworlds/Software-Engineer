@@ -3,7 +3,7 @@ import axios from "axios";
 
 export const CartContext = createContext({
   cartItems: [],
-  cartCount: 0,
+  // cartCount: 0,
   isLoading: true,
   setIsLoading: () => true,
   fetchCartData: () => {},
@@ -14,9 +14,16 @@ export const CartContext = createContext({
 });
 
 export const CartProvider = ({ children }) => {
-  const [cartItems, setCartItems] = useState([]);
+  const [cartItems, setCartItems] = useState([
+    {
+      id: 57,
+      name: "Broccoli",
+      quantity: 1,
+      url: "https://cdn.britannica.com/25/78225-050-1781F6B7/broccoli-florets.jpg",
+    },
+  ]);
   const [isLoading, setIsLoading] = useState(true);
-  const [cartCount, setCartCount] = useState(0);
+  // const [cartCount, setCartCount] = useState(0);
 
   const fetchCartData = async () => {
     const response = await axios.get("/cart");
@@ -79,7 +86,7 @@ export const CartProvider = ({ children }) => {
 
   const value = {
     cartItems,
-    cartCount,
+    // cartCount,
     isLoading,
     fetchCartData,
     addItemToCart,
