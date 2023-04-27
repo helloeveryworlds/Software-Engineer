@@ -10,9 +10,7 @@ const Home = () => {
       <div className="background-image"></div>
       <div className="home-right">
         <SearchBar />
-        <p className="home-slogan" data-testid="slogan">
-          The right store with the right price
-        </p>
+        <p data-testid="slogan">The right store with the right price</p>
       </div>
     </div>
   );

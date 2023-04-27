@@ -17,11 +17,15 @@ export const shopSlice = createSlice({
         removeFromShop : (state,action) => {
             const removeFromShop = state.shop.filter((item) => item.name !== action.payload.name);
             state.shop = removeFromShop;
+        },
+        clearShop: (state,action) => {
+            const empty = [];
+            state.shop = empty;
         }
     }
 });
 
 
-export const {addToShoppingList,removeFromShop} = shopSlice.actions;
+export const {addToShoppingList,removeFromShop, clearShop} = shopSlice.actions;
 
 export default shopSlice.reducer;

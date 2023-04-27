@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -14,31 +14,43 @@ import {
   Alert,
   Platform
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
+import { useDispatch, useSelector } from "react-redux";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { FontAwesome5 } from "@expo/vector-icons";
+
 import SearchIcon from "../../assets/svgs/search";
 import GitHubIcon from "../../assets/svgs/github"
 import Loader from "../components/Loader";
 
 const { width, height } = Dimensions.get("window");
 
-const initialState = { 
-  isLoading: false, 
-  text: "",
-  list: [
+
+const Welcome = ({ route, navigation }) => {
+  const loginInfo = useSelector((state) => state.login.login);
+  const [ isLoading, setIsLoading ] = useState(false);
+  const [text, setText] = useState("");
+  const [list, setList] = useState([
     { store: "Whole Food" },
     { store: "Target" },
-    { store: "Star Market" },
-  ],
-  filteredData: []
-};
+    { store: "Star Market" }
+  ]);
+  const [filteredData, setFilteredData] = useState([]);
+  
+  const toCart = () => {
+    if(loginInfo[0].cart.orderItemList.length != 0){
+      navigation.navigate("Cart", {
+        array: loginInfo[0].cart.orderItemList
+      })
+    }else{
+    navigation.navigate("Cart", {
+      array: []
+    })
+    }
+  }
 
-class Welcome extends Component {
-  state = initialState;
-
-  search = (text) => {
+  const search = (text) => {
     if (text) {
-      const newData = this.state.list.filter(
+      const newData = list.filter(
         function (item) {
           const itemData = item.store
             ? item.store.toUpperCase()
@@ -47,24 +59,24 @@ class Welcome extends Component {
           return itemData.indexOf(textData) > -1;
       });
       
-      this.setState({ filteredData: newData, text: text })
-
+      setFilteredData(newData)
+      setText(text);
     } else {
-      this.setState({ filteredData: this.state.list })
+      setFilteredData(list)
     }
   };
 
-  itemView = ({item}) => {
+  const itemView = ({item}) => {
     return (
       <Text
         style={styles.itemStyle}
-        onPress={() => this.getItem(item)}>
+        onPress={() => getItem(item)}>
         {item.store}
       </Text>
     );
   };
 
-  itemSeparatorView = () => {
+  const itemSeparatorView = () => {
     return (
       <View
         style={{
@@ -76,47 +88,10 @@ class Welcome extends Component {
     );
   };
 
-  getItem = (item) => {
+  const getItem = (item) => {
     Alert.alert(null,"Yes we have "+item.store+" on our list of stores to search!")
   };
 
-  removeItemValue = async (key) => {
-    try {
-      await AsyncStorage.removeItem(key);
-      return true;
-    } catch (exception) {
-      return false;
-    }
-  }
-
-  _retrieveData = () => {
-    AsyncStorage.getItem("userDetails").then((res) => {
-      const response = JSON.parse(res);
-      if (res !== null) {
-      } else {
-        console.log("No response...", response);
-      }
-    });
-  }
-
-  logOut = async () => {
-    Alert.alert(
-      'Logout? ',
-      'Are you sure you want to logout?',
-      [
-        {
-          text: 'Yes', onPress: () => {
-            this.removeItemValue("userDetails");
-              this._retrieveData()
-          }
-        },
-          { text: 'No', onPress: () => console.log('NO Pressed') }
-        ],
-        { cancelable: false },
-        );
-  }
-
-  render() {
     LogBox.ignoreAllLogs(true);
       return (
       <ScrollView
@@ -124,32 +99,43 @@ class Welcome extends Component {
         <ImageBackground
           source={require('../../assets/splashh.png')}
           style={{ height: height, backgroundColor: "#FFF" }}>
-          <Loader loading={this.state.isLoading} />
+          <Loader loading={isLoading} />
           
           <StatusBar backgroundColor="#F4EFEF" barStyle="dark-content"/>
-          {/* <TouchableOpacity style={{ alignSelf: "flex-end", marginEnd: 10, marginBottom: -10 }} onPress={()=> this.logOut()}>
-          <Ionicons
-            name={"log-out-outline"}
-            color={"orange"}
-            size={30}/>
-        </TouchableOpacity> */}
-        
+          
+              {/* {loginInfo.length != 0 &&
+                <View style={{ marginTop: 20, right: -5 }}>
+                  
+                   <View style={styles.best}>
+                  {loginInfo.length != 0 ? 
+                  <Text style={{ fontSize: loginInfo[0].cart.orderItemList.length > 9 ? 9.5 : 12, paddingTop: loginInfo[0].cart.orderItemList.length > 9 ? 2 : 1, paddingHorizontal: loginInfo[0].cart.orderItemList.length > 9 ? 7.5 : 9,  }}>{loginInfo[0].cart.orderItemList.length}</Text>
+                   : 
+                   null}
+                  </View>
+                <TouchableOpacity onPress={()=> toCart()}>
+                  <FontAwesome5 
+                    name={"shopping-cart"} 
+                    style={{ color: "#FF0080", alignSelf: "flex-end", marginEnd : 30, marginBottom: 10 }}
+                    size={25}/>
+                  </TouchableOpacity>
+                  </View>} */}
+
             <View style={{ marginVertical: height * 0.2 }}>
               <TextInput 
               style={styles.optionContainer}
               placeholder={"Search available stores"}
-              onChangeText={(input) => this.search(input)}
+              onChangeText={(input) => search(input)}
               />
 
               <View style={{ bottom: 35, paddingStart: 20 }}>
               <SearchIcon/>
               </View>
               <FlatList
-                data={this.state.filteredData}
+                data={filteredData}
                 style={{ backgroundColor: "#FFF" }}
                 keyExtractor={(item, index) => index.toString()}
-                ItemSeparatorComponent={this.itemSeparatorView}
-                renderItem={this.itemView}
+                ItemSeparatorComponent={itemSeparatorView}
+                renderItem={itemView}
               />
             <View flexDirection="row" alignSelf="center" marginTop={10} marginBottom={10}>
             <Text style={styles.infoTextStyle}>The right store with the right price</Text>
@@ -166,7 +152,7 @@ class Welcome extends Component {
             alignSelf={"flex-start"} 
             marginVertical={5}
             />
-        <TouchableOpacity onPress={()=> this.props.navigation.navigate("Shop")}>
+        <TouchableOpacity onPress={()=> navigation.navigate("Shop")}>
         <Text style={styles.smallText_}>Shopping Page</Text>
         </TouchableOpacity>
         <Text style={styles.bigText}>Students</Text>
@@ -202,8 +188,6 @@ class Welcome extends Component {
         </ScrollView>
       );
     }
-}
-
 
 export default Welcome;
 
@@ -248,6 +232,18 @@ const styles = StyleSheet.create({
     marginTop: 10,
     lineHeight: 29.05,
     marginBottom: 40
+  },
+  best: {
+    backgroundColor: "#EFDB6F",
+    paddingVertical: 4,
+    fontSize: 11,
+    width: 25,
+    height: 25,
+    position: "absolute",
+    right: 3,
+    top: -15,
+    marginRight: 10,
+    borderRadius: 100,
   },
   image: {
     flex: 1,

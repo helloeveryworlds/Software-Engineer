@@ -8,11 +8,9 @@ import {
     TouchableOpacity,
     Alert
   } from 'react-native';
-import UserIcon from '../../assets/svgs/user';
 import {
     DrawerContentScrollView,
-    DrawerItemList,
-    DrawerItem,
+    DrawerItemList
   } from '@react-navigation/drawer';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch, useSelector } from "react-redux";
@@ -21,7 +19,6 @@ import { login,logout } from "../reducers/LoginReducer";
 
 
 const DrawerDesign = (props) => {
-  const [data, setData] = useState("");
   const loginInfo = useSelector((state) => state.login.login);
   const dispatch = useDispatch();
 
