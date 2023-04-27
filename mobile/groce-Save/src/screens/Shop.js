@@ -18,6 +18,7 @@ import groceSaveService from ".././service/GroceSaveService";
 import groceSaveItemService from "../service/GroceSaveItemService";
 import SearchIcon from "../../assets/svgs/search";
 import  Loader  from '../components/Loader';
+import Blink from "../components/Blink";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
 import { addToShoppingList, removeFromShop } from "../reducers/ShopReducer";
@@ -30,7 +31,7 @@ const Shop = ({ navigation }) => {
 
   const [ isLoading, setIsLoading ] = useState(false);
   const [click, setClick] = useState("");
-  const [hide, setHide] = useState(false);
+  const [hide, setHide] = useState(true);
   const [list, setList] = useState([]);
   const [mainList, setMainList] = useState([]);
   const [mainData, setMainData] = useState({});
@@ -98,11 +99,6 @@ const Shop = ({ navigation }) => {
     useEffect(() => {
         itemList()
         getCurrentCart()
-        // if(currentCartList.length == 0){
-        //   setHide(true);
-        // }else{
-        //   setHide(false);
-        // }
     },[]);
       
     const addItemToShop = (item) => {
@@ -122,6 +118,10 @@ const Shop = ({ navigation }) => {
     }
 
     const addToCart = (item, key) => {
+      if(currentCartList.length != 0){
+        scrollRef.current?.scrollTo({x: 0, y: 0, animated: true}) 
+        Alert.alert(null,"Please Empty and checkout other items left in the cart before you continue..")
+      }else{
       scrollRef.current?.scrollTo({x: 0, y: 0, animated: true}) 
       selectedItemsList.push({
         id: key+"",
@@ -138,18 +138,19 @@ const Shop = ({ navigation }) => {
       setNewCartList([...selectedItemsList]);
       addItemToShop(itemData)
     }
+    }
 
     const toCart = () => {
-      // if(currentCartList.length != 0){
-      //   navigation.navigate("Cart", {
-      //     array: currentCartList
-      //   })
-      // }else{
+      if(currentCartList.length != 0){
+        navigation.navigate("Cart", {
+          array: currentCartList
+        })
+        setCurrentCartList([]);
+      }else{
       navigation.navigate("Cart", {
         array: shop
       })
-      setHide(false);
-    // }
+    }
     }
 
     const removeFromCart = (item, index) => {
@@ -352,7 +353,6 @@ const Shop = ({ navigation }) => {
   const getCurrentCart = () => {
     const onSuccess = ( data ) => {
       setIsLoading(false);
-      console.log("Donneeee",data)
       if (data.status == 200){
       console.log("Data data data data donneeee",data.data.orderItemList)
       if(data){
@@ -455,9 +455,35 @@ const Shop = ({ navigation }) => {
                 </TouchableOpacity>
                 : null}
 
-                {/* {shop.length != 0 &&
+                {currentCartList.length != 0 ?
                 <View>
-                  
+                  <Blink duration={1000}>
+                  <View style={styles.best}>
+                  <Text style={{ fontSize: currentCartList.length > 9 ? 9.5 : 12, paddingTop: currentCartList.length > 9 ? 2 : 1, paddingHorizontal: currentCartList.length > 9 ? 7.5 : 9,  }}>{currentCartList.length}</Text>
+                  </View>
+                    <TouchableOpacity onPress={()=> toCart()}>
+                    <FontAwesome5 
+                      name={"shopping-cart"} 
+                      style={{ color: "#FF0080", alignSelf: "flex-end", marginEnd : 30, marginBottom: 10 }}
+                      size={25}/>
+                    </TouchableOpacity>
+                    </Blink>
+                  </View> : 
+                  currentCartList.length == 0 && shop.length != 0 &&
+                  <View>
+                    <View style={styles.best}>
+                    <Text style={{ fontSize: shop.length > 9 ? 9.5 : 12, paddingTop: shop.length > 9 ? 2 : 1, paddingHorizontal: shop.length > 9 ? 7.5 : 9,  }}>{shop.length}</Text>
+                    </View>
+                      <TouchableOpacity onPress={()=> toCart()}>
+                      <FontAwesome5 
+                        name={"shopping-cart"} 
+                        style={{ color: "#FF0080", alignSelf: "flex-end", marginEnd : 30, marginBottom: 10 }}
+                        size={25}/>
+                    </TouchableOpacity>
+                  </View>}
+
+                  {/* {shop.length != 0 &&
+                <View>
                   <View style={styles.best}>
                   {currentCartList.length != 0 ? 
                   <Text style={{ fontSize: currentCartList.length > 9 ? 9.5 : 12, paddingTop: currentCartList.length > 9 ? 2 : 1, paddingHorizontal: currentCartList.length > 9 ? 7.5 : 9,  }}>{currentCartList.length}</Text>
@@ -470,9 +496,10 @@ const Shop = ({ navigation }) => {
                   style={{ color: "#FF0080", alignSelf: "flex-end", marginEnd : 30, marginBottom: 10 }}
                   size={25}/>
                   </TouchableOpacity>
-                  </View>} */}
+                  </View>}
+                   */}
 
-                  {shop.length != 0 &&
+                  {/* {shop.length != 0 &&
                   <View>
                   
                   <View style={styles.best}>
@@ -487,7 +514,7 @@ const Shop = ({ navigation }) => {
                   style={{ color: "#FF0080", alignSelf: "flex-end", marginEnd : 30, marginBottom: 10 }}
                   size={25}/>
                   </TouchableOpacity>
-                  </View>}
+                  </View>} */}
 
                 {!mainList && <Text style={styles.invalidTextStyle}>No available Categories. Please check your network...</Text>}
                 {!list ? 

@@ -57,6 +57,11 @@ const DrawerDesign = (props) => {
              removeItemValue("userDetails");
              dispatch(logout([]));
               _retrieveData()
+              Alert.alert(null, "You just logged out now,\nSign in to do actions successfully!",[
+                {
+                  text: 'Ok', onPress: () => {
+                  props.navigation.navigate("SignIn");
+           } }]);
           }
         },
           { text: 'No', onPress: () => console.log('NO Pressed') }
