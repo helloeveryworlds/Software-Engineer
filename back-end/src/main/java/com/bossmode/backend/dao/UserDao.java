@@ -19,6 +19,24 @@ public class UserDao {
 
     @Autowired
     private SessionFactory sessionFactory;
+    public void updateUser(User user) {
+        Session session = null;
+        try {
+            session = sessionFactory.openSession();
+            session.beginTransaction();
+            session.update(user);
+            session.getTransaction().commit();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            if (session != null) {
+                session.getTransaction().rollback();
+            }
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+    }
     public boolean emailExists(String email) {
         Session session = sessionFactory.openSession();
         String q = "FROM User WHERE email = :email";
