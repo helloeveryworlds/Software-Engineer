@@ -14,39 +14,47 @@ const ComparePrice = ({ comparePriceData }) => {
   return (
     <div className="compare-price-container">
       <div className="best-category">
-        <div className="best-category-heading">Best By Category</div>
-        <div>
+        <div className="best-category-heading">Best By Categories</div>
+        <div className="compare-price-body">
+        <div className="compare-item">
           <p>{bestByCategory.lowestUnitPriceStoreName}</p>
           <p>{bestByCategory.lowestUnitPriceStorePrice}</p>
         </div>
-        <div>
+        <div className="compare-item">
           <p>{bestByCategory.lowestTotalPriceStoreName}</p>
           <p>{bestByCategory.lowestTotalPriceStorePrice}</p>
         </div>
-        <div>
+        <div className="compare-item">
           <p>{bestByCategory.lowestAvgStoreName}</p>
           <p>{bestByCategory.lowestAvgTotalPrice}</p>
         </div>
       </div>
-
+      </div>
+      <div className="compare-button-body">
+      <div className="compare-button">
       {Object.keys(storeValue).map((storeName) => {
         const storeData = storeValue[storeName];
         return (
-          <div className="store-buttons" key={storeName}>
+          
+          <div className="popuptext" id="myPopup" key={storeName}>
             {showStoreData === storeName && (
               <div
-                className="store-data-overlay"
+                className="store-data-overlay" id="myPopup"
                 onClick={() => handleShowStoreDataToggle(storeName)}
               >
                 <IndividualStoreData storeData={storeData} />
               </div>
             )}
-            <button onClick={() => handleShowStoreDataToggle(storeName)}>
+            <div className="store-button" onClick={() => handleShowStoreDataToggle(storeName)}>
               {storeName}
-            </button>
+            </div>
           </div>
+
         );
       })}
+       </div>
+       </div>
+
     </div>
   );
 };
@@ -59,21 +67,25 @@ const IndividualStoreData = ({ storeData }) => {
         return (
           <div className="store-data" key={itemName}>
             <div className="store-data-header">
-              <div>
+              <div >
                 {itemName} ({itemData.lowestUnit})
               </div>
               <div>{itemData.avgTotalPrice}</div>
             </div>
             <div className="store-data-body">
-              <div>
-                <p>{itemData.lowestUnitItemImgUrl}</p>
+              <div className="store-item">
+                <img src = {itemData.lowestUnitItemImgUrl}/>
+                <div className="store-row">
                 <p>{itemData.lowestUnitItemName}</p>
                 <p>{itemData.lowestUnitPriceTotal}</p>
+                </div> 
               </div>
-              <div>
-                <p>{itemData.lowestItemImgUrl}</p>
+              <div className="store-item">
+                <img src = {itemData.lowestItemImgUrl}/>
+                <div className="store-row">
                 <p>{itemData.lowestItemName}</p>
                 <p>{itemData.lowestPriceTotal}</p>
+                </div>
               </div>
             </div>
           </div>
