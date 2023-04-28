@@ -536,6 +536,7 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     flex: 1,
+    backgroundColor: "#FFFFFF60"
   },
   errorMessageContainerStyle: {
     backgroundColor: "#fee8e6",

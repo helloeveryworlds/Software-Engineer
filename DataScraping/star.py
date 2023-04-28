@@ -37,7 +37,7 @@ def scraping(zipcode, product, store, printinfo = False):
         click(driver, By.XPATH, '//*[@id="fulfilmentInStore"]/div/div/div[1]/store-card/div[2]/div/a')
         driver.execute_script("window.scrollBy(0, 100);")
         click(driver, By.ID, 'sortDropdown')
-        click(driver, By.ID, 'sortRule-1', 3)
+        click(driver, By.ID, 'sortRule-1', 1.5)
     except:
         return 
     # cookies # close # change zip # enter zip code # search # select first store # sort option # sort by price
@@ -56,9 +56,10 @@ def scraping(zipcode, product, store, printinfo = False):
             pic = pic_tag[0].img['data-src']
             
             price_tag = tag.find_all('div', class_='product-card-container__details mt-3')
-            price_start = str(price_tag[0].div.span).find('</span>')
-            price_end   = str(price_tag[0].div.span).find('<!')
-            price = str(price_tag[0].div.span)[price_start+8: price_end-1]
+            #price_start = str(price_tag[0].div.span).find('</span>')
+            #price_end   = str(price_tag[0].div.span).find('<!')
+            price = price_tag[0].div.span.span.text
+            price = price.strip('$')
             
             name_tag = tag.find_all('div', class_='product-title__text has-tooltip')
             if len(name_tag)==0:
@@ -70,17 +71,21 @@ def scraping(zipcode, product, store, printinfo = False):
             unit_price = tag.find_all('div', class_='product-title__details')[0].div.text[1:-1]
             num, measure = unit_price.split(f' / ')
             num = num[1:]
+            
             if measure == '100ct':
-                unit_price = str(float(num)/100.0)
+                unit_price = str(round(float(num)/100.0, 2))
+                unit = 'ct'
+            elif measure == 'Each':
+                unit_price = str(round(float(num)/1.0, 2))
                 unit = 'ct'
             elif measure == 'Gal.':
-                unit_price = str(float(num)/3.79)
+                unit_price = str(round(float(num)/3.79, 2))
                 unit = 'kg'
-            elif measure == 'Lb' or measure == 'pound':
-                unit_price = str(float(num)/0.45)
+            elif measure  in ['Lb', 'pound', 'Pound']:
+                unit_price = str(round(float(num)/0.45, 2))
                 unit = 'kg'
             elif measure == 'Quart':
-                unit_price = str(float(num)/0.95)
+                unit_price = str(round(float(num)/0.95, 2))
                 unit = 'kg'
             
             
@@ -93,7 +98,7 @@ def scraping(zipcode, product, store, printinfo = False):
                 print(pic, price, name, unit_price, sep='\n')
                 print()
         except Exception as e:
-            print(f"ERROR : {e}")
+            print(f"ERROR : {e}")  # zipcode name
             continue
     driver.close()
     
@@ -103,7 +108,8 @@ def scraping(zipcode, product, store, printinfo = False):
         for item in items[:-1]:
             f.write(json.dumps(item))
             f.write(',\n')
-        f.write(json.dumps(items[-1]))
+        if len(items):
+            f.write(json.dumps(items[-1]))
         f.write(']')
         print(f'{store}  {zipcode}  {product} finished  total:', len(items))
 
@@ -116,17 +122,10 @@ with open('products.txt' ,'r') as f:
     products = f.read()
 products = products.split(', ')
 
-for zipcode in zipcodes[:2]:
-    for product in products[:1]:
+for zipcode in zipcodes[:]:
+    for product in products[:]:
         scraping(zipcode, product, store)
 
-
-def f(text, count):
-    cate, items = text.split(' - ')
-    items = items.split(', ')
-    for i, item in enumerate(items):
-        print(f"insert into item (id, item_name, category) values ({count}, '{item}', '{cate}')")
-        count += 1
 
 
 

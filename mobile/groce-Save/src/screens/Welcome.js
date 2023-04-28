@@ -98,28 +98,11 @@ const Welcome = ({ route, navigation }) => {
           keyboardShouldPersistTaps="always">
         <ImageBackground
           source={require('../../assets/splashh.png')}
-          style={{ height: height, backgroundColor: "#FFF" }}>
+          style={{ height: height }}>
           <Loader loading={isLoading} />
           
           <StatusBar backgroundColor="#F4EFEF" barStyle="dark-content"/>
-          
-              {/* {loginInfo.length != 0 &&
-                <View style={{ marginTop: 20, right: -5 }}>
-                  
-                   <View style={styles.best}>
-                  {loginInfo.length != 0 ? 
-                  <Text style={{ fontSize: loginInfo[0].cart.orderItemList.length > 9 ? 9.5 : 12, paddingTop: loginInfo[0].cart.orderItemList.length > 9 ? 2 : 1, paddingHorizontal: loginInfo[0].cart.orderItemList.length > 9 ? 7.5 : 9,  }}>{loginInfo[0].cart.orderItemList.length}</Text>
-                   : 
-                   null}
-                  </View>
-                <TouchableOpacity onPress={()=> toCart()}>
-                  <FontAwesome5 
-                    name={"shopping-cart"} 
-                    style={{ color: "#FF0080", alignSelf: "flex-end", marginEnd : 30, marginBottom: 10 }}
-                    size={25}/>
-                  </TouchableOpacity>
-                  </View>} */}
-
+          <View style={{ backgroundColor: "#FFFFFF60", height: height }}>
             <View style={{ marginVertical: height * 0.2 }}>
               <TextInput 
               style={styles.optionContainer}
@@ -139,6 +122,7 @@ const Welcome = ({ route, navigation }) => {
               />
             <View flexDirection="row" alignSelf="center" marginTop={10} marginBottom={10}>
             <Text style={styles.infoTextStyle}>The right store with the right price</Text>
+            </View>
             </View>
             </View>
           </ImageBackground>

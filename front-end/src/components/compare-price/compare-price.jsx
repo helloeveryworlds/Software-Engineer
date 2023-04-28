@@ -15,12 +15,18 @@ const ComparePrice = ({ comparePriceData }) => {
     <div className="compare-price-container">
       <div className="best-category">
         <div className="best-category-heading">Best By Category</div>
-        <p>{bestByCategory.lowestAvgStoreName}</p>
-        <p>{bestByCategory.lowestUnitPriceStoreName}</p>
-        <p>{bestByCategory.lowestTotalPriceStorePrice}</p>
-        <p>{bestByCategory.lowestAvgTotalPrice}</p>
-        <p>{bestByCategory.lowestUnitPriceStorePrice}</p>
-        <p>{bestByCategory.lowestTotalPriceStoreName}</p>
+        <div>
+          <p>{bestByCategory.lowestUnitPriceStoreName}</p>
+          <p>{bestByCategory.lowestUnitPriceStorePrice}</p>
+        </div>
+        <div>
+          <p>{bestByCategory.lowestTotalPriceStoreName}</p>
+          <p>{bestByCategory.lowestTotalPriceStorePrice}</p>
+        </div>
+        <div>
+          <p>{bestByCategory.lowestAvgStoreName}</p>
+          <p>{bestByCategory.lowestAvgTotalPrice}</p>
+        </div>
       </div>
 
       {Object.keys(storeValue).map((storeName) => {
@@ -52,16 +58,23 @@ const IndividualStoreData = ({ storeData }) => {
         const itemData = storeData[itemName];
         return (
           <div className="store-data" key={itemName}>
-            <div className="store-data-header">{itemName}</div>
+            <div className="store-data-header">
+              <div>
+                {itemName} ({itemData.lowestUnit})
+              </div>
+              <div>{itemData.avgTotalPrice}</div>
+            </div>
             <div className="store-data-body">
-              <p>{itemData.lowestUnitItemImgUrl}</p>
-              <p>{itemData.lowestItemName}</p>
-              <p>{itemData.lowestUnit}</p>
-              <p>{itemData.lowestItemImgUrl}</p>
-              <p>{itemData.avgTotalPrice}</p>
-              <p>{itemData.lowestUnitPriceTotal}</p>
-              <p>{itemData.lowestPriceTotal}</p>
-              <p>{itemData.lowestUnitItemName}</p>
+              <div>
+                <p>{itemData.lowestUnitItemImgUrl}</p>
+                <p>{itemData.lowestUnitItemName}</p>
+                <p>{itemData.lowestUnitPriceTotal}</p>
+              </div>
+              <div>
+                <p>{itemData.lowestItemImgUrl}</p>
+                <p>{itemData.lowestItemName}</p>
+                <p>{itemData.lowestPriceTotal}</p>
+              </div>
             </div>
           </div>
         );

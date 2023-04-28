@@ -26,7 +26,6 @@ const ShoppingCart = () => {
   useEffect(() => {
     fetchCartData();
   }, [cartItems]);
-
   const collectComparePriceData = (cartItems, zipCode) => {
     let data = [];
 
@@ -121,16 +120,16 @@ const ShoppingCart = () => {
                     <CartXFill size={30} />
                   </div>
                 </div>
-                <div
-                  className="shopping-cart-checkout"
-                  onClick={() => collectComparePriceData(cartItems, "02134")}
-                >
-                  Compare Price
-                </div>
               </div>
             );
           })
         )}
+        <div
+          className="shopping-cart-compare"
+          onClick={() => collectComparePriceData(cartItems, "02134")}
+        >
+          Compare Price
+        </div>
         {comparePriceData && (
           <ComparePrice comparePriceData={comparePriceData[0]} />
         )}
