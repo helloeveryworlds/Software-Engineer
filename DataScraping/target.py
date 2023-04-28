@@ -31,13 +31,8 @@ def scraping(zipcode, product, store, printinfo = False):
     bar = driver.find_element(By.ID, 'zip-or-city-state')
     bar.send_keys(zipcode)
     sleep(2)
-    try:
-        click(driver, By.XPATH, '/html/body/div[23]/div/div/div[2]/div/div[1]/div/div[3]/div[2]/button') 
-        click(driver, By.XPATH, '/html/body/div[23]/div/div/div[2]/div/div[3]/div[2]/div[1]/button')
-    except:
-        click(driver, By.XPATH, '/html/body/div[22]/div/div/div[2]/div/div[1]/div/div[3]/div[2]/button') 
-        click(driver, By.XPATH, '/html/body/div[22]/div/div/div[2]/div/div[3]/div[2]/div[1]/button')
-    click(driver, By.ID, 'search')
+    click(driver, By.XPATH, '/html/body/div[5]/div/div/div[2]/div[1]/div/div[2]/div[2]/button')
+    click(driver, By.XPATH, '/html/body/div[5]/div/div/div[3]/button')
     # change zip # enter zip code # search # select store # click
     soup = BeautifulSoup(driver.page_source, 'html.parser')
     
@@ -47,27 +42,35 @@ def scraping(zipcode, product, store, printinfo = False):
     for i, tag in enumerate(tags[:]):
         try:
             
+            div1 = tag.div.div.div.find('div', class_='ProductCardImageWrapper-sc-164r5os-0 styles__StyledProductCardImageWrapper-sc-9lksuw-1 bVqrgz byfgtU')
             driver_tmp = webdriver.Chrome()
-            driver_tmp.get('https://www.target.com'+ tag.div.div.div.h3.a['href'])
-            sleep(4)
+            driver_tmp.get('https://www.target.com'+div1.h3.div.div.a['href'])
+            main_content = BeautifulSoup(driver_tmp.page_source, 'html.parser')
             
-            soup_tmp = BeautifulSoup(driver_tmp.find_element(By.ID, 'pageBodyContainer').get_attribute('outerHTML'), 'html.parser')
-            main_content = soup_tmp.div
+            pic = main_content.find('div', class_='styles__ImageGalleryThumbnailWrapper-sc-mk2xp9-1 XmisB').button.div.div.div.picture.img['src']
             
-            name = main_content.div.h1.text
+            price = driver_tmp.find_element(By.XPATH, '//*[@id="pageBodyContainer"]/div[1]/div[2]/div[2]/div[1]/div').text.find('\n')[0]
+            price = price.strip('$')
             
-            main_content = main_content.find('div', class_='styles__GalleryAndAddToCartWrapper-sc-2vujr8-3 edRGzK')
-            pic = main_content.div.div.section.div.button.div.div.div.picture.img['src']
+            name = main_content.find('div', class_='h-padding-h-default').h1.text
             
-            price = main_content.find('div', class_='styles__StyledSecondColumn-sc-y0ahq4-2 fgJgHt h-padding-h-default').div.div.div.span.span.text
-            
-            unit_price = 'None'
-            
-            rating = 'None'
+            driver_tmp.execute_script("window.scrollBy(0, 500);")
+            click(driver_tmp, By.XPATH, '//*[@id="tabContent-tab-Details"]/div/button')
+            infos = main_content.find('div', 'styles__StyledCol-sc-fw90uk-0 dFHUpo h-padding-h-tight').find_all('div')
+            unit_price = ""
+            unit = ""
+            for info in infos:
+                if 'Net weight' in info.text:
+                    unit_price = info.text.split(': ')[1]
+                    amount, unit_price = unit_price.split(' ')
+                    if unit_price == 'Pound':
+                        unit_price = float(price)/0.45/float(amount)
+                        unit = "kg"
+                    break
             
             driver_tmp.close()
             
-            item = {"pic-url": pic, "price": price, "name": name, "unit-price":unit_price , "rating": rating}
+            item = {"pic-url": pic, "price": price, "name": name, "unit-price":unit_price , "unit": unit}
             items.append(item)
             
             if printinfo:
@@ -98,11 +101,5 @@ products = ['milk', 'egg']
 for zipcode in zipcodes[:2]:
     for product in products[:1]:
         scraping(zipcode, product, store)
-
-
-
-
-
-
 
 
