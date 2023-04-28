@@ -8,6 +8,7 @@ import {
     ScrollView,
     TouchableOpacity,
     Alert,
+    Modal,
     Dimensions
   } from "react-native";
   import React, { useRef, useState, useEffect } from "react";
@@ -310,9 +311,9 @@ import {
           </Pressable>
         ))
         }
-        {cart.length != 0 && cartResponse.lowestAvgStoreName ?
+        {cart.length != 0 ?
         <Text style={{ textAlign: "center", fontSize: 14, backgroundColor: "#808080", color: "#FFF", width: width, padding: 10 }}>
-          {cartResponse.lowestAvgStoreName.toUpperCase()}
+          {/* {cartResponse.lowestAvgStoreName.toUpperCase()} */}
         </Text> : <View
                 width={width * 0.9} 
                 height={1.5} 
@@ -327,12 +328,12 @@ import {
             <View style={{ flexDirection: "row" }}>
             <Image style={{ width: 100, height: 100, borderRadius: 8,marginTop:6 }}
                 source={{ uri: item.image ? item.image: item.url }}/>
-               {cartResponse.lowestAvgStoreName &&
+               {/* {cartResponse.lowestAvgStoreName &&
                 <View>
                 <Text style={{ fontWeight: "600", marginTop: 30, marginStart: 10, width: width * 0.7 }}>Lowest Price: ${cartResponse.lowestAvgTotalPrice}</Text>
                 <Text style={{ fontWeight: "600", marginTop: 10, marginStart: 10, width: width * 0.7 }}>Total Price: ${cartResponse.lowestTotalPriceStorePrice}</Text>
                 <Text style={{ fontWeight: "bold", marginTop: 10, marginStart: 10, width: width * 0.7 }}>Store: {cartResponse.lowestAvgStoreName}</Text>
-                </View>}
+                </View>} */}
             </View>
             <Pressable
               style={{
@@ -382,8 +383,23 @@ import {
             </Pressable>
           </View>
         ))}
+        {/* <Text style={styles.best}>Best</Text> */}
+        <TouchableOpacity 
+          style={styles.itemStoreBtn}
+          // onPress={()=> submitComparePrice()}
+          >
+          <Text style={styles.itemBtnDetails}>Star Market</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity 
+          style={styles.itemStoreBtn}
+          // onPress={()=> submitComparePrice()}
+          >
+          <Text style={styles.itemBtnDetails}>Target</Text>
+        </TouchableOpacity>
+
         {cart.length != 0 ?
-         !cartResponse.lowestAvgStoreName ? 
+        //  !cartResponse.lowestAvgStoreName ? 
         <TouchableOpacity 
           style={styles.itemCompareBtn}
           onPress={()=> submitComparePrice()}>
@@ -393,7 +409,8 @@ import {
         style={styles.itemBtn}
         onPress={()=> submitCheckOut()}>
         <Text style={styles.itemBtnDetails}>Checkout</Text>
-      </TouchableOpacity> : null}
+      </TouchableOpacity>} 
+      {/* : null} */}
       </SafeAreaView>
       </ScrollView>
     );
@@ -418,11 +435,29 @@ import {
       alignSelf: "center",
       marginVertical: Platform.OS === "ios" ? 20: 20,
     },
+    itemStoreBtn: {
+      backgroundColor: "#FF3366",
+      width: width * 0.40,
+      height: 35,
+      borderRadius: 50,
+      alignSelf: "center",
+      marginVertical: Platform.OS === "ios" ? 20: 20,
+    },
     itemBtnDetails: {
       fontSize: 17,
       padding: 5,
       textAlign: "center",
     },
+    best: {
+      backgroundColor: "#EFDB6F",
+      paddingVertical: 5,
+      paddingHorizontal: 10,
+      fontSize: 11,
+      width: 45,
+      position: "absolute",
+      right: -20,
+      top: -10
+    },  
     invalidTextStyle: {
       fontSize: 12,
       color: "#FF0000",

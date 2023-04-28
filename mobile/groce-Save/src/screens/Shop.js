@@ -21,12 +21,17 @@ import  Loader  from '../components/Loader';
 import Blink from "../components/Blink";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
+import { addToCart } from "../reducers/CartReducer";
 import { addToShoppingList, removeFromShop } from "../reducers/ShopReducer";
 
 const { width } = Dimensions.get("window");
 
 const Shop = ({ navigation }) => {
   const shop = useSelector((state) => state.shop.shop);
+  const cart = useSelector((state) => state.cart.cart);
+  const login = useSelector((state) => state.login.login);
+  
+  console.log("Carttttttttt", cart)
   const dispatch = useDispatch();
 
   const [ isLoading, setIsLoading ] = useState(false);
@@ -117,7 +122,7 @@ const Shop = ({ navigation }) => {
       setSelectedMainItemsList([...selectedMainItemsList]);
     }
 
-    const addToCart = (item, key) => {
+    const addToShop = (item, key) => {
       if(currentCartList.length != 0){
         scrollRef.current?.scrollTo({x: 0, y: 0, animated: true}) 
         Alert.alert(null,"Please Empty and checkout other items left in the cart before you continue..")
@@ -145,7 +150,7 @@ const Shop = ({ navigation }) => {
         navigation.navigate("Cart", {
           array: currentCartList
         })
-        setCurrentCartList([]);
+        // setCurrentCartList([]);
       }else{
       navigation.navigate("Cart", {
         array: shop
@@ -306,13 +311,16 @@ const Shop = ({ navigation }) => {
           borderRadius: 50,
           alignSelf: "center",
           marginTop: Platform.OS === "ios" ? -10: -10,}}
-          onPress={()=> { 
-          addSelectedMainCat(item,key)
+          onPress= {
+            currentCartList.length == 0 && login.length != 0 ? 
+            ()=> { 
+          addSelectedMainCat(item,key) 
           scrollRef.current?.scrollTo({x: 0, y: 0, animated: true}) 
           setList(mainData[item])
           setFilteredData(mainData[item])
           setClick("clicked")
-          setInput(item)}}>
+          setInput(item)} : currentCartList.length != 0 && login.length != 0 ? 
+          ()=> { Alert.alert(null,"Please Empty cart")} : ()=> { Alert.alert(null,"Please Login to continue")}}>
           <Text style={styles.viewBtnDetails}>View Category</Text>
       </TouchableOpacity> : 
       !shop.some((value) => value.name == item.split(',')[0].trim()) ?
@@ -327,7 +335,7 @@ const Shop = ({ navigation }) => {
           marginTop: Platform.OS === "ios" ? 15: 10,
         }}
         onPress={()=> { 
-          addToCart(item, key)
+          addToShop(item, key)
         }}>
       <Text style={styles.itemBtnDetails}>Add to cart</Text>
       </TouchableOpacity> : 
@@ -356,13 +364,17 @@ const Shop = ({ navigation }) => {
       if (data.status == 200){
       console.log("Data data data data donneeee",data.data.orderItemList)
       if(data){
-        setCurrentCartList(data.data.orderItemList)
+        if(data.data.orderItemList.length != 0){
+          data.data.orderItemList.forEach((item)=> {
+            dispatch(addToCart(item));
+            setCurrentCartList(data.data.orderItemList)
+          })
+        }else if(data.data.orderItemList == null){
+          setCurrentCartList([]);
+        }
       }else{
         setCurrentCartList([])
       }
-        // Alert.alert(null, "Checkout successfully,\nIt's free so no need to pay!", [{
-        //   text: 'Ok', onPress: () => navigation.navigate("Shop")
-        // }])
       }
     };
 
@@ -455,7 +467,7 @@ const Shop = ({ navigation }) => {
                 </TouchableOpacity>
                 : null}
 
-                {currentCartList.length != 0 ?
+                {currentCartList.length != 0 && cart.length != 0 ?
                 <View>
                   <Blink duration={1000}>
                   <View style={styles.best}>

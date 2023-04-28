@@ -77,6 +77,7 @@ class SignUp extends Component {
 
   handleZipcode = (zipCode) => {  
     if(zipCode != ""){
+      this.zipCodeCheck(zipCode);
       this.setState({ zipCode: zipCode, zc: "" });
     }else {
       this.setState({ zipCode: zipCode, zc: "empty" });
@@ -110,11 +111,16 @@ class SignUp extends Component {
     }
   }
 
+  zipCodeCheck = (zipCode) => {
+    return /^[0-9]+$/.test(zipCode);
+  }
+
   onPressSubmit() {
     this.setState({ isLoading: true });
 
     const { email, password, em, name, pa, zipCode, address, correctPassword, correct} = this.state;
-    
+    const zipCodeCheck = this.zipCodeCheck(zipCode);
+
     if(name == ""){
       this.setState({ isLoading: false, us: "empty" });
     }else if(email == ""){
@@ -127,7 +133,9 @@ class SignUp extends Component {
       this.setState({ isLoading: false, pa: "empty" });
     }else if(address == ""){
       this.setState({ isLoading: false, ad: "empty" });
-    }else if(zipCode == "Select zipcode"){
+    }else if(zipCode == ""){
+      this.setState({ isLoading: false, zc: "empty" });
+    }else if(zipCode != "" && !zipCodeCheck){
       this.setState({ isLoading: false, zc: "empty" });
     }else{
       const payload = { email, password, address, name, zipCode };
@@ -417,6 +425,8 @@ class SignUp extends Component {
             />
             </View>
             {this.state.zc == "empty" && this.state.zipCode == "" && <Text style={styles.invalidEmailTextStyle}>Zip code is empty</Text>}
+            {!this.zipCodeCheck(this.state.zipCode) && this.state.zipCode != "" && <Text style={styles.invalidEmailTextStyle}>Zip code is not numeric</Text>}
+
           </View>
 
           <TouchableOpacity
