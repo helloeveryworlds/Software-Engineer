@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useContext, Component } from "react";
 // import axios from "axios";
 import "./sign-in.css";
 import {
@@ -7,6 +7,8 @@ import {
   useParams,
   Navigate,
 } from "react-router-dom";
+import { notification } from 'antd';
+import { UserContext } from "../../contexts/user.context"
 // import { Button, Form, Input, message } from "antd";
 
 function withRouter(Component) {
@@ -64,11 +66,26 @@ class SignIn extends React.Component {
       })
       .then((data) => {
         console.log(data);
+        const {currentUser, setCurrentUser} = useContext(UserContext)
+        setCurrentUser({
+          name: data.name,
+          email: data.email,
+          address: data.address,
+          zipCode: data.zipCode
+        })
         localStorage.setItem("name", data.name);
         localStorage.setItem("email", data.email);
         localStorage.setItem("address", data.address);
         localStorage.setItem("zipCode", data.zipCode);
         this.setState({ success: true });
+      })
+      .catch(error => {
+        notification.open({
+          message: 'Email or password is incorrect.',
+          onClick: () => {
+            console.log('Notification Clicked!');
+          },
+        });
       });
   }
 

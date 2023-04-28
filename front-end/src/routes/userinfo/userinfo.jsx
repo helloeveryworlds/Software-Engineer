@@ -1,6 +1,8 @@
 import React from "react";
 import "./userinfo.css";
 import { PersonVcard, PinMap, ClockHistory } from "react-bootstrap-icons";
+import { useContext } from "react";
+import { UserContext } from "../../contexts/user.context";
 
 class UserInfo extends React.Component {
 
@@ -13,6 +15,7 @@ class UserInfo extends React.Component {
     user.address = storage.getItem("address")
     user.zipCode = storage.getItem("zipCode")
     console.log(user)
+
     this.state = {
       user: user
     }
