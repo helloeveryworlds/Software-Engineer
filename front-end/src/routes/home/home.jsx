@@ -1,10 +1,15 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 
 import SearchBar from "../../components/search-bar/search-bar";
 
 import "./home.css";
+import { UserContext } from "../../contexts/user.context"
 
 const Home = () => {
+  const {currentUser, setCurrentUser} = useContext(UserContext)
+  useEffect(() => {
+
+  })
   return (
     <div className="home-container">
       <div className="background-image"></div>
