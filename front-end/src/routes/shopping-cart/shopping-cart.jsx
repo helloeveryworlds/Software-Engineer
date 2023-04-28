@@ -23,9 +23,9 @@ const ShoppingCart = () => {
   const [comparePriceData, setComparePriceData] = useState(null);
   const { isLogIn } = useContext(UserContext);
 
-  useEffect(() => {
-    fetchCartData();
-  }, [cartItems]);
+  // useEffect(() => {
+  //   fetchCartData();
+  // }, [cartItems]);
   const collectComparePriceData = (cartItems, zipCode) => {
     let data = [];
 
@@ -85,9 +85,11 @@ const ShoppingCart = () => {
           <div>
             Your Cart is Empty. Go <a href="/shopping">Shopping</a>{" "}
           </div>
-        ) : isLoading ? (
-          <Loader />
-        ) : (
+        ) 
+        // : isLoading ? (
+        //   <Loader />
+        // ) 
+        : (
           cartItems.map((item) => {
             return (
               <div className="shopping-cart-body" key={item.id}>
