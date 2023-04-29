@@ -1,26 +1,20 @@
-import React, { useContext, Component } from "react";
+import React from "react";
 // import axios from "axios";
 import "./sign-in.css";
-import {
-  useLocation,
-  useNavigate,
-  useParams,
-  Navigate,
-} from "react-router-dom";
-import { notification } from 'antd';
-import { UserContext } from "../../contexts/user.context"
+import { Navigate } from "react-router-dom";
+import { notification } from "antd";
 // import { Button, Form, Input, message } from "antd";
 
-function withRouter(Component) {
-  function ComponentWithRouterProp(props) {
-    let location = useLocation();
-    let navigate = useNavigate();
-    let params = useParams();
-    return <Component {...props} router={{ location, navigate, params }} />;
-  }
+// function withRouter(Component) {
+//   function ComponentWithRouterProp(props) {
+//     let location = useLocation();
+//     let navigate = useNavigate();
+//     let params = useParams();
+//     return <Component {...props} router={{ location, navigate, params }} />;
+//   }
 
-  return ComponentWithRouterProp;
-}
+//   return ComponentWithRouterProp;
+// }
 
 class SignIn extends React.Component {
   constructor(props) {
@@ -72,12 +66,12 @@ class SignIn extends React.Component {
         localStorage.setItem("zipCode", data.zipCode);
         this.setState({ success: true });
       })
-      .catch(error => {
-        console.log(error)
+      .catch((error) => {
+        console.log(error);
         notification.open({
-          message: 'Email or password is incorrect.',
+          message: "Email or password is incorrect.",
           onClick: () => {
-            console.log('Notification Clicked!');
+            console.log("Notification Clicked!");
           },
         });
       });

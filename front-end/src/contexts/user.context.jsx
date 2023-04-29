@@ -7,12 +7,7 @@ export const UserContext = createContext({
 });
 
 export const UserProvider = ({ children }) => {
-  const [currentUser, setCurrentUser] = useState({
-    name: "zz",
-    email: "123@gmail.com",
-    address: "zxcv",
-    zipCode: "02134",
-  });
+  const [currentUser, setCurrentUser] = useState({});
   const [isLogIn, setIsLogIn] = useState(false);
 
   useEffect(() => {

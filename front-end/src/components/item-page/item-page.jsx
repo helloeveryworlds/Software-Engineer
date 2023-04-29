@@ -16,6 +16,8 @@ const getCategoryItems = (categoryName, itemList) => {
     if (categoryNameFromList === categoryName) {
       items = ele;
     }
+
+    return null;
   });
 
   return items;
