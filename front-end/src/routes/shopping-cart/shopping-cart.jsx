@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
-import axios from "axios";
+// import axios from "axios";
 import { CartContext } from "../../contexts/cart.context";
 import { CartXFill } from "react-bootstrap-icons";
 import Loader from "../../components/loader/loader";
@@ -25,16 +25,16 @@ const ShoppingCart = () => {
 
   useEffect(() => {
     fetchCartData();
-  }, [cartItems]);
+  }, [cartItems, fetchCartData]);
   const collectComparePriceData = (cartItems, zipCode) => {
     let data = [];
 
     let temp = {};
     temp["zipCode"] = zipCode;
     temp["itemsWithQuantity"] = {};
-    cartItems.map((ele) => {
-      temp["itemsWithQuantity"][ele.name] = ele.quantity;
-    });
+    cartItems.map(
+      (ele) => (temp["itemsWithQuantity"][ele.name] = ele.quantity)
+    );
 
     data.push(temp);
     postComparePriceData(data);
@@ -85,11 +85,9 @@ const ShoppingCart = () => {
           <div>
             Your Cart is Empty. Go <a href="/shopping">Shopping</a>{" "}
           </div>
-        ) 
-        : isLoading ? (
+        ) : isLoading ? (
           <Loader />
-        ) 
-        : (
+        ) : (
           cartItems.map((item) => {
             return (
               <div className="shopping-cart-body" key={item.id}>

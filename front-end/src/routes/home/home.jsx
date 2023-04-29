@@ -3,13 +3,13 @@ import React, { useContext, useEffect } from "react";
 import SearchBar from "../../components/search-bar/search-bar";
 
 import "./home.css";
-import { UserContext } from "../../contexts/user.context"
+import { UserContext } from "../../contexts/user.context";
 
 const Home = () => {
-  const {currentUser, setCurrentUser} = useContext(UserContext)
+  const { currentUser } = useContext(UserContext);
   useEffect(() => {
-
-  })
+    console.log(currentUser);
+  });
   return (
     <div className="home-container">
       <div className="background-image"></div>

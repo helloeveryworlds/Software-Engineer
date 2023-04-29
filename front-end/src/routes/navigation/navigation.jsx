@@ -50,7 +50,7 @@ const Navigation = () => {
             Cart
           </Link>
           {isLogIn ? (
-            <Link className="nav-link" onClick={() => setCurrentUser(null)}>
+            <Link className="nav-link" onClick={() => setCurrentUser({})}>
               <div />
               Sign Out
             </Link>
