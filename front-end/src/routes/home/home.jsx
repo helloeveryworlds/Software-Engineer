@@ -3,13 +3,26 @@ import React, { useContext, useEffect } from "react";
 import SearchBar from "../../components/search-bar/search-bar";
 
 import "./home.css";
-import { UserContext } from "../../contexts/user.context";
+import { UserContext } from "../../contexts/user.context"
 
 const Home = () => {
-  const { currentUser } = useContext(UserContext);
+  const {currentUser, setCurrentUser} = useContext(UserContext)
   useEffect(() => {
-    console.log(currentUser);
-  });
+    let user = {}
+    user.name = localStorage.getItem("name")
+    user.email = localStorage.getItem("email")
+    user.address = localStorage.getItem("address")
+    user.zipCode = localStorage.getItem("zipCode")
+    console.log(user)
+    if (user.name || user.email) {
+      setCurrentUser({
+        name: user.name,
+        email: user.email,
+        address: user.address,
+        zipCode: user.zipCode
+      })
+    }
+  }, [])
   return (
     <div className="home-container">
       <div className="background-image"></div>
