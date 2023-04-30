@@ -1,7 +1,8 @@
 import React from "react";
+import { Fragment } from "react";
 // import axios from "axios";
 import "./sign-up.css";
-import { notification } from "antd";
+import { notification } from 'antd';
 import {
   useLocation,
   useNavigate,
@@ -95,6 +96,14 @@ class SignUp extends React.Component {
 
   handleSubmit(e) {
     e.preventDefault();
+    // if (!this.state.name || !this.state.email || !this.state.password || !this.state.address || !this.state.zipcode) {
+    //   notification.open({
+    //     message: 'Email duplicated.',
+    //     onClick: () => {
+    //       console.log('Notification Clicked!');
+    //     },
+    //   });
+    // }
     const signupUrl = `/signup`;
     const data = {
       name: this.state.name,
@@ -113,20 +122,20 @@ class SignUp extends React.Component {
       body: JSON.stringify(data),
     }).then((response) => {
       // alert("sign up success");
-      console.log(response.status);
-      if (response.status === 409) {
+      console.log(response.status)
+      if (response.status == 409) {
         notification.open({
-          message: "Email duplicated.",
+          message: 'Email duplicated.',
           onClick: () => {
-            console.log("Notification Clicked!");
+            console.log('Notification Clicked!');
           },
         });
-        return;
+        return
       }
       if (response.status < 200 || response.status >= 300) {
         throw Error("Fail to sign up");
       } else {
-        console.log("success");
+        console.log("success")
         this.setState({ success: true });
       }
     });
@@ -142,10 +151,11 @@ class SignUp extends React.Component {
             <input
               type="text"
               value={this.state.name}
-              maxLength="15"
+              maxlength="15"
               onChange={this.handleChangeName}
               name=""
               placeholder="Name"
+              required
             />
             <input
               type="email"
@@ -154,23 +164,26 @@ class SignUp extends React.Component {
               onChange={this.handleChangeEmail}
               name=""
               placeholder="Email"
+              required
             />
             <input
               type="password"
               minLength="6"
-              maxLength="18"
+              maxlength="18"
               value={this.state.password}
               onChange={this.handleChangePwd}
               name=""
               placeholder="Password"
+              required
             />
             <input
               type="text"
               name=""
-              maxLength="25"
+              maxlength="25"
               value={this.state.address}
               onChange={this.handleChangeAddress}
               placeholder="Address"
+              required
             />
             <input
               type="number"
@@ -180,60 +193,61 @@ class SignUp extends React.Component {
               value={this.state.zipcode}
               onChange={this.handleChangeZipcode}
               placeholder="Zip code"
+              required
             />
-            <datalist id="citycode">
-              <option value="02101" />
-              <option value="02102" />
-              <option value="02103" />
-              <option value="02104" />
-              <option value="02105" />
-              <option value="02106" />
-              <option value="02107" />
-              <option value="02108" />
-              <option value="02109" />
-              <option value="02110" />
-              <option value="02111" />
-              <option value="02112" />
-              <option value="02113" />
-              <option value="02114" />
-              <option value="02115" />
-              <option value="02116" />
-              <option value="02117" />
-              <option value="02118" />
-              <option value="02119" />
-              <option value="02120" />
-              <option value="02121" />
-              <option value="02122" />
-              <option value="02123" />
-              <option value="02124" />
-              <option value="02125" />
-              <option value="02126" />
-              <option value="02127" />
-              <option value="02128" />
-              <option value="02129" />
-              <option value="02130" />
-              <option value="02131" />
-              <option value="02132" />
-              <option value="02133" />
-              <option value="02134" />
-              <option value="02135" />
-              <option value="02136" />
-              <option value="02137" />
-              <option value="02163" />
-              <option value="02199" />
-              <option value="02203" />
-              <option value="02205" />
-              <option value="02208" />
-              <option value="02209" />
-              <option value="02199" />
-              <option value="02210" />
-              <option value="02215" />
-              <option value="02222" />
-              <option value="02228" />
-              <option value="02283" />
-              <option value="02284" />
-              <option value="02455" />
-            </datalist>
+    <datalist id="citycode">
+      <option value="02101"/>
+      <option value="02102"/>
+      <option value="02103"/>
+      <option value="02104"/>
+      <option value="02105"/>
+      <option value="02106"/>
+      <option value="02107"/>
+      <option value="02108"/>
+      <option value="02109"/>
+      <option value="02110"/>
+      <option value="02111"/>
+      <option value="02112"/>
+      <option value="02113"/>
+      <option value="02114"/>
+      <option value="02115"/>
+      <option value="02116"/>
+      <option value="02117"/>
+      <option value="02118"/>
+      <option value="02119"/>
+      <option value="02120"/>
+      <option value="02121"/>
+      <option value="02122"/>
+      <option value="02123"/>
+      <option value="02124"/>
+      <option value="02125"/>
+      <option value="02126"/>
+      <option value="02127"/>
+      <option value="02128"/>
+      <option value="02129"/>
+      <option value="02130"/>
+      <option value="02131"/>
+      <option value="02132"/>
+      <option value="02133"/>
+      <option value="02134"/>
+      <option value="02135"/>
+      <option value="02136"/>
+      <option value="02137"/>
+      <option value="02163"/>
+      <option value="02199"/>
+      <option value="02203"/>
+      <option value="02205"/>
+      <option value="02208"/>
+      <option value="02209"/>
+      <option value="02199"/>
+      <option value="02210"/>
+      <option value="02215"/>
+      <option value="02222"/>
+      <option value="02228"/>
+      <option value="02283"/>
+      <option value="02284"/>
+      <option value="02455"/>
+    </datalist>
             <input type="submit" name="" value="Submit" />
             <p className="signinlink">
               Have an account?
