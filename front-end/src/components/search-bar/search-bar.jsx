@@ -44,6 +44,7 @@ class SearchBar extends React.Component {
             className="search-input"
             type="text"
             placeholder="Search"
+            maxLength={25}
             value={this.state.searchQuery}
             onChange={this.handleSearchChange}
             onKeyDown={this.handleKeyDown}

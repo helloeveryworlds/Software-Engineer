@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useRef, useState } from "react";
 import {
   View,
   Text,
@@ -9,24 +9,111 @@ import {
   Dimensions,
   LogBox,
   Alert,
+  TextInput,
   Platform
 } from "react-native";
+import groceSaveService from ".././service/GroceSaveService";
 import DetailsIcon from "../../assets/svgs/details";
 import LocationIcon from "../../assets/svgs/location";
 import TimedIcon from "../../assets/svgs/timed";
-import { useSelector } from "react-redux";
+import  Loader  from '../components/Loader';
+import { useDispatch, useSelector } from "react-redux";
+import { login, updateLogin } from "../reducers/LoginReducer";
 
 const { width, height } = Dimensions.get("window");
 
 const UserInfo = ({ navigation }) => { 
+const dispatch = useDispatch();
 const loginInfo = useSelector((state) => state.login.login);
-  
+
+const [ isLoading, setIsLoading ] = useState(false);
+const [ update, setUpdate ] = useState(false);
+const [ us, setUs ] = useState("");
+const [ zip, setZip ] = useState("");
+const [addressText, onChangeAddressText] = React.useState(loginInfo.length != 0 ? loginInfo[0].address : "nil");
+const [zipCodeText, onChangeZipCodeText] = React.useState(loginInfo.length != 0 ? loginInfo[0].zipCode : "nil");
+
+const zipCodeInput = useRef();
+
+const updateUserDetails = () => {
+const check = zipCodeCheck(zipCodeText);
+console.log("Zipcode..................",check);
+
+  if(zipCodeText == ""){
+    setIsLoading(false);
+    setZip("empty");
+  }else if(zipCodeText != "" && !check){
+    setIsLoading(false);
+    setZip("empty");
+  }else if(addressText == ""){
+    setIsLoading(false);
+    setUs("empty");
+  }else{
+  const onSuccess = ( data ) => {
+    let newItem = [];
+    newItem.push({
+      address : addressText,
+      cart: loginInfo[0].cart,
+      email: loginInfo[0].email,
+      enable: loginInfo[0].enable,
+      name: loginInfo[0].name,
+      password: loginInfo[0].password,
+      zipCode: zipCodeText
+    })
+
+    // dispatch(login(newItem));
+    dispatch(updateLogin(newItem));
+
+    setZip("");
+    setUs("");
+    setIsLoading(false);
+    if (data.status == 200){
+    Alert.alert(null, "Your details have been updated successfully!", [{
+      text: 'Ok', onPress: () => setUpdate(false)
+    }]);
+    }
+  };
+
+  const onFailure = (error) => {
+    console.log(error && error.response);
+      setIsLoading(false);
+    if(error.response == null){
+      setIsLoading(false);
+      Alert.alert('Info: ','Network Error')
+    }
+    if(error.response.status == 400){
+      setIsLoading(false);
+      Alert.alert('Info: ',"Something went wrong, Please try again")
+    } else if(error.response.status == 500){
+      setIsLoading(false);
+      Alert.alert('Info: ','Ensure your Network is Stable')
+    } else if(error.response.status == 401){
+      setIsLoading(false);
+      Alert.alert(null,error.response.data)
+    } else if(error.response.status == 404){
+      setIsLoading(false);
+      Alert.alert('Info: ','Not found')
+    }
+  };
+
+    groceSaveService
+      .post(`/update?address=${addressText}&zipcode=${zipCodeText}`)
+      .then(onSuccess)
+      .catch(onFailure);
+    }
+  }
+
+  const zipCodeCheck = (zipCode) => {
+    return /^[0-9]+$/.test(zipCode);
+  }
+
     LogBox.ignoreAllLogs(true);
       return (
         <ScrollView
           keyboardShouldPersistTaps="always" backgroundColor="#FFF">
           
           <StatusBar backgroundColor="#F4EFEF" barStyle="dark-content"/>
+            <Loader loading={isLoading}/>
               <View style={{ marginVertical: 15 }}>
               <View style={{ flexDirection: "row" }}>
               <View style={{ marginTop: 50, }}>
@@ -53,34 +140,79 @@ const loginInfo = useSelector((state) => state.login.login);
                 <Text style={styles.infoTextStyle}>ADDRESS</Text>
 
                 <View style={{ marginHorizontal: 10, marginTop: 30, width: width * 0.5 }}>
+                
                 <View style={{ flexDirection: "row", justifyContent: "space-between", marginStart: 10, }}>
                 <Text style={styles.userDetails}>Zip code:</Text>
+                {update ? 
+                <TextInput 
+                  placeholder="zipcode"
+                  autoFocus={true}
+                  returnKeyType="next"
+                  onSubmitEditing={() => zipCodeInput.current.focus()}
+                  blurOnSubmit={false}
+                  value={zipCodeText}
+                  style={{
+                    fontSize: 18,
+                    padding: 4,
+                    width: width * 0.35,
+                    textAlign: "left",
+                    borderWidth: 1,
+                    borderColor: !zipCodeCheck(zipCodeText) && zipCodeText != "" ? "pink" : "transparent",
+                    backgroundColor: zip == "empty" && zipCodeText == "" ? "pink" : "transparent"
+                  }}
+                  onChangeText={onChangeZipCodeText}
+                  /> :
+                <View>
                 {loginInfo.length != 0 ? <Text style={styles.userDetails_}>{loginInfo[0].zipCode}</Text> : <Text style={styles.userDetails_}>nil</Text>}
+                </View> }
                 </View>
+                {zip == "empty" && zipCodeText == "" && <Text style={styles.invalidZTextStyle}>Zip code is empty</Text>}
+                {!zipCodeCheck(zipCodeText) && zipCodeText != "" && zipCodeText != "nil" && <Text style={styles.invalidEmailTextStyle}>Zip code is not numeric</Text>}
 
                 <View style={{ flexDirection: "row", justifyContent: "space-between", marginStart: 10, marginTop: 20, }}>
                 <Text style={styles.userDetails}>Address:</Text>
+                {update ? 
+                <TextInput 
+                  placeholder="address"
+                  style={{
+                    fontSize: 18,
+                    padding: 4,
+                    width: width * 0.35,
+                    textAlign: "left",
+                    borderWidth: 1,
+                    borderColor:  us == "empty" && addressText == "" ? "pink" : "transparent",
+                    backgroundColor: us == "empty" && addressText == "" ? "pink" : "transparent"
+                  }}
+                  onChangeText={onChangeAddressText}
+                  ref={zipCodeInput}
+                  value={addressText}
+                  /> :
+                 <View>
                 {loginInfo.length != 0 ? <Text style={styles.userDetails_}>{loginInfo[0].address}</Text> : <Text style={styles.userDetails_}>nil</Text>}
+                </View>}
                 </View>
+                {us == "empty" && addressText == "" && <Text style={styles.invalidETextStyle}>Address is empty</Text>}
 
-                <View style={{ flexDirection: "row", justifyContent: "space-between", marginStart: 10, marginTop: 20, }}>
-                <Text style={styles.userDetails}>Email:</Text>
-                {loginInfo.length != 0 ? <Text style={styles.userDetails_}>{loginInfo[0].email}</Text> : <Text style={styles.userDetails_}>nil</Text>}
-                </View>
-                </View>
 
-                <View style={{ flexDirection: "row", alignSelf: "center", justifyContent: "space-between", width: width * 0.5, marginStart: 30, marginTop: 50 }}>
-                  <TouchableOpacity
+                <View style={{ flexDirection: "row", justifyContent: "space-between", marginStart: 10, marginTop: 20 }}>
+                {loginInfo.length != 0 ? <Text style={styles.userDetailsE}>Email:</Text> : <Text style={styles.userDetails}>Email:</Text>}
+                {loginInfo.length != 0 ? <Text style={styles.userDetailsEmail}>{loginInfo[0].email}</Text> : <Text style={styles.userDetails_}>nil</Text>}
+                </View>
+                </View>
+                <View style={{ alignContent: "center", width: width * 0.78, marginTop: 20 }}>
+                   {update ? 
+                   <TouchableOpacity
                       style={styles.itemBtnBlue}
-                      onPress={()=> Alert.alert(null,"Save")}>
+                      onPress={()=> updateUserDetails()}>
                       <Text style={styles.itemBtnDetails}>Save</Text>
                   </TouchableOpacity>
+                  :
                   <TouchableOpacity
                       style={styles.itemBtnGreen}
-                      onPress={()=> Alert.alert(null,"Update")}>
+                      onPress={()=>  setUpdate(true)}>
                       <Text style={styles.itemBtnDetails}>Update</Text>
-                  </TouchableOpacity>
-                </View>
+                  </TouchableOpacity>}
+                  </View>
                 </View>
                 </View>
             </View>
@@ -113,6 +245,39 @@ const styles = StyleSheet.create({
     right: -20,
     top: -10
   },
+  invalidEmailTextStyle: {
+    fontSize: 8,
+    color: "#FF0000",
+    backgroundColor: "pink",
+    alignSelf: "flex-end",
+    paddingHorizontal: 3,
+    left: 15,
+    textAlign: "right",
+    opacity: 1,
+    top: 5,
+  },
+  invalidETextStyle: {
+    fontSize: 8,
+    color: "#FF0000",
+    backgroundColor: "pink",
+    alignSelf: "flex-end",
+    paddingHorizontal: 3,
+    textAlign: "right",
+    opacity: 1,
+    right: 10,
+    top: 5,
+  },
+  invalidZTextStyle: {
+    fontSize: 8,
+    color: "#FF0000",
+    backgroundColor: "pink",
+    alignSelf: "flex-end",
+    paddingHorizontal: 3,
+    textAlign: "right",
+    opacity: 1,
+    right: 7,
+    top: 5,
+  },
   itemContainer: {
     backgroundColor: "#F6F6F6",
     borderRadius: 30,
@@ -124,19 +289,17 @@ const styles = StyleSheet.create({
   },
   itemBtnGreen: {
     backgroundColor: "#52A860",
-    width: width * 0.22,
+    width: width * 0.4,
     height: 40,
     alignSelf: "center",
     marginTop: 10,
-    marginStart: 25,
   },
   itemBtnBlue: {
     backgroundColor: "#25B8D9",
-    width: width * 0.22,
+    width: width * 0.4,
     height: 40,
     alignSelf: "center",
     marginTop: 10,
-    marginEnd: 25,
   },
   itemBtnDetails: {
     fontSize: 18,
@@ -149,11 +312,31 @@ const styles = StyleSheet.create({
     width: width * 0.25,
     textAlign: "left",
   },
+  userDetailsEdit: {
+    fontSize: 18,
+    padding: 4,
+    width: width * 0.35,
+    textAlign: "left",
+  },
   userDetails_: {
     fontSize: 18,
     padding: 6,
     width: width * 0.45,
     textAlign: "left",
+  },
+  userDetailsE: {
+    fontSize: 18,
+    padding: 6,
+    width: width * 0.25,
+    textAlign: "left",
+    backgroundColor: "#DDDDDD"
+  },
+  userDetailsEmail: {
+    fontSize: 18,
+    padding: 6,
+    width: width * 0.4,
+    textAlign: "left",
+    backgroundColor: "#DDDDDD"
   },
   details: {
     marginTop: -30, 

@@ -21,12 +21,17 @@ import  Loader  from '../components/Loader';
 import Blink from "../components/Blink";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
+import { addToCart } from "../reducers/CartReducer";
 import { addToShoppingList, removeFromShop } from "../reducers/ShopReducer";
 
 const { width } = Dimensions.get("window");
 
 const Shop = ({ navigation }) => {
   const shop = useSelector((state) => state.shop.shop);
+  const cart = useSelector((state) => state.cart.cart);
+  const login = useSelector((state) => state.login.login);
+  
+  console.log("Carttttttttt", cart)
   const dispatch = useDispatch();
 
   const [ isLoading, setIsLoading ] = useState(false);
@@ -91,9 +96,7 @@ const Shop = ({ navigation }) => {
         console.log(err)
         Alert.alert(null, err.substring(item.indexOf(":") + 1).trim())
         setIsLoading(false);
-
       });
-    
   }
 
     useEffect(() => {
@@ -117,7 +120,7 @@ const Shop = ({ navigation }) => {
       setSelectedMainItemsList([...selectedMainItemsList]);
     }
 
-    const addToCart = (item, key) => {
+    const addToShop = (item, key) => {
       if(currentCartList.length != 0){
         scrollRef.current?.scrollTo({x: 0, y: 0, animated: true}) 
         Alert.alert(null,"Please Empty and checkout other items left in the cart before you continue..")
@@ -269,6 +272,7 @@ const Shop = ({ navigation }) => {
 
     const renderElement = (item, key) => {
       const selectedItems = []
+      const sampleImage = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsUhUsM8JuZ4MKDjlPNox4QuV81hnoccTW_A&usqp=CAU";
 
       selectedItems.push({ key })
       return(
@@ -284,7 +288,7 @@ const Shop = ({ navigation }) => {
             /> 
             : 
           <Image 
-            source={{url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsUhUsM8JuZ4MKDjlPNox4QuV81hnoccTW_A&usqp=CAU"}}//require("../../assets/grocery.png")}
+            source={{url: sampleImage }}
             style={{ width: 100, height: 100, alignSelf: "center" }}
             />}
         </View>
@@ -306,13 +310,16 @@ const Shop = ({ navigation }) => {
           borderRadius: 50,
           alignSelf: "center",
           marginTop: Platform.OS === "ios" ? -10: -10,}}
-          onPress={()=> { 
-          addSelectedMainCat(item,key)
+          onPress= {
+            currentCartList.length == 0 && login.length != 0 ? 
+            ()=> { 
+          addSelectedMainCat(item,key) 
           scrollRef.current?.scrollTo({x: 0, y: 0, animated: true}) 
           setList(mainData[item])
           setFilteredData(mainData[item])
           setClick("clicked")
-          setInput(item)}}>
+          setInput(item)} : currentCartList.length != 0 && login.length != 0 ? 
+          ()=> { Alert.alert(null,"Please Empty cart")} : ()=> { Alert.alert(null,"Please Login to continue")}}>
           <Text style={styles.viewBtnDetails}>View Category</Text>
       </TouchableOpacity> : 
       !shop.some((value) => value.name == item.split(',')[0].trim()) ?
@@ -327,7 +334,7 @@ const Shop = ({ navigation }) => {
           marginTop: Platform.OS === "ios" ? 15: 10,
         }}
         onPress={()=> { 
-          addToCart(item, key)
+          addToShop(item, key)
         }}>
       <Text style={styles.itemBtnDetails}>Add to cart</Text>
       </TouchableOpacity> : 
@@ -354,15 +361,19 @@ const Shop = ({ navigation }) => {
     const onSuccess = ( data ) => {
       setIsLoading(false);
       if (data.status == 200){
-      console.log("Data data data data donneeee",data.data.orderItemList)
+      console.log("Data data data data donneeee",data)
       if(data){
-        setCurrentCartList(data.data.orderItemList)
+        if(data.data.orderItemList.length != 0){
+          data.data.orderItemList.forEach((item)=> {
+            dispatch(addToCart(item));
+            setCurrentCartList(data.data.orderItemList)
+          })
+        }else if(data.data.orderItemList == null){
+          setCurrentCartList([]);
+        }
       }else{
         setCurrentCartList([])
       }
-        // Alert.alert(null, "Checkout successfully,\nIt's free so no need to pay!", [{
-        //   text: 'Ok', onPress: () => navigation.navigate("Shop")
-        // }])
       }
     };
 
@@ -455,7 +466,7 @@ const Shop = ({ navigation }) => {
                 </TouchableOpacity>
                 : null}
 
-                {currentCartList.length != 0 ?
+                {currentCartList.length != 0 && cart.length != 0 ?
                 <View>
                   <Blink duration={1000}>
                   <View style={styles.best}>
@@ -481,40 +492,6 @@ const Shop = ({ navigation }) => {
                         size={25}/>
                     </TouchableOpacity>
                   </View>}
-
-                  {/* {shop.length != 0 &&
-                <View>
-                  <View style={styles.best}>
-                  {currentCartList.length != 0 ? 
-                  <Text style={{ fontSize: currentCartList.length > 9 ? 9.5 : 12, paddingTop: currentCartList.length > 9 ? 2 : 1, paddingHorizontal: currentCartList.length > 9 ? 7.5 : 9,  }}>{currentCartList.length}</Text>
-                   : 
-                  <Text style={{ fontSize: shop.length > 9 ? 9.5 : 12, paddingTop: shop.length > 9 ? 2 : 1, paddingHorizontal: shop.length > 9 ? 7.5 : 9,  }}>{shop.length}</Text>}
-                  </View>
-                <TouchableOpacity onPress={()=> toCart()}>
-                  <FontAwesome5 
-                  name={"shopping-cart"} 
-                  style={{ color: "#FF0080", alignSelf: "flex-end", marginEnd : 30, marginBottom: 10 }}
-                  size={25}/>
-                  </TouchableOpacity>
-                  </View>}
-                   */}
-
-                  {/* {shop.length != 0 &&
-                  <View>
-                  
-                  <View style={styles.best}>
-                  {shop.length != 0 ? 
-                  <Text style={{ fontSize: shop.length > 9 ? 9.5 : 12, paddingTop:  shop.length > 9 ? 2 : 1, paddingHorizontal: shop.length > 9 ? 7.5 : 9,  }}>{shop.length}</Text>
-                   : 
-                  <Text style={{ fontSize: shop.length > 9 ? 9.5 : 12, paddingTop: shop.length > 9 ? 2 : 1, paddingHorizontal: shop.length > 9 ? 7.5 : 9,  }}>{shop.length}</Text>}
-                  </View>
-                <TouchableOpacity onPress={()=> toCart()}>
-                  <FontAwesome5 
-                  name={"shopping-cart"} 
-                  style={{ color: "#FF0080", alignSelf: "flex-end", marginEnd : 30, marginBottom: 10 }}
-                  size={25}/>
-                  </TouchableOpacity>
-                  </View>} */}
 
                 {!mainList && <Text style={styles.invalidTextStyle}>No available Categories. Please check your network...</Text>}
                 {!list ? 

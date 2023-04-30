@@ -5,10 +5,12 @@ import { CartXFill } from "react-bootstrap-icons";
 import Loader from "../../components/loader/loader";
 import ComparePrice from "../../components/compare-price/compare-price";
 import { UserContext } from "../../contexts/user.context";
+import NoAuth from "../../components/no-auth/no-auth";
 
 import "./shopping-cart.css";
 
-import response from "./comparePrice.json";
+// import response from "./comparePrice.json";
+import { Fragment } from "react";
 
 const ShoppingCart = () => {
   const {
@@ -25,16 +27,17 @@ const ShoppingCart = () => {
 
   useEffect(() => {
     fetchCartData();
-  }, [cartItems]);
+  }, [cartItems, fetchCartData]);
+
   const collectComparePriceData = (cartItems, zipCode) => {
     let data = [];
 
     let temp = {};
     temp["zipCode"] = zipCode;
     temp["itemsWithQuantity"] = {};
-    cartItems.map((ele) => {
-      temp["itemsWithQuantity"][ele.name] = ele.quantity;
-    });
+    cartItems.map(
+      (ele) => (temp["itemsWithQuantity"][ele.name] = ele.quantity)
+    );
 
     data.push(temp);
     postComparePriceData(data);
@@ -42,17 +45,18 @@ const ShoppingCart = () => {
 
   const postComparePriceData = async (data) => {
     try {
-      // const response = await axios.post(
-      //   "http://localhost:8800/comparePrice",
-      //   data,
-      //   {
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //       Accept: "*/*",
-      //     },
-      //   }
-      // );
-      setComparePriceData(response);
+      const response = await axios.post(
+        "http://localhost:8800/comparePrice",
+        data,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "*/*",
+          },
+        }
+      );
+      console.log(response.data);
+      setComparePriceData(response.data);
     } catch (error) {
       console.log(error);
     }
@@ -88,60 +92,55 @@ const ShoppingCart = () => {
         ) : isLoading ? (
           <Loader />
         ) : (
-          cartItems.map((item) => {
-            return (
-              <div className="shopping-cart-body" key={item.id}>
-                <div className="shopping-cart-item">
-                  <div className="shopping-cart-image">
-                    <img src={item.url} alt={item.name} />
-                  </div>
+          <div className="shopping-cart-body">
+            {cartItems.map((item) => {
+              return (
+                <Fragment key={item.id}>
+                  <div className="shopping-cart-item" key={item.id}>
+                    <div className="shopping-cart-image">
+                      <img src={item.url} alt={item.name} />
+                    </div>
 
-                  <div className="shopping-cart-item-name">{item.name}</div>
-                  <div className="shopping-cart-counter">
-                    <div className="btn" onClick={() => addItemToCart(item)}>
-                      +
+                    <div className="shopping-cart-item-name">{item.name}</div>
+                    <div className="shopping-cart-counter">
+                      <div className="btn" onClick={() => addItemToCart(item)}>
+                        +
+                      </div>
+                      <div>{item.quantity}</div>
+                      <div
+                        className="btn"
+                        onClick={() =>
+                          item.quantity === 1
+                            ? clearItemFromCart(item)
+                            : removeItemFromCart(item)
+                        }
+                      >
+                        -
+                      </div>
                     </div>
-                    <div>{item.quantity}</div>
                     <div
-                      className="btn"
-                      onClick={() =>
-                        item.quantity === 1
-                          ? clearItemFromCart(item)
-                          : removeItemFromCart(item)
-                      }
+                      className="remove-item"
+                      onClick={() => clearItemFromCart(item)}
                     >
-                      -
+                      <CartXFill size={30} />
                     </div>
                   </div>
-                  <div
-                    className="remove-item"
-                    onClick={() => clearItemFromCart(item)}
-                  >
-                    <CartXFill size={30} />
-                  </div>
-                </div>
-              </div>
-            );
-          })
+                </Fragment>
+              );
+            })}
+
+            <div
+              className="shopping-cart-compare"
+              onClick={() => collectComparePriceData(cartItems, "02115")}
+            >
+              Compare Price
+            </div>
+          </div>
         )}
-        <div
-          className="shopping-cart-compare"
-          onClick={() => collectComparePriceData(cartItems, "02134")}
-        >
-          Compare Price
-        </div>
         {comparePriceData && (
           <ComparePrice comparePriceData={comparePriceData[0]} />
         )}
       </div>
-    </div>
-  );
-};
-
-const NoAuth = () => {
-  return (
-    <div>
-      You haven't logged in. Please <a href="/signin">LogIn</a> first.
     </div>
   );
 };

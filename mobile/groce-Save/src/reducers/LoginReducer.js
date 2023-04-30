@@ -38,6 +38,12 @@ export const loginSlice = createSlice({
                 state.login.push({...action.payload})
             }
         },
+        updateLogin : (state, action) => {
+            const itemInLogin = state.login;
+            if(itemInLogin){
+                state.login.push({...action.payload})
+            }
+        },
         logout : (state,action) => {
             const removeFromLogin = [];
             state.login = removeFromLogin;
@@ -46,6 +52,6 @@ export const loginSlice = createSlice({
 });
 
 
-export const {login,logout} = loginSlice.actions;
+export const {login,logout, updateLogin} = loginSlice.actions;
 
 export default loginSlice.reducer;

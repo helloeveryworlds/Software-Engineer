@@ -102,6 +102,7 @@ public class StoreItemSericeImpl implements StoreItemService {
 					}
 					list=list.substring(1,list.length()-1);
 					String [] arr1= list.split(",");
+					boolean storeIsPresent=false;
 					for(String id:arr1) {
 						Long ide=Long.valueOf(id);
 						Optional<Store> st1=storeRepo.findById(ide);
@@ -110,21 +111,22 @@ public class StoreItemSericeImpl implements StoreItemService {
 							st.setName(s1.getStoreName().toLowerCase());
 							st.setPriceList(String.valueOf(data));
 							storeRepo.save(st);
-							break;
-						}else {
-							Store st=new Store();
-							st.setName(s1.getStoreName().toLowerCase());
-							st.setPriceList(String.valueOf(data));
-							Long newId=storeRepo.save(st).getId();
-							if(list.equals("0")) {
-								list="";
-							}else
-								list+=",";
-							list="["+list+newId.toString()+"]";
-							zipdata.setStoreList(list);
-							zipRepo.save(zipdata);
+							storeIsPresent=true;
 							break;
 						}
+					}
+					if(!storeIsPresent) {
+						Store st=new Store();
+						st.setName(s1.getStoreName().toLowerCase());
+						st.setPriceList(String.valueOf(data));
+						Long newId=storeRepo.save(st).getId();
+						if(list.equals("0")) {
+							list="";
+						}else
+							list+=",";
+						list="["+list+newId.toString()+"]";
+						zipdata.setStoreList(list);
+						zipRepo.save(zipdata);
 					}
 				}catch(Exception e) {
 					ErrorLog error=new ErrorLog();
@@ -247,11 +249,7 @@ public class StoreItemSericeImpl implements StoreItemService {
 					map1.put("msg", "The zip code is'nt currently covered under our services");
 				retList.add(map1);
 			}catch(Exception e) {
-				e.printStackTrace();
-				ErrorLog error=new ErrorLog();
-				error.setLogMessage("Error in store compare first");
-				error.setStatus("pending");
-				errorRepo.save(error);
+				throw e;
 			}
 		}
 		return retList;

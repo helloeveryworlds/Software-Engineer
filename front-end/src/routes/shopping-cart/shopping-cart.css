@@ -55,12 +55,13 @@
 }
 
 .shopping-cart-image img {
-  width: 100%;
-  height: auto;
-  object-fit: cover;
+  width: 70%;
+  height: 150px;
+  object-fit: fill;
 }
 
 .shopping-cart-item-name {
+  width: 23%;
   color: #000000;
 }
 
@@ -97,6 +98,7 @@
   border-radius: 15px;
   align-self: flex-end;
   margin-top: 7%;
+  margin-bottom: 1%;
 }
 
 .shopping-cart-compare:hover {
@@ -119,6 +121,11 @@
 @media screen and (max-width: 768px) {
   .shopping-cart-image {
     width: 30%;
+    height: 60px;
+  }
+
+  .shopping-cart-image img {
+    width: 70%;
     height: 60px;
   }
 
