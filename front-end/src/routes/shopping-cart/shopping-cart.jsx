@@ -88,9 +88,11 @@ const ShoppingCart = () => {
           <div>
             Your Cart is Empty. Go <a href="/shopping">Shopping</a>{" "}
           </div>
-        ) : isLoading ? (
+        ) 
+        : isLoading ? (
           <Loader />
-        ) : (
+        ) 
+        : (
           <div className="shopping-cart-body">
             {cartItems.map((item) => {
               return (
