@@ -33,6 +33,7 @@ export const ProductsContext = createContext({
   isLoading: true,
   setIsLoading: () => true,
   fetchData: () => {},
+  setItemList: () => {},
 });
 
 export const ProductsProvider = ({ children }) => {
@@ -40,16 +41,24 @@ export const ProductsProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchData = async () => {
-    const response = await axios.get("http://localhost:8800/itemList", {
-      headers: {
-        accept: "application/json",
+    const response = await axios.get(
+      "http://localhost:8800/itemList",
+      {
+        headers: {
+          accept: "application/json",
+        },
       },
-    });
+      { async: false }
+    );
     setItemList(processing_data(response.data));
     setIsLoading(false);
   };
 
-  const value = { itemList, fetchData, isLoading };
+  const value = {
+    itemList,
+    fetchData,
+    isLoading,
+  };
 
   return (
     <ProductsContext.Provider value={value}>

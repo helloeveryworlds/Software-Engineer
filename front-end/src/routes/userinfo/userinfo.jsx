@@ -1,30 +1,29 @@
-import React from "react";
+import React, { Fragment, useContext } from "react";
 import "./userinfo.css";
 import { PersonVcard, PinMap, ClockHistory } from "react-bootstrap-icons";
-import { useContext } from "react";
+import NoAuth from "../../components/no-auth/no-auth";
 import { UserContext } from "../../contexts/user.context";
 
-class UserInfo extends React.Component {
+const UserInfo = () => {
+  // constructor(props) {
+  //   super(props);
+  //   let storage = window.localStorage;
+  //   let user = {};
+  //   user.name = storage.getItem("name");
+  //   user.email = storage.getItem("email");
+  //   user.address = storage.getItem("address");
+  //   user.zipCode = storage.getItem("zipCode");
 
-  constructor(props){
-    super(props);
-    let storage = window.localStorage;
-    let user = {}
-    user.name = storage.getItem("name")
-    user.email = storage.getItem("email")
-    user.address = storage.getItem("address")
-    user.zipCode = storage.getItem("zipCode")
-    console.log(user)
+  //   this.state = {
+  //     user: user,
+  //   };
+  // }
+  const { isLogIn, currentUser } = useContext(UserContext);
 
-    this.state = {
-      user: user
-    }
-  }
-
-  render() {
-    return <div id="userinfo">
+  return (
+    <div id="userinfo">
       <div id="person">
-        <div>{this.state.user?.name}</div>
+        <div>{currentUser.name}</div>
         <PersonVcard className="card"></PersonVcard>
         <div className="person-item">
           <PinMap className="person-icon"></PinMap>
@@ -35,15 +34,21 @@ class UserInfo extends React.Component {
           <div>History</div>
         </div>
       </div>
-      <div className="sep"></div> 
+      <div className="sep"></div>
       <div id="address">
-        <h3>ADDRESS</h3>
-        <p>Zip code:{this.state.user?.zipCode}</p>
-        <p>Address:{this.state.user?.address}</p>
-        <p>Email:{this.state.user?.email}</p>
+        {!isLogIn ? (
+          <NoAuth />
+        ) : (
+          <Fragment>
+            <h3>ADDRESS</h3>
+            <p>Zip code:{currentUser.zipCode}</p>
+            <p>Address:{currentUser.address}</p>
+            <p>Email:{currentUser.email}</p>
+          </Fragment>
+        )}
       </div>
-    </div>;
-  }
-}
+    </div>
+  );
+};
 
 export default UserInfo;

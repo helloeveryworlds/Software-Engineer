@@ -31,6 +31,8 @@ h1 {
 }
 
 .signupbox input[type="text"],
+input[type="email"],
+input[type="number"],
 input[type="password"] {
   border: none;
   border-bottom: 1px solid #fff;

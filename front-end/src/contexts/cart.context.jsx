@@ -1,9 +1,8 @@
-import React, { createContext, useState, useEffect } from "react";
+import React, { createContext, useState } from "react";
 import axios from "axios";
 
 export const CartContext = createContext({
   cartItems: [],
-  // cartCount: 0,
   isLoading: true,
   setIsLoading: () => true,
   fetchCartData: () => {},
@@ -23,7 +22,6 @@ export const CartProvider = ({ children }) => {
     },
   ]);
   const [isLoading, setIsLoading] = useState(true);
-  // const [cartCount, setCartCount] = useState(0);
 
   const fetchCartData = async () => {
     const response = await axios.get("/cart");
@@ -31,15 +29,8 @@ export const CartProvider = ({ children }) => {
     setIsLoading(false);
   };
 
-  // useEffect(() => {
-  //   const newCartCount = cartItems.reduce(
-  //     (total, cartItem) => total + cartItem.quantity,
-  //     0
-  //   );
-  //   setCartCount(newCartCount);
-  // }, [cartItems]);
-
   const addItemToCart = async (itemToAdd) => {
+    setIsLoading(true);
     await axios.post(
       "/order",
       {
@@ -57,6 +48,7 @@ export const CartProvider = ({ children }) => {
   };
 
   const removeItemFromCart = async (cartItemToRemove) => {
+    setIsLoading(true);
     await axios.post(
       "/order",
       {
@@ -74,6 +66,7 @@ export const CartProvider = ({ children }) => {
   };
 
   const clearItemFromCart = async (cartItemToClear) => {
+    setIsLoading(true);
     await axios.post("/delete", {
       name: cartItemToClear.name,
       url: cartItemToClear.url,
@@ -86,7 +79,6 @@ export const CartProvider = ({ children }) => {
 
   const value = {
     cartItems,
-    // cartCount,
     isLoading,
     fetchCartData,
     addItemToCart,

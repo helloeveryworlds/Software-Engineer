@@ -96,6 +96,14 @@ class SignUp extends React.Component {
 
   handleSubmit(e) {
     e.preventDefault();
+    // if (!this.state.name || !this.state.email || !this.state.password || !this.state.address || !this.state.zipcode) {
+    //   notification.open({
+    //     message: 'Email duplicated.',
+    //     onClick: () => {
+    //       console.log('Notification Clicked!');
+    //     },
+    //   });
+    // }
     const signupUrl = `/signup`;
     const data = {
       name: this.state.name,
@@ -147,6 +155,7 @@ class SignUp extends React.Component {
               onChange={this.handleChangeName}
               name=""
               placeholder="Name"
+              required
             />
             <input
               type="email"
@@ -155,6 +164,7 @@ class SignUp extends React.Component {
               onChange={this.handleChangeEmail}
               name=""
               placeholder="Email"
+              required
             />
             <input
               type="password"
@@ -164,6 +174,7 @@ class SignUp extends React.Component {
               onChange={this.handleChangePwd}
               name=""
               placeholder="Password"
+              required
             />
             <input
               type="text"
@@ -172,6 +183,7 @@ class SignUp extends React.Component {
               value={this.state.address}
               onChange={this.handleChangeAddress}
               placeholder="Address"
+              required
             />
             <input
               type="number"
@@ -181,6 +193,7 @@ class SignUp extends React.Component {
               value={this.state.zipcode}
               onChange={this.handleChangeZipcode}
               placeholder="Zip code"
+              required
             />
     <datalist id="citycode">
       <option value="02101"/>
