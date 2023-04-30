@@ -96,9 +96,7 @@ const Shop = ({ navigation }) => {
         console.log(err)
         Alert.alert(null, err.substring(item.indexOf(":") + 1).trim())
         setIsLoading(false);
-
       });
-    
   }
 
     useEffect(() => {
@@ -150,7 +148,7 @@ const Shop = ({ navigation }) => {
         navigation.navigate("Cart", {
           array: currentCartList
         })
-        // setCurrentCartList([]);
+        setCurrentCartList([]);
       }else{
       navigation.navigate("Cart", {
         array: shop
@@ -274,6 +272,7 @@ const Shop = ({ navigation }) => {
 
     const renderElement = (item, key) => {
       const selectedItems = []
+      const sampleImage = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsUhUsM8JuZ4MKDjlPNox4QuV81hnoccTW_A&usqp=CAU";
 
       selectedItems.push({ key })
       return(
@@ -289,7 +288,7 @@ const Shop = ({ navigation }) => {
             /> 
             : 
           <Image 
-            source={{url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsUhUsM8JuZ4MKDjlPNox4QuV81hnoccTW_A&usqp=CAU"}}//require("../../assets/grocery.png")}
+            source={{url: sampleImage }}
             style={{ width: 100, height: 100, alignSelf: "center" }}
             />}
         </View>
@@ -362,7 +361,7 @@ const Shop = ({ navigation }) => {
     const onSuccess = ( data ) => {
       setIsLoading(false);
       if (data.status == 200){
-      console.log("Data data data data donneeee",data.data.orderItemList)
+      console.log("Data data data data donneeee",data)
       if(data){
         if(data.data.orderItemList.length != 0){
           data.data.orderItemList.forEach((item)=> {
@@ -493,40 +492,6 @@ const Shop = ({ navigation }) => {
                         size={25}/>
                     </TouchableOpacity>
                   </View>}
-
-                  {/* {shop.length != 0 &&
-                <View>
-                  <View style={styles.best}>
-                  {currentCartList.length != 0 ? 
-                  <Text style={{ fontSize: currentCartList.length > 9 ? 9.5 : 12, paddingTop: currentCartList.length > 9 ? 2 : 1, paddingHorizontal: currentCartList.length > 9 ? 7.5 : 9,  }}>{currentCartList.length}</Text>
-                   : 
-                  <Text style={{ fontSize: shop.length > 9 ? 9.5 : 12, paddingTop: shop.length > 9 ? 2 : 1, paddingHorizontal: shop.length > 9 ? 7.5 : 9,  }}>{shop.length}</Text>}
-                  </View>
-                <TouchableOpacity onPress={()=> toCart()}>
-                  <FontAwesome5 
-                  name={"shopping-cart"} 
-                  style={{ color: "#FF0080", alignSelf: "flex-end", marginEnd : 30, marginBottom: 10 }}
-                  size={25}/>
-                  </TouchableOpacity>
-                  </View>}
-                   */}
-
-                  {/* {shop.length != 0 &&
-                  <View>
-                  
-                  <View style={styles.best}>
-                  {shop.length != 0 ? 
-                  <Text style={{ fontSize: shop.length > 9 ? 9.5 : 12, paddingTop:  shop.length > 9 ? 2 : 1, paddingHorizontal: shop.length > 9 ? 7.5 : 9,  }}>{shop.length}</Text>
-                   : 
-                  <Text style={{ fontSize: shop.length > 9 ? 9.5 : 12, paddingTop: shop.length > 9 ? 2 : 1, paddingHorizontal: shop.length > 9 ? 7.5 : 9,  }}>{shop.length}</Text>}
-                  </View>
-                <TouchableOpacity onPress={()=> toCart()}>
-                  <FontAwesome5 
-                  name={"shopping-cart"} 
-                  style={{ color: "#FF0080", alignSelf: "flex-end", marginEnd : 30, marginBottom: 10 }}
-                  size={25}/>
-                  </TouchableOpacity>
-                  </View>} */}
 
                 {!mainList && <Text style={styles.invalidTextStyle}>No available Categories. Please check your network...</Text>}
                 {!list ? 

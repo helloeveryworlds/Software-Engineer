@@ -30,8 +30,8 @@ const [ isLoading, setIsLoading ] = useState(false);
 const [ update, setUpdate ] = useState(false);
 const [ us, setUs ] = useState("");
 const [ zip, setZip ] = useState("");
-const [addressText, onChangeAddressText] = React.useState(loginInfo[0].address);
-const [zipCodeText, onChangeZipCodeText] = React.useState(loginInfo[0].zipCode);
+const [addressText, onChangeAddressText] = React.useState(loginInfo.length != 0 ? loginInfo[0].address : "nil");
+const [zipCodeText, onChangeZipCodeText] = React.useState(loginInfo.length != 0 ? loginInfo[0].zipCode : "nil");
 
 const zipCodeInput = useRef();
 
@@ -53,11 +53,11 @@ console.log("Zipcode..................",check);
     let newItem = [];
     newItem.push({
       address : addressText,
-      cart: loginInfo.cart,
-      email: loginInfo.email,
-      enable: loginInfo.enable,
-      name: loginInfo.name,
-      password: loginInfo.password,
+      cart: loginInfo[0].cart,
+      email: loginInfo[0].email,
+      enable: loginInfo[0].enable,
+      name: loginInfo[0].name,
+      password: loginInfo[0].password,
       zipCode: zipCodeText
     })
 
@@ -167,7 +167,7 @@ console.log("Zipcode..................",check);
                 </View> }
                 </View>
                 {zip == "empty" && zipCodeText == "" && <Text style={styles.invalidZTextStyle}>Zip code is empty</Text>}
-                {!zipCodeCheck(zipCodeText) && zipCodeText != "" && <Text style={styles.invalidEmailTextStyle}>Zip code is not numeric</Text>}
+                {!zipCodeCheck(zipCodeText) && zipCodeText != "" && zipCodeText != "nil" && <Text style={styles.invalidEmailTextStyle}>Zip code is not numeric</Text>}
 
                 <View style={{ flexDirection: "row", justifyContent: "space-between", marginStart: 10, marginTop: 20, }}>
                 <Text style={styles.userDetails}>Address:</Text>
@@ -195,7 +195,7 @@ console.log("Zipcode..................",check);
 
 
                 <View style={{ flexDirection: "row", justifyContent: "space-between", marginStart: 10, marginTop: 20 }}>
-                <Text style={styles.userDetailsE}>Email:</Text>
+                {loginInfo.length != 0 ? <Text style={styles.userDetailsE}>Email:</Text> : <Text style={styles.userDetails}>Email:</Text>}
                 {loginInfo.length != 0 ? <Text style={styles.userDetailsEmail}>{loginInfo[0].email}</Text> : <Text style={styles.userDetails_}>nil</Text>}
                 </View>
                 </View>
