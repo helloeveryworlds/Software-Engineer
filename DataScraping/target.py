@@ -98,8 +98,8 @@ store = 'target'
 zipcodes = ['02134', '02148']
 products = ['milk', 'egg']
 
-for zipcode in zipcodes[:2]:
-    for product in products[:1]:
+for zipcode in zipcodes[:]:
+    for product in products[:]:
         scraping(zipcode, product, store)
 
 

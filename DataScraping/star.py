@@ -87,6 +87,9 @@ def scraping(zipcode, product, store, printinfo = False):
             elif measure == 'Quart':
                 unit_price = str(round(float(num)/0.95, 2))
                 unit = 'kg'
+            elif measure in ['Pint', 'pint']:
+                unit_price = str(round(float(num)/0.47, 2))
+                unit = 'liter'
             
             
             item = {"pic-url": pic, "price": price, "name": name, "unit-price": unit_price, "unit": unit}
@@ -122,7 +125,7 @@ with open('products.txt' ,'r') as f:
     products = f.read()
 products = products.split(', ')
 
-for zipcode in zipcodes[:]:
+for zipcode in ['02128']:#zipcodes[23:]:
     for product in products[:]:
         scraping(zipcode, product, store)
 
