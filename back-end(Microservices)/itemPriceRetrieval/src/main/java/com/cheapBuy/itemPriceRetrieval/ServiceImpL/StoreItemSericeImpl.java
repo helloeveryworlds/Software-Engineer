@@ -129,7 +129,6 @@ public class StoreItemSericeImpl implements StoreItemService {
 						zipRepo.save(zipdata);
 					}
 				}catch(Exception e) {
-					e.printStackTrace();
 					ErrorLog error=new ErrorLog();
 					error.setLogMessage("Error in save store data first block");
 					error.setStatus("pending");
@@ -138,7 +137,6 @@ public class StoreItemSericeImpl implements StoreItemService {
 				
 			}
 		}catch(Exception e) {
-			e.printStackTrace();
 			ErrorLog error=new ErrorLog();
 			error.setLogMessage("Error in save store data second block");
 			error.setStatus("pending");
