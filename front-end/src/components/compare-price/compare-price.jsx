@@ -65,6 +65,14 @@ const ComparePrice = ({ comparePriceData }) => {
                       </span>
                       <h1 className="popup-heading">{storeName}</h1>
                       <IndividualStoreData storeData={storeData} />
+                      <div className="checkout-button">
+                        <div
+                          className="checkout-btn-primary"
+                          onClick={() => checkoutFromCart(storeData)}
+                        >
+                          Checkout
+                        </div>
+                        </div>
                     </div>
                   </div>
                 )}
