@@ -1,0 +1,2 @@
+1) Soap Ui from given link: https://www.soapui.org/downloads/thank-you-for-downloading-soapui/
+2)Load all test scripts from the folder
