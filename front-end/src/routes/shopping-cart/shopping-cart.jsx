@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
-// import axios from "axios";
+import axios from "axios";
 import { CartContext } from "../../contexts/cart.context";
 import { CartXFill } from "react-bootstrap-icons";
 import Loader from "../../components/loader/loader";
@@ -9,7 +9,7 @@ import NoAuth from "../../components/no-auth/no-auth";
 
 import "./shopping-cart.css";
 
-import response from "./comparePrice.json";
+// import response from "./comparePrice.json";
 import { Fragment } from "react";
 
 const ShoppingCart = () => {
@@ -45,17 +45,18 @@ const ShoppingCart = () => {
 
   const postComparePriceData = async (data) => {
     try {
-      // const response = await axios.post(
-      //   "http://localhost:8800/comparePrice",
-      //   data,
-      //   {
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //       Accept: "*/*",
-      //     },
-      //   }
-      // );
-      setComparePriceData(response);
+      const response = await axios.post(
+        "http://localhost:8800/comparePrice",
+        data,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "*/*",
+          },
+        }
+      );
+      console.log(response.data);
+      setComparePriceData(response.data);
     } catch (error) {
       console.log(error);
     }
@@ -88,11 +89,9 @@ const ShoppingCart = () => {
           <div>
             Your Cart is Empty. Go <a href="/shopping">Shopping</a>{" "}
           </div>
-        ) 
-        : isLoading ? (
+        ) : isLoading ? (
           <Loader />
-        ) 
-        : (
+        ) : (
           <div className="shopping-cart-body">
             {cartItems.map((item) => {
               return (
@@ -132,7 +131,7 @@ const ShoppingCart = () => {
 
             <div
               className="shopping-cart-compare"
-              onClick={() => collectComparePriceData(cartItems, "02134")}
+              onClick={() => collectComparePriceData(cartItems, "02115")}
             >
               Compare Price
             </div>
