@@ -1,20 +1,7 @@
 import React from "react";
-// import axios from "axios";
 import "./sign-in.css";
 import { Navigate } from "react-router-dom";
 import { notification } from "antd";
-// import { Button, Form, Input, message } from "antd";
-
-// function withRouter(Component) {
-//   function ComponentWithRouterProp(props) {
-//     let location = useLocation();
-//     let navigate = useNavigate();
-//     let params = useParams();
-//     return <Component {...props} router={{ location, navigate, params }} />;
-//   }
-
-//   return ComponentWithRouterProp;
-// }
 
 class SignIn extends React.Component {
   constructor(props) {
@@ -59,20 +46,34 @@ class SignIn extends React.Component {
         return response.json();
       })
       .then((data) => {
-        console.log(data);
         localStorage.setItem("name", data.name);
         localStorage.setItem("email", data.email);
         localStorage.setItem("address", data.address);
         localStorage.setItem("zipCode", data.zipCode);
         this.setState({ success: true });
+        notification.success({
+          message: "Login Successful",
+          style: {
+            top: 65,
+            right: 25,
+            left: "auto",
+            button: "auto",
+            position: "fixed",
+          },
+          duration: 2,
+        });
       })
       .catch((error) => {
-        console.log(error);
-        notification.open({
+        notification.warning({
           message: "Email or password is incorrect.",
-          onClick: () => {
-            console.log("Notification Clicked!");
+          style: {
+            top: 65,
+            right: 25,
+            left: "auto",
+            button: "auto",
+            position: "fixed",
           },
+          duration: 2,
         });
       });
   }

@@ -21,7 +21,8 @@ const Home = () => {
         zipCode: user.zipCode,
       });
     }
-  });
+  }, [setCurrentUser]);
+
   return (
     <div className="home-container">
       <div className="background-image"></div>

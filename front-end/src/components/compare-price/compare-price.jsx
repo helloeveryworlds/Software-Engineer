@@ -7,7 +7,6 @@ const ComparePrice = ({ comparePriceData }) => {
   const bestByCategory = comparePriceData.bestByCategory;
   const storeValue = comparePriceData.storeValue;
   const [showStoreData, setShowStoreData] = useState(null);
-  // checkout functionality
   const { checkoutFromCart } = useContext(CartContext);
 
   const handleShowStoreDataToggle = (storeName) => {
@@ -72,7 +71,7 @@ const ComparePrice = ({ comparePriceData }) => {
                         >
                           Checkout
                         </div>
-                        </div>
+                      </div>
                     </div>
                   </div>
                 )}

@@ -6,11 +6,28 @@ import Footer from "../../components/footer/footer";
 import { PersonBoundingBox } from "react-bootstrap-icons";
 import { UserContext } from "../../contexts/user.context";
 import "./navigation.css";
+import { notification } from "antd";
 
 const Navigation = () => {
-  const { setCurrentUser, isLogIn } = useContext(UserContext);
+  const { isLogIn, userLogOut } = useContext(UserContext);
   const [selected, setSelected] = useState("home");
 
+  const handleLogOut = () => {
+    localStorage.clear();
+    userLogOut();
+
+    notification.success({
+      message: "Logout Successful",
+      style: {
+        top: 65,
+        right: 25,
+        left: "auto",
+        button: "auto",
+        position: "fixed",
+      },
+      duration: 2,
+    });
+  };
   return (
     <Fragment>
       <div className="navigation-container">
@@ -50,7 +67,7 @@ const Navigation = () => {
             Cart
           </Link>
           {isLogIn ? (
-            <Link className="nav-link" onClick={() => setCurrentUser({})}>
+            <Link className="nav-link" onClick={handleLogOut}>
               <div />
               Sign Out
             </Link>
