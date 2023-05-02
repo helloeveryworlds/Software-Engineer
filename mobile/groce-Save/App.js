@@ -8,10 +8,8 @@ import { Entypo } from "@expo/vector-icons";
 import UserIcon from './assets/svgs/user';
 import SignIn from "./src/screens/SignIn";
 import Welcome from "./src/screens/Welcome";
-import PriceCompare from "./src/screens/PriceCompare";
 import UserInfo from "./src/screens/UserInfo";
 import Shop from "./src/screens/Shop";
-import ItemList from "./src/screens/ItemList";
 import DrawerDesign from './src/components/DrawerDesign';
 import SignUp from "./src/screens/SignUp";
 import { Provider } from 'react-redux';
@@ -145,46 +143,6 @@ function ShopScreenStack({ navigation }) {
             backgroundColor: '#F4EFEF', 
           },
           headerTintColor: '#fff', 
-          headerTitleStyle: {
-            fontWeight: 'bold', 
-          },
-        }}
-      />
-       <Stack.Screen
-        name="ItemList"
-        component={ItemList}
-        options={{
-          title: '', 
-          headerLeft: () => (
-            <Image source={require('./assets/logo_.png')} resizeMode={'cover'}  marginStart={20}/>
-          ),
-          headerRight: () => (
-            <NavigationDrawerStructure navigationProps={navigation} />
-          ),
-          headerStyle: {
-            backgroundColor: '#F4EFEF', 
-          },
-          headerTintColor: '#000', 
-          headerTitleStyle: {
-            fontWeight: 'bold', 
-          },
-        }}
-      />
-      <Stack.Screen
-        name="PriceCompare"
-        component={PriceCompare}
-        options={{
-          title: '', 
-          headerLeft: () => (
-            <Image source={require('./assets/logo_.png')} resizeMode={'cover'}  marginStart={20}/>
-          ),
-          headerRight: () => (
-            <NavigationDrawerStructure navigationProps={navigation} />
-          ),
-          headerStyle: {
-            backgroundColor: '#F4EFEF', 
-          },
-          headerTintColor: '#000', 
           headerTitleStyle: {
             fontWeight: 'bold', 
           },
