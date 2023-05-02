@@ -104,11 +104,7 @@ with open('products.txt' ,'r') as f:
     products = f.read()
 products = products.split(', ')
 
-for zipcode in zipcodes[:]:
-    if zipcode == '02108':
-        for product in products[49:100]:
-            scraping(zipcode, product, store)
-    else:
-        for product in products[:100]:
-            scraping(zipcode, product, store)
+for zipcode in zipcodes[23:]:
+    for product in products[:100]:
+        scraping(zipcode, product, store)
 

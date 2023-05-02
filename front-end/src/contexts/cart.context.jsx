@@ -10,17 +10,11 @@ export const CartContext = createContext({
   removeItemFromCart: () => {},
   clearItemFromCart: () => {},
   checkoutFromCart: () => {},
+  setCartItems: () => {},
 });
 
 export const CartProvider = ({ children }) => {
-  const [cartItems, setCartItems] = useState([
-    {
-      id: 57,
-      name: "Broccoli",
-      quantity: 1,
-      url: "https://cdn.britannica.com/25/78225-050-1781F6B7/broccoli-florets.jpg",
-    },
-  ]);
+  const [cartItems, setCartItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchCartData = async () => {
@@ -85,6 +79,7 @@ export const CartProvider = ({ children }) => {
     removeItemFromCart,
     clearItemFromCart,
     checkoutFromCart,
+    setCartItems,
   };
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;

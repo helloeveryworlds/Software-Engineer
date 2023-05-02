@@ -5,19 +5,6 @@ import NoAuth from "../../components/no-auth/no-auth";
 import { UserContext } from "../../contexts/user.context";
 
 const UserInfo = () => {
-  // constructor(props) {
-  //   super(props);
-  //   let storage = window.localStorage;
-  //   let user = {};
-  //   user.name = storage.getItem("name");
-  //   user.email = storage.getItem("email");
-  //   user.address = storage.getItem("address");
-  //   user.zipCode = storage.getItem("zipCode");
-
-  //   this.state = {
-  //     user: user,
-  //   };
-  // }
   const { isLogIn, currentUser } = useContext(UserContext);
 
   return (
