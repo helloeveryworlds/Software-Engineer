@@ -19,7 +19,7 @@ import  Loader  from '../components/Loader';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { BarPasswordStrengthDisplay } from 'react-native-password-strength-meter';
 import { useDispatch, useSelector } from "react-redux";
-import { login,logout } from "../reducers/LoginReducer";
+import { login } from "../reducers/LoginReducer";
 
 const { width, height } = Dimensions.get("window");
 

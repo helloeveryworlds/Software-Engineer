@@ -21,7 +21,7 @@ import  Loader  from '../components/Loader';
 import Blink from "../components/Blink";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
-import { addToCart, removeFromCart } from "../reducers/CartReducer";
+import { addToCart } from "../reducers/CartReducer";
 import { addToShoppingList, removeFromShop } from "../reducers/ShopReducer";
 
 const { width } = Dimensions.get("window");
@@ -139,7 +139,6 @@ const Shop = ({ navigation }) => {
         });
         setNewCartList([...selectedItemsList]);
         addItemToShop(itemDataWithQuant)
-        // Alert.alert(null,"Please Empty and checkout other items left in the cart before you continue..")
       }else{
       scrollRef.current?.scrollTo({x: 0, y: 0, animated: true}) 
       selectedItemsList.push({
@@ -182,14 +181,11 @@ const Shop = ({ navigation }) => {
           quantity: 1
         }
         removeOrderedItem(itemDataWithQuant)
-        // removeFromCart(itemDataWithQuant)
         const filteredItem = selectedItemsList.filter(o =>
         o.name.includes(item));
         filteredItem.forEach((dataItem)=>{
             dataForLife = dataItem
         })
-        // console.log("fgfdfzdsfdxgchvjbn", itemDataWithQuant)
-        // removeItemFromShop(dataForLife)
         removeItemFromShop(itemDataWithQuant)
       }else{
         let dataForLife = {}
@@ -423,10 +419,6 @@ const Shop = ({ navigation }) => {
     const onFailure = (error) => {
       console.log(error && error.response);
         setIsLoading(false);
-      // if(error.response == null){
-      //   setIsLoading(false);
-      //   Alert.alert('Info: ','Network Error')
-      // }
       if(error.response.status == 400){
         setIsLoading(false);
         Alert.alert('Info: ',"Something went wrong, Please try again")

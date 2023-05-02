@@ -224,7 +224,6 @@ class SignUp extends Component {
               borderColor={this.state.us == "empty" ? 'red' : "transparent"}
               width = {width * 0.81}
               height= {56}
-              // borderRadius = {10}
               textAlign = "left"
               paddingTop = {8}
               paddingBottom ={8}
@@ -693,7 +692,6 @@ const styles = StyleSheet.create({
     opacity: 1,
     top: -10,
     left: 8
-    // marginBottom: 10
   },
   linearGradient: {
     flex: 1,
@@ -714,7 +712,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "maroon",
     right: 10,
-    // fontFamily: "Nunito_400Regular",
     textAlign: "right",
     marginTop: 18, 
     marginBottom: 22
@@ -726,7 +723,6 @@ const styles = StyleSheet.create({
     opacity: 1,
     marginStart: 5,
     fontWeight: "400",
-    // fontFamily: "Nunito_400Regular",
     alignSelf: "center",
   },
   dontHaveAccountMintTextStyle: {
@@ -735,7 +731,6 @@ const styles = StyleSheet.create({
     marginBottom: 1,
     fontWeight: "600",
     opacity: 1,
-    // fontFamily: "Nunito_400Regular",
     alignSelf: "center",
     textDecorationLine: "underline"
   },

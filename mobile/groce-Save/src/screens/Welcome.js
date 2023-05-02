@@ -14,9 +14,7 @@ import {
   Alert,
   Platform
 } from "react-native";
-import { useDispatch, useSelector } from "react-redux";
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { FontAwesome5 } from "@expo/vector-icons";
+import { useSelector } from "react-redux";
 
 import SearchIcon from "../../assets/svgs/search";
 import GitHubIcon from "../../assets/svgs/github"

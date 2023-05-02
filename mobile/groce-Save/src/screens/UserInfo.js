@@ -19,7 +19,7 @@ import TimedIcon from "../../assets/svgs/timed";
 import  Loader  from '../components/Loader';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch, useSelector } from "react-redux";
-import { login, logout, updateLogin } from "../reducers/LoginReducer";
+import { updateLogin } from "../reducers/LoginReducer";
 
 const { width, height } = Dimensions.get("window");
 

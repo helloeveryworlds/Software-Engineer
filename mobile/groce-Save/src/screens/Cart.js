@@ -81,7 +81,6 @@ import {
       if(item.quantity == 1){
         dispatch(removeFromCart(item));
       }else{
-        // submitOrderItems(item);
         dispatch(decrementQuantity(item));
       }
     }
@@ -165,15 +164,11 @@ import {
     setIsLoading(false);
     console.log("Dataaa", data.data[0].storeValue);
     if (data.status == 200){
-      // if(data.data[0].msg == "The zip code is'nt currently covered under our services"){
-      //   Alert.alert(null, data.data[0].msg);
-      // }else{
       setCartResponse(data.data[0].bestByCategory)
       setStoreValue(data.data[0].storeValue)
       setStoreList(Object.keys(data.data[0].storeValue))
       Alert.alert(null, "Price compare option was successful,\nPlease view and checkout!", [{
       }])
-    // }
     }
   };
 
@@ -299,7 +294,6 @@ import {
     const isBest = () => {
       const innerObject = storeValue; 
       let best = 0;
-      let bestt = 0;
       storeList.map((item, index)=> {
       const avgPrices = Object.values(innerObject[item])
 
