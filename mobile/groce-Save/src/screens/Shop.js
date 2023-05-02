@@ -21,7 +21,7 @@ import  Loader  from '../components/Loader';
 import Blink from "../components/Blink";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
-import { addToCart } from "../reducers/CartReducer";
+import { addToCart, removeFromCart } from "../reducers/CartReducer";
 import { addToShoppingList, removeFromShop } from "../reducers/ShopReducer";
 
 const { width } = Dimensions.get("window");
@@ -121,9 +121,25 @@ const Shop = ({ navigation }) => {
     }
 
     const addToShop = (item, key) => {
-      if(currentCartList.length != 0){
+      if(cart.length != 0){
         scrollRef.current?.scrollTo({x: 0, y: 0, animated: true}) 
-        Alert.alert(null,"Please Empty and checkout other items left in the cart before you continue..")
+        const itemDataWithQuant = {
+          id: key+"",
+          image: item.substring(item.indexOf(",") + 1),
+          name: item.split(',')[0].trim(),
+          quantity: 1
+        }
+
+        dispatch(addToCart(itemDataWithQuant));
+        submitOrderItems(itemDataWithQuant);
+        selectedItemsList.push({
+          id: key+"",
+          image: item.substring(item.indexOf(",") + 1),
+          name: item.split(',')[0].trim(),
+        });
+        setNewCartList([...selectedItemsList]);
+        addItemToShop(itemDataWithQuant)
+        // Alert.alert(null,"Please Empty and checkout other items left in the cart before you continue..")
       }else{
       scrollRef.current?.scrollTo({x: 0, y: 0, animated: true}) 
       selectedItemsList.push({
@@ -144,9 +160,9 @@ const Shop = ({ navigation }) => {
     }
 
     const toCart = () => {
-      if(currentCartList.length != 0){
+      if(cart.length != 0){
         navigation.navigate("Cart", {
-          array: currentCartList
+          array: cart
         })
         setCurrentCartList([]);
       }else{
@@ -156,7 +172,26 @@ const Shop = ({ navigation }) => {
     }
     }
 
-    const removeFromCart = (item, index) => {
+    const removeFromShopItem = (item, index) => {
+      if(cart.length != 0){
+        let dataForLife = {}
+        const itemDataWithQuant = {
+          id: index+"",
+          image: item.substring(item.indexOf(",") + 1),
+          name: item.split(',')[0].trim(),
+          quantity: 1
+        }
+        removeOrderedItem(itemDataWithQuant)
+        // removeFromCart(itemDataWithQuant)
+        const filteredItem = selectedItemsList.filter(o =>
+        o.name.includes(item));
+        filteredItem.forEach((dataItem)=>{
+            dataForLife = dataItem
+        })
+        // console.log("fgfdfzdsfdxgchvjbn", itemDataWithQuant)
+        // removeItemFromShop(dataForLife)
+        removeItemFromShop(itemDataWithQuant)
+      }else{
         let dataForLife = {}
         const filteredItem = selectedItemsList.filter(o =>
         o.name.includes(item.split(',')[0].trim()));
@@ -164,6 +199,7 @@ const Shop = ({ navigation }) => {
             dataForLife = dataItem
         })
         removeItemFromShop(dataForLife)
+      }
     }
 
     const checkRightMain = (name) => {
@@ -311,15 +347,22 @@ const Shop = ({ navigation }) => {
           alignSelf: "center",
           marginTop: Platform.OS === "ios" ? -10: -10,}}
           onPress= {
-            currentCartList.length == 0 && login.length != 0 ? 
+            cart.length == 0 && login.length != 0 ? 
             ()=> { 
-          addSelectedMainCat(item,key) 
-          scrollRef.current?.scrollTo({x: 0, y: 0, animated: true}) 
-          setList(mainData[item])
-          setFilteredData(mainData[item])
-          setClick("clicked")
-          setInput(item)} : currentCartList.length != 0 && login.length != 0 ? 
-          ()=> { Alert.alert(null,"Please Empty cart")} : ()=> { Alert.alert(null,"Please Login to continue")}}>
+              addSelectedMainCat(item,key) 
+              scrollRef.current?.scrollTo({x: 0, y: 0, animated: true}) 
+              setList(mainData[item])
+              setFilteredData(mainData[item])
+              setClick("clicked")
+              setInput(item)} : cart.length != 0 && login.length != 0 ?
+            ()=> {
+              addSelectedMainCat(item,key) 
+              scrollRef.current?.scrollTo({x: 0, y: 0, animated: true}) 
+              setList(mainData[item])
+              setFilteredData(mainData[item])
+              setClick("clicked")
+              setInput(item)
+              } : ()=> { Alert.alert(null,"Please Login to continue")}}>
           <Text style={styles.viewBtnDetails}>View Category</Text>
       </TouchableOpacity> : 
       !shop.some((value) => value.name == item.split(',')[0].trim()) ?
@@ -348,7 +391,7 @@ const Shop = ({ navigation }) => {
         alignSelf: "center",
         marginTop: Platform.OS === "ios" ? 15: 10,
       }}
-      onPress={()=> removeFromCart(item, key)}>
+      onPress={()=> removeFromShopItem(item, key)}>
     <Text style={styles.itemBtnDetails}>Remove</Text>
     </TouchableOpacity>}
       </View>
@@ -380,10 +423,10 @@ const Shop = ({ navigation }) => {
     const onFailure = (error) => {
       console.log(error && error.response);
         setIsLoading(false);
-      if(error.response == null){
-        setIsLoading(false);
-        Alert.alert('Info: ','Network Error')
-      }
+      // if(error.response == null){
+      //   setIsLoading(false);
+      //   Alert.alert('Info: ','Network Error')
+      // }
       if(error.response.status == 400){
         setIsLoading(false);
         Alert.alert('Info: ',"Something went wrong, Please try again")
@@ -405,7 +448,119 @@ const Shop = ({ navigation }) => {
       .catch(onFailure);
     }
 
+    const submitOrderItems = (items) => {
+      if(login.length != 0){
+        setIsLoading(true);
+        let name = items.name
+        let quantity = +items.quantity
+        let url = items.image ? items.image : items.url
+        
+        const payload = {
+          name,
+          quantity,
+          url
+        }
+        
+    const onSuccess = ( data ) => {
+      setIsLoading(false);
+      if (data.status == 201){
+        console.log("Donneeee order........",data)
+      }
+    };
+  
+    const onFailure = (error) => {
+      console.log(error && error.response);
+        setIsLoading(false);
+      if(error.response == null){
+        setIsLoading(false);
+        Alert.alert('Info: ','Network Error')
+      }
+      if(error.response.status == 400){
+        setIsLoading(false);
+        Alert.alert('Info: ',"Something went wrong, Please try again")
+      } else if(error.response.status == 500){
+        setIsLoading(false);
+        Alert.alert('Info: ','Ensure your Network is Stable')
+      } else if(error.response.status == 401){
+        setIsLoading(false);
+        Alert.alert(null,error.response.data)
+      } else if(error.response.status == 404){
+        setIsLoading(false);
+        Alert.alert('Info: ','Not found')
+      }
+    };
+  
+    groceSaveService
+      .post("/order", payload)
+      .then(onSuccess)
+      .catch(onFailure);
+      } else {
+        Alert.alert(null, "Please sign in to Checkout successfully!", [{
+          text: 'Ok', onPress: () => navigation.navigate("SignIn")
+        }])
+      }
+      }
+
+      const removeOrderedItem = (items) => {
+        if(login.length != 0){
+          setIsLoading(true);
+          getCurrentCart();
+          let name = items.name
+          let quantity = +items.quantity
+          let url = items.image ? items.image : items.url
+          
+          const payload = {
+            name,
+            quantity,
+            url
+          }
+
+          console.log("Donneeee payload........",payload)
+          
+          
+      const onSuccess = ( data ) => {
+        setIsLoading(false);
+        if (data.status == 201){
+          getCurrentCart();
+          console.log("Donneeee order........yyyyyyyy",data)
+        }
+      };
+    
+      const onFailure = (error) => {
+        console.log(error && error.response);
+          setIsLoading(false);
+        if(error.response == null){
+          setIsLoading(false);
+          Alert.alert('Info: ','Network Error')
+        }
+        if(error.response.status == 400){
+          setIsLoading(false);
+          Alert.alert('Info: ',"Something went wrong, Please try again")
+        } else if(error.response.status == 500){
+          setIsLoading(false);
+          Alert.alert('Info: ','Ensure your Network is Stable')
+        } else if(error.response.status == 401){
+          setIsLoading(false);
+          Alert.alert(null,error.response.data)
+        } else if(error.response.status == 404){
+          setIsLoading(false);
+          Alert.alert('Info: ','Not found')
+        }
+      };
+    
+      groceSaveService
+        .post("/delete", payload)
+        .then(onSuccess)
+        .catch(onFailure);
+        } else {
+          Alert.alert(null, "Please sign in to Checkout successfully!", [{
+            text: 'Ok', onPress: () => navigation.navigate("SignIn")
+          }])
+        }
+        }
+
     LogBox.ignoreAllLogs(true);
+    console.log("currentCartList currentCartListcurrentCartList", currentCartList)
       return (
         <ScrollView
           ref={scrollRef}
@@ -464,13 +619,13 @@ const Shop = ({ navigation }) => {
                 }}>
                 <Text style={styles.backText}>{"<< "}Back to Categories</Text>
                 </TouchableOpacity>
-                : null}
+                : null} 
 
-                {currentCartList.length != 0 && cart.length != 0 ?
+                {cart.length != 0 && cart.length != 0 ?
                 <View>
-                  <Blink duration={1000}>
+                  <Blink duration={600}>
                   <View style={styles.best}>
-                  <Text style={{ fontSize: currentCartList.length > 9 ? 9.5 : 12, paddingTop: currentCartList.length > 9 ? 2 : 1, paddingHorizontal: currentCartList.length > 9 ? 7.5 : 9,  }}>{currentCartList.length}</Text>
+                  <Text style={{ fontSize: cart.length > 9 ? 9.5 : 12, paddingTop: cart.length > 9 ? 2 : 1, paddingHorizontal: cart.length > 9 ? 7.5 : 9,  }}>{cart.length}</Text>
                   </View>
                     <TouchableOpacity onPress={()=> toCart()}>
                     <FontAwesome5 
@@ -480,7 +635,7 @@ const Shop = ({ navigation }) => {
                     </TouchableOpacity>
                     </Blink>
                   </View> : 
-                  currentCartList.length == 0 && shop.length != 0 &&
+                  cart.length == 0 && shop.length != 0 &&
                   <View>
                     <View style={styles.best}>
                     <Text style={{ fontSize: shop.length > 9 ? 9.5 : 12, paddingTop: shop.length > 9 ? 2 : 1, paddingHorizontal: shop.length > 9 ? 7.5 : 9,  }}>{shop.length}</Text>

@@ -17,8 +17,9 @@ import DetailsIcon from "../../assets/svgs/details";
 import LocationIcon from "../../assets/svgs/location";
 import TimedIcon from "../../assets/svgs/timed";
 import  Loader  from '../components/Loader';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch, useSelector } from "react-redux";
-import { login, updateLogin } from "../reducers/LoginReducer";
+import { login, logout, updateLogin } from "../reducers/LoginReducer";
 
 const { width, height } = Dimensions.get("window");
 
@@ -36,8 +37,9 @@ const [zipCodeText, onChangeZipCodeText] = React.useState(loginInfo.length != 0 
 const zipCodeInput = useRef();
 
 const updateUserDetails = () => {
-const check = zipCodeCheck(zipCodeText);
-console.log("Zipcode..................",check);
+  setIsLoading(true);
+  const check = zipCodeCheck(zipCodeText);
+  console.log("Zipcode..................",check);
 
   if(zipCodeText == ""){
     setIsLoading(false);
@@ -55,13 +57,12 @@ console.log("Zipcode..................",check);
       address : addressText,
       cart: loginInfo[0].cart,
       email: loginInfo[0].email,
-      enable: loginInfo[0].enable,
+      enabled: loginInfo[0].enabled,
       name: loginInfo[0].name,
       password: loginInfo[0].password,
       zipCode: zipCodeText
     })
-
-    // dispatch(login(newItem));
+    _storeData(newItem[0]);
     dispatch(updateLogin(newItem));
 
     setZip("");
@@ -103,6 +104,25 @@ console.log("Zipcode..................",check);
     }
   }
 
+  const removeItemValue = async (key) => {
+    try {
+      await AsyncStorage.removeItem(key);
+      return true;
+    } catch (exception) {
+      return false;
+    }
+  }
+
+  const _storeData = async (value) => {
+    await removeItemValue("userDetails");
+    try {
+      await AsyncStorage.setItem("userDetails", JSON.stringify(value));
+
+    } catch (error) {
+    }
+    console.log("This is for storing data...", value);
+  };
+  
   const zipCodeCheck = (zipCode) => {
     return /^[0-9]+$/.test(zipCode);
   }
@@ -209,7 +229,14 @@ console.log("Zipcode..................",check);
                   :
                   <TouchableOpacity
                       style={styles.itemBtnGreen}
-                      onPress={()=>  setUpdate(true)}>
+                      onPress={()=>  {
+                        if(loginInfo.length == 0){
+                        Alert.alert(null, "Please Login to contine")
+                        }else {
+                          setUpdate(true)
+                          onChangeAddressText(loginInfo[0].address)
+                          onChangeZipCodeText(loginInfo[0].zipCode)
+                        }}}>
                       <Text style={styles.itemBtnDetails}>Update</Text>
                   </TouchableOpacity>}
                   </View>

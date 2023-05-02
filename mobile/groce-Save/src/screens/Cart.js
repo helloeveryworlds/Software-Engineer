@@ -13,6 +13,7 @@ import {
   } from "react-native";
   import React, { useRef, useState, useEffect } from "react";
   import { useDispatch, useSelector } from "react-redux";
+  import Blink from "../components/Blink";
   import { addToCart, decrementQuantity, incrementQuantity, removeFromCart, clearCart } from "../reducers/CartReducer";
   import { clearShop } from "../reducers/ShopReducer";
   import  Loader  from '../components/Loader';
@@ -34,7 +35,6 @@ import {
     const [ visible, setVisible ] = useState(false);
     const [ showItem, setShowItem ] = useState("");
     const [userData, setUserData] = useState({});
-    const [storeName, setStoreName] = useState("");
     const [isImageAvailable, setIsImageAvailable] = useState(true);
     const [isImageItemAvailable, setIsImageItemAvailable] = useState(true);
     const [storeData, setStoreData] = useState({});
@@ -277,20 +277,36 @@ import {
       }])
     }
     
-    const isBest = () => {
-      const innerObject = storeData[showItem]; // accessing the object stored at key1
-      // const innerValue = myObject['key1']['innerKey1'];
+    function getMinFromValue(item){
+      let data = Object.values(storeValue[item])
+			 
+			return Math.min(...data.map(d => d.avgTotalPrice));
+		}
 
-      // if(Object.keys(storeData).length != 0){
-      // let data = innerObject
-      // let best = 0;
-      // Object.values(data).map((items, index) => (
-      //   items.avgTotalPrice 
-      //   ))
-      // best = Math.min(...Object.values(data.avgTotalPrice))
-      // console.log("Besttttt", best)
-      // return best;
-      // }
+    function getItemMin(){
+      const innerObject = storeValue; 
+      let data = [];
+      storeList.map((item, index)=> {
+      data = Object.values(innerObject[item])
+      })
+      return data.map(d => d.avgTotalPrice);
+		}
+
+		function getRealMinItem(){
+			return Math.min(...getItemMin());
+		}
+
+    const isBest = () => {
+      const innerObject = storeValue; 
+      let best = 0;
+      let bestt = 0;
+      storeList.map((item, index)=> {
+      const avgPrices = Object.values(innerObject[item])
+
+      best = Math.min(...avgPrices.map(({ avgTotalPrice }) =>  avgTotalPrice));
+      })
+
+      return best;
   };
 
     function stringSentenceCase(str) {
@@ -298,7 +314,7 @@ import {
     }
 
     const sampleImage = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsUhUsM8JuZ4MKDjlPNox4QuV81hnoccTW_A&usqp=CAU";
-
+    
     return (
       <ScrollView  ref={scrollRef}  onContentSizeChange={() => onPressTouch()} style={{ backgroundColor: "#FFF" }}>
       <SafeAreaView>
@@ -339,10 +355,17 @@ import {
             <View>
             
             <View style={{flexDirection: "row", justifyContent: "space-between", width: width * 0.8,  }}>
-              {Object.keys(storeData).map((item,index) => (
-              <Text style={{ fontSize: 14, }}>{item}({storeItems.lowestUnit})</Text>
-              ))}
-              <Text style={{ alignSelf: "flex-end", textAlign: "right", width: width * 0.43, }}>Average Total Price: {storeItems.avgTotalPrice}</Text>
+              <Text style={{ fontSize: 14, }}>{Object.keys(storeData)[index]}({storeItems.lowestUnit})</Text>
+              {storeItems.avgTotalPrice ? 
+              <Text style={{ alignSelf: "flex-end", textAlign: "right", width: width * 0.45, marginEnd: 5 }}>Average Total Price: {" "}
+              {getRealMinItem() == storeItems.avgTotalPrice ? 
+              <Blink duration={600}>
+              <Text style={{ alignSelf: "flex-end", textAlign: "right",  marginEnd: 5, color: getRealMinItem() == storeItems.avgTotalPrice ? "green" : "#000", backgroundColor: getRealMinItem() == storeItems.avgTotalPrice ? "lime" : "transparent", }}>{storeItems.avgTotalPrice}
+              </Text>
+              </Blink> : 
+              <Text style={{ alignSelf: "flex-end", textAlign: "right",  marginEnd: 5, color: getRealMinItem() == storeItems.avgTotalPrice ? "green" : "#000", backgroundColor: getRealMinItem() == storeItems.avgTotalPrice ? "lime" : "transparent", }}>{storeItems.avgTotalPrice}
+              </Text>}</Text> : 
+              <Text style={{ alignSelf: "flex-end", textAlign: "right", width: width * 0.45, marginEnd: 5 }}>Average Total Price: Unavailable</Text>}
             </View>
 
             <View style={{ flexDirection: "row", width: width * 0.8, alignItems: "center", marginTop: 0  }}>
@@ -355,12 +378,19 @@ import {
               source={{ uri: sampleImage }}/>}
             </View>
             <View style={{ marginLeft: 10 }}>
+            {storeItems.lowestUnitItemName ? 
             <Text style={{ textAlign: "left", fontSize: 14, color: "#000", width: width * 0.5, marginTop: 10 }}>
               Lowest Unit Item: {storeItems.lowestUnitItemName}
-            </Text>
+            </Text> : <Text style={{ textAlign: "left", fontSize: 14, color: "#000", width: width * 0.5, marginTop: 10 }}>
+              Lowest Unit Item: Unavailable
+            </Text>}
+            {storeItems.lowestUnitPriceTotal ? 
             <Text style={{ textAlign: "left", fontSize: 14, color: "#000", width: width * 0.5, marginTop: 10 }}>
               Lowest Unit Price Total: {storeItems.lowestUnitPriceTotal}
-            </Text>
+            </Text> : 
+            <Text style={{ textAlign: "left", fontSize: 14, color: "#000", width: width * 0.5, marginTop: 10 }}>
+            Lowest Unit Price Total: Unavailable
+          </Text>}
             </View>
             </View>
 
@@ -374,12 +404,20 @@ import {
                   source={{ uri: sampleImage }}/>}
             </View>
             <View style={{ marginLeft: 10 }}>
+            {storeItems.lowestItemName ? 
             <Text style={{ textAlign: "left", fontSize: 14, color: "#000", width: width * 0.5, marginTop: 10 }}>
               Lowest Item Name: {storeItems.lowestItemName}
-            </Text>
+            </Text> :
+            <Text style={{ textAlign: "left", fontSize: 14, color: "#000", width: width * 0.5, marginTop: 10 }}>
+              Lowest Item Name: Unavailable
+            </Text>}
+            {storeItems.lowestPriceTotal ?
             <Text style={{ textAlign: "left", fontSize: 14, color: "#000", width: width * 0.5, marginTop: 10 }}>
               Lowest Price Total: {storeItems.lowestPriceTotal}
-            </Text>
+            </Text> : 
+            <Text style={{ textAlign: "left", fontSize: 14, color: "#000", width: width * 0.5, marginTop: 10 }}>
+              Lowest Price Total: Unavailable
+            </Text>}
             </View>
             </View>
             </View>))}
@@ -519,37 +557,48 @@ import {
         </Text>
         
         <View style={{ backgroundColor: "#F4EFEF", color: "#000", width: width * 0.9, alignSelf: "center", padding: 10, marginTop: 15 }}>
+        {cartResponse.lowestUnitPriceStoreName == "star" ? 
+        <Text style={{ textAlign: "left", fontSize: 14, color: "#000", width: width * 0.8, marginTop: 10 }}>
+          Lowest Unit Price Store: {stringSentenceCase(cartResponse.lowestUnitPriceStoreName)}{" "}Market
+        </Text> : 
         <Text style={{ textAlign: "left", fontSize: 14, color: "#000", width: width * 0.8, marginTop: 10 }}>
           Lowest Unit Price Store: {stringSentenceCase(cartResponse.lowestUnitPriceStoreName)}
-        </Text>
+        </Text>}
         <Text style={{ textAlign: "left", fontSize: 14, color: "#000", width: width * 0.8, marginTop: 10 }}>
           Lowest Unit Price: {cartResponse.lowestUnitPriceStorePrice}
         </Text>
-        
           <View
-                width={width * 0.9} 
-                height={1.5} 
-                backgroundColor={"#DDD"} 
-                alignSelf={"center"} 
-                marginVertical={15}
+            width={width * 0.9} 
+            height={1.5} 
+            backgroundColor={"#DDD"} 
+            alignSelf={"center"} 
+            marginVertical={15}
                 />
+        {cartResponse.lowestTotalPriceStoreName == "star" ? 
+        <Text style={{ textAlign: "left", fontSize: 14, color: "#000", width: width * 0.8, marginTop: 10 }}>
+          Lowest Total Price Store: {stringSentenceCase(cartResponse.lowestTotalPriceStoreName)}{" "}Market
+        </Text> : 
         <Text style={{ textAlign: "left", fontSize: 14, color: "#000", width: width * 0.8, marginTop: 10 }}>
           Lowest Total Price Store: {stringSentenceCase(cartResponse.lowestTotalPriceStoreName)}
-        </Text>
+        </Text>}
         <Text style={{ textAlign: "left", fontSize: 14, color: "#000", width: width * 0.8, marginTop: 10 }}>
           Lowest Total Price: {cartResponse.lowestTotalPriceStorePrice}
         </Text>
 
-              <View
-                width={width * 0.9} 
-                height={1.5} 
-                backgroundColor={"#DDD"} 
-                alignSelf={"center"} 
-                marginVertical={15}
-                />
+          <View
+            width={width * 0.9} 
+            height={1.5} 
+            backgroundColor={"#DDD"} 
+            alignSelf={"center"} 
+            marginVertical={15}
+            />
+        {cartResponse.lowestAvgStoreName == "star" ? 
+        <Text style={{ textAlign: "left", fontSize: 14, color: "#000", width: width * 0.8, marginTop: 10 }}>
+          Lowest Average Store: {stringSentenceCase(cartResponse.lowestAvgStoreName)}{" "}Market
+        </Text> : 
         <Text style={{ textAlign: "left", fontSize: 14, color: "#000", width: width * 0.8, marginTop: 10 }}>
           Lowest Average Store: {stringSentenceCase(cartResponse.lowestAvgStoreName)}
-        </Text>
+        </Text>}
         <Text style={{ textAlign: "left", fontSize: 14, color: "#000", width: width * 0.8, marginTop: 10 }}>
           Lowest Average Total Store: {cartResponse.lowestAvgTotalPrice}
         </Text>
@@ -574,13 +623,15 @@ import {
             setVisible(true)
             setStoreData(Object.values(storeValue)[index])
             console.log("Object Dataaa", Object.values(storeValue)[index]);
-          }: ()=> {Alert.alert(null, "Not all items are available. Check individual stores.")}} 
-          >
+          }: ()=> {Alert.alert(null, "Not all items are available. Check individual stores.", [{
+            text: 'Ok', onPress: () => submitCheckOut()
+          }])}}>
+
           {item == "star" ? 
           <Text style={styles.itemBtnDetails}>{stringSentenceCase(item)} Market</Text> :
           <Text style={styles.itemBtnDetails}>{stringSentenceCase(item)}</Text>}
         </TouchableOpacity>
-        <Text style={styles.best}>Best</Text>
+        {getMinFromValue(item) == getRealMinItem() ? <Text style={styles.best}>Best</Text> : null}
         </View>))}
         </View>
         </View> }

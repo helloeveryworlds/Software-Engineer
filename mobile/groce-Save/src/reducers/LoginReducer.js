@@ -39,9 +39,9 @@ export const loginSlice = createSlice({
             }
         },
         updateLogin : (state, action) => {
-            const itemInLogin = state.login;
+            const itemInLogin = action.payload;
             if(itemInLogin){
-                state.login.push({...action.payload})
+                state.login = itemInLogin;
             }
         },
         logout : (state,action) => {
