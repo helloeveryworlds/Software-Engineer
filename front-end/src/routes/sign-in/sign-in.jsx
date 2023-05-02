@@ -60,7 +60,7 @@ class SignIn extends React.Component {
             button: "auto",
             position: "fixed",
           },
-          duration: 2,
+          duration: 1,
         });
       })
       .catch((error) => {

@@ -1,6 +1,5 @@
 import React, { useContext } from "react";
 import { useParams } from "react-router-dom";
-
 import SearchBar from "../search-bar/search-bar";
 import ItemCard from "../item-card/item-card";
 import { ProductsContext } from "../../contexts/products.context";

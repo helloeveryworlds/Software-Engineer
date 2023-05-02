@@ -146,8 +146,8 @@ const ShoppingCart = () => {
             </div>
           </div>
         )}
-        {isComparePriceOpen && comparePriceData && (
-          <ComparePrice comparePriceData={comparePriceData[0]} />
+        {isLogIn && isComparePriceOpen && comparePriceData && (
+          <ComparePrice comparePriceData={comparePriceData} />
         )}
       </div>
     </div>

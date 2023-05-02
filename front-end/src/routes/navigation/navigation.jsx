@@ -25,7 +25,7 @@ const Navigation = () => {
         button: "auto",
         position: "fixed",
       },
-      duration: 2,
+      duration: 1,
     });
   };
   return (
