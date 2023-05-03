@@ -9,6 +9,7 @@ import {
     TouchableOpacity,
     Alert,
     Modal,
+    FlatList,
     Dimensions
   } from "react-native";
   import React, { useRef, useState, useEffect } from "react";
@@ -600,33 +601,42 @@ import {
         </View>
         <View style={{ flexDirection: "row", width: width, justifyContent: "space-around" }}>
 
-        {storeList.map((item,index) => (
-        <View>
-        <TouchableOpacity 
-          style={{
-            backgroundColor: item == showItem ? "#9BC0F1" :"#FF3366",
-            width: width * 0.40,
-            height: 35,
-            borderRadius: 50,
-            alignSelf: "center",
-            marginVertical: Platform.OS === "ios" ? 20: 20,
-          }}
-          onPress={stringSentenceCase(cartResponse.lowestAvgStoreName) != "Not all items are available. Check individual stores." ?
-          ()=> {
-            setShowItem(item)
-            setVisible(true)
-            setStoreData(Object.values(storeValue)[index])
-            console.log("Object Dataaa", Object.values(storeValue)[index]);
-          }: ()=> {Alert.alert(null, "Not all items are available. Check individual stores.", [{
-            text: 'Ok', onPress: () => submitCheckOut()
-          }])}}>
-
-          {item == "star" ? 
-          <Text style={styles.itemBtnDetails}>{stringSentenceCase(item)} Market</Text> :
-          <Text style={styles.itemBtnDetails}>{stringSentenceCase(item)}</Text>}
-        </TouchableOpacity>
-        {getMinFromValue(item) == getRealMinItem() ? <Text style={styles.best}>Best</Text> : null}
-        </View>))}
+        
+        <FlatList
+          data={storeList}
+          style={{ width : width *0.8, margin: 20 }}
+          renderItem={({ item, index }) => (
+            <View>
+            <TouchableOpacity 
+            style={{
+              backgroundColor: item == showItem ? "#9BC0F1" :"#FF3366",
+              width: width * 0.40,
+              height: 35,
+              borderRadius: 50,
+              alignSelf: "center",
+              marginTop: Platform.OS === "ios" ? 20: 20,
+              marginHorizontal: 10
+            }}
+            onPress={stringSentenceCase(cartResponse.lowestAvgStoreName) != "Not all items are available. Check individual stores." ?
+            ()=> {
+              setShowItem(item)
+              setVisible(true)
+              setStoreData(Object.values(storeValue)[index])
+              console.log("Object Dataaa", Object.values(storeValue)[index]);
+            }: ()=> {Alert.alert(null, "Not all items are available. Check individual stores.", [{
+              text: 'Ok', onPress: () => submitCheckOut()
+            }])}}>
+  
+            {item == "star" ? 
+            <Text style={styles.itemBtnDetails}>{stringSentenceCase(item)} Market</Text> :
+            <Text style={styles.itemBtnDetails}>{stringSentenceCase(item)}</Text>}
+          {getMinFromValue(item) == getRealMinItem() ? <Text style={styles.best}>Best</Text> : null}
+          </TouchableOpacity>
+          </View>
+          )}
+          numColumns={2}
+          keyExtractor={(item, index) => index}
+        />
         </View>
         </View> }
       </SafeAreaView>
@@ -698,7 +708,7 @@ import {
       width: 45,
       position: "absolute",
       right: -20,
-      marginTop: 5,
+      marginTop: -10,
       marginEnd: 5
     },
     bestS: {
