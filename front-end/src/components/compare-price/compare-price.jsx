@@ -1,18 +1,15 @@
 import React, { Fragment, useState } from "react";
-
 import "./compare-price.css";
-// import { CartContext } from "../../contexts/cart.context";
 
 const ComparePrice = ({ comparePriceData }) => {
   const isZipCodeInvalid = comparePriceData[0].hasOwnProperty("msg");
   let bestByCategory;
   let storeValue;
-  if (isZipCodeInvalid) {
+  if (!isZipCodeInvalid) {
     bestByCategory = comparePriceData[0].bestByCategory;
     storeValue = comparePriceData[0].storeValue;
   }
   const [showStoreData, setShowStoreData] = useState(null);
-  // const { checkoutFromCart } = useContext(CartContext);
 
   const handleShowStoreDataToggle = (storeName) => {
     setShowStoreData(showStoreData === storeName ? null : storeName);
@@ -81,14 +78,6 @@ const ComparePrice = ({ comparePriceData }) => {
                           </span>
                           <h1 className="popup-heading">{storeName}</h1>
                           <IndividualStoreData storeData={storeData} />
-                          {/* <div className="checkout-button">
-                        <div
-                          className="checkout-btn-primary"
-                          onClick={() => checkoutFromCart(storeData)}
-                        >
-                          Checkout
-                        </div>
-                      </div> */}
                         </div>
                       </div>
                     )}
