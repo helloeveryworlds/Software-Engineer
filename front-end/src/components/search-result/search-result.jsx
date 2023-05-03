@@ -1,52 +1,85 @@
-import React, { useContext } from "react";
+import React, { useState, useContext } from "react";
 import { useParams } from "react-router-dom";
-import SearchBar from "../search-bar/search-bar";
-import ItemCard from "../item-card/item-card";
-import { ProductsContext } from "../../contexts/products.context";
-
+import ComparePrice from "../compare-price/compare-price";
+import Loader from "../loader/loader";
+import axios from "axios";
 import "./search-result.css";
-
-const getQueryResult = (queryArray, itemList) => {
-  let items = [];
-  queryArray.map((str) => {
-    itemList.map((ele) => {
-      ele.items.map((item) => {
-        if (str === item.name.toLowerCase()) {
-          items.push(item);
-        }
-        return null;
-      });
-      return null;
-    });
-    return null;
-  });
-  return items;
+import { UserContext } from "../../contexts/user.context";
+const defaultZipCode = (isLogIn, currentUser, zipCode, setZipCode) => {
+  if (isLogIn && zipCode !== currentUser.zipCode) {
+    setZipCode(currentUser.zipCode);
+  }
 };
 
 const SearchResult = () => {
   const { query } = useParams();
   const queryArray = query.split("-");
+  const [comparePriceData, setComparePriceData] = useState(null);
+  const [zipCode, setZipCode] = useState("02134");
+  const { isLogIn, currentUser } = useContext(UserContext);
+  defaultZipCode(isLogIn, currentUser, zipCode, setZipCode);
+  const postComparePriceData = async (searchItem) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:8800/comparePrice",
+        searchItem,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "*/*",
+          },
+        }
+      );
+      setComparePriceData(response.data);
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-  const { itemList } = useContext(ProductsContext);
+  let searchItem = [];
+  let temp = {};
+  temp["zipCode"] = zipCode;
+  temp["itemsWithQuantity"] = {};
+  temp["itemsWithQuantity"][
+    queryArray[0].charAt(0).toUpperCase() + queryArray[0].slice(1)
+  ] = 1;
+  searchItem.push(temp);
 
-  const queryResult = getQueryResult(queryArray, itemList);
+  postComparePriceData(searchItem);
+
+  const handleZipCodeChange = (event) => {
+    setZipCode(event.target.value);
+  };
+
+  const handleComparePriceDataUpdate = () => {
+    postComparePriceData(searchItem);
+  };
 
   return (
     <div className="search-result-container">
-      <div className="search-container">
-        <SearchBar />
-      </div>
       <div className="search-result-body">
         <div className="search-result-heading">
           <h4>Search Result:</h4>
           <hr />
         </div>
-
-        <div className="search-result">
-          {queryResult.map((item) => {
-            return <ItemCard key={item.name} item={item} />;
-          })}
+        <div className="zip-code-input-container">
+          <label htmlFor="zip-code-input">Enter Zip Code:</label>
+          <input
+            id="zip-code-input"
+            type="text"
+            value={zipCode}
+            onChange={handleZipCodeChange}
+          />
+          <button onClick={() => handleComparePriceDataUpdate()}>Update</button>
         </div>
+        {comparePriceData === null ? (
+          <Loader />
+        ) : (
+          <div className="search-result">
+            <ComparePrice comparePriceData={comparePriceData} />
+          </div>
+        )}
       </div>
     </div>
   );

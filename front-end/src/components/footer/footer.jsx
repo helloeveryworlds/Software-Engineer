@@ -11,8 +11,18 @@ const Footer = () => {
       <div className="footer-body">
         <div className="row">
           <div className="footer-col">
-            <p>Shop</p>
+            <p>Links</p>
             <ul>
+              <li>
+                <Link to="/signin" className="footer-link">
+                  Login
+                </Link>
+              </li>
+              <li>
+                <Link to="/signup" className="footer-link">
+                  Signup
+                </Link>
+              </li>
               <li>
                 <Link to="/Shopping" className="footer-link">
                   Shopping page
