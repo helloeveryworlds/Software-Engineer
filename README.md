@@ -16,7 +16,7 @@
 
 ## Background
 Proposal google doc link: [here](https://docs.google.com/document/d/19A-Ovdj1PSGlUoQklYVjRKVRHxpZLoF1OxOf17hxW4E/edit)
-
+PPT: [here](https://docs.google.com/presentation/d/1MGXwAfZNnjd3dtozew_-pE-qhtsdOA1N/edit#slide=id.g23c58840e06_0_120)
 
 FOR busy families WHO want to save money on their daily grocery shopping, the GroceSave is an application that helps find the best deals on groceries. UNLIKE traditional shopping lists, our product utilizes local store sales to create a personalized shopping list that helps users save the most money. GroceSave is the perfect solution for families looking to stretch their budget and live smarter with their grocery shopping.
 
